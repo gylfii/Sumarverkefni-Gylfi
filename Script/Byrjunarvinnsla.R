@@ -37,20 +37,22 @@ miniQ[grep("Qgen-q2100",miniQ$plonePath),]
 
 
 #prufa að joina nokkuð saman
-Hashvinnsla$plonePath <- pathQ
-test <- right_join(miniQ,Hashvinnsla)
+hashes$plonePath <- paste(hashes$dir,hashes$qName,sep="")
+test <- right_join(miniQ,hashes)
 
 quest <- as.data.frame(question)
-test2 <- right_join(quest,Hashvinnsla)
+test2 <- right_join(quest,hashes)
 
 test2 %>%dplyr::select(questionId) %>% duplicated() %>% sum
-Hashvinnsla %>%dplyr::select(plonePath) %>% duplicated() %>% sum
+hashes %>%dplyr::select(plonePath) %>% duplicated() %>% sum
 
 
 answer <- as.data.frame(answer)
 
 prufa <- inner_join(answer,test2)
 prufa <- prufa %>% dplyr::select(answerId,lectureId,studentId,questionId,correct,timeStart,V3,V4,V5)
+
+prufa2 <- inner_join(MyAnswer,hashes)
 
 #Sést að prufa er ekki alveg rétt, ekki nægilegt að gera join með questionId sem eini lykillinn, þarf fleiri
 glimpse(prufa)
