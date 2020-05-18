@@ -1,0 +1,27 @@
+---
+title: "Framanburdur"
+output: rmdformats::readthedown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dbplyr)
+library(dplyr)
+library(RMySQL)
+library(tidyr)
+library(MASS)
+library(ggplot2)
+setwd("C:/Users/gylfi/Desktop/R powaaa/Vinna/spurning 4 verkefni")
+```
+
+## Gagna Innlestur
+skoðum svo bara svörinn í seinasta misseri í bili
+```{r, warning=FALSE}
+twDb<-src_mysql("tw_quizdb", host = "127.0.0.1", port = 3306, user = "gss24", password = "JuwofKWT2Ewc")
+answer <- tbl(twDb, "answer")
+question <- tbl(twDb,"question")
+answer <- answer%>% filter(timeStart>'2020-01-01 01:00:00')
+manyAota <- read.csv("manyAOTAsPois.hash",header = FALSE,sep = " ")
+```
+
+
