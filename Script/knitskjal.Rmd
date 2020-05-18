@@ -5,13 +5,7 @@ output: rmdformats::readthedown
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(dbplyr)
-library(dplyr)
-library(RMySQL)
-library(tidyr)
-library(MASS)
-library(ggplot2)
-setwd("C:/Users/gylfi/Desktop/R powaaa/Vinna/spurning 4 verkefni")
+source('Settings.R')
 ```
 
 ## Gagna Innlestur

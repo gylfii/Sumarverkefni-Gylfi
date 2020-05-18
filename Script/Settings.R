@@ -1,0 +1,6 @@
+library(dbplyr)
+library(dplyr)
+library(RMySQL)
+library(tidyr)
+library(MASS)
+library(ggplot2)
