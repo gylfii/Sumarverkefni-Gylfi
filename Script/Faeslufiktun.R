@@ -47,3 +47,26 @@ allsvor <- alltmeddag %>% subset(select =  -c(practice,coinsAwarded,ugQuestionGu
 
 allsvor$hefsedtheddaAdur <- ifelse(allsvor$timeStart==allsvor$mindag,0,1)
 allsvor$fjoldiSvaraFramAdThessu <- allsvor %>% with(ave(timeStart,1,lectureId,studentId,FUN = seq_along))
+
+#prufa að joina nokkuð saman
+hashes$plonePath <- paste(hashes$dir,hashes$qName,sep="")
+test <- right_join(miniQ,hashes)
+
+quest <- as.data.frame(question)
+test2 <- right_join(quest,hashes)
+
+test2 %>%dplyr::select(questionId) %>% duplicated() %>% sum
+hasht %>%dplyr::select(plonePath) %>% duplicated() %>% sum
+
+hasht <-hashes[-grep("AOTA+",hashes$notaType),]
+
+answer <- as.data.frame(answer)
+
+prufa <- inner_join(answer,test2)
+prufa <- prufa %>% dplyr::select(answerId,lectureId,studentId,questionId,correct,timeStart,V3,V4,V5)
+
+prufa2 <- inner_join(MyAnswer,hashes)
+
+#Sést að prufa er ekki alveg rétt, ekki nægilegt að gera join með questionId sem eini lykillinn, þarf fleiri
+glimpse(prufa)
+summary(prufa)
