@@ -18,9 +18,6 @@ question%>%filter(plonePath%in%pathQ)->myQuestions
 answer%>%filter(timeStart>"2020-01-01 00:01:01")->answerRed
 inner_join(answerRed,myQuestions) -> myAnswer
 
-# answer <- read.csv("answer.csv")
-help("read.csv")
-help("tbl")
 #skoðumm aðeins gögninn
 glimpse(answer)
 answer %>% summarise("count"=n())
