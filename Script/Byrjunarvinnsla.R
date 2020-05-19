@@ -24,7 +24,7 @@ help("tbl")
 #skoðumm aðeins gögninn
 glimpse(answer)
 answer %>% summarise("count"=n())
-glimpse(question)
+glimpse(myQuestions)
 question %>% summarize("count"=n())
 
 # Skoða aðeins tengingarnar
