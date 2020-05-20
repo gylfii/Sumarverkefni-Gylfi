@@ -28,9 +28,3 @@ hashAnsdag$hsta <- ifelse(hashAnsdag$mindag==hashAnsdag$timeStart,0,1)
 #Vel dálka og save-a
 hashanswers <- hashAnsdag %>% dplyr::select(lectureId,studentId,questionId,correct,fsfat,hsta)
 write.csv(hashanswers,'Data/hashAnswer.csv')
-
-
-
-
-
-
