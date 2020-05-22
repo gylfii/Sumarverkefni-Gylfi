@@ -1,0 +1,33 @@
+Stærsta spurninginn sem ég hef er
+
+Er hægt að mæla framfarir en ekki bara utanaðbókarlærdóm? Bera saman fyrstu svarmöguleika og þá sem hafa komið áður
+
+
+Spurningar eru svo:
+Hvernig líta gögninn út?
+Svaraði í Faeslufiktun.R, þar sem ég var að skoða alls konar skipanir, byrjandi með einn nemanda og svo stækka gögninn
+
+Hvað með hin gögninn?
+Þau voru ekki það góð fyrir mitt verk, finnst í Hentefni,R
+
+Hvað á að gera með NOTA+ fyrir hsta?
+Ég skoðaði það aðallega í hvadatafla.R, en eftir að prufa 4 möguleika
+1. Eins og var gert með hin svörinn
+2. Alltaf 0 þegar unnið er með NOTA+
+3. 0 ef fyrsta skiptið í fyrirlestrinum, annars 1
+4. tekið 0 út úr gögnunum
+
+Eftir skoðun þá er 3. eða 4. þægilegast. 
+2. hefur of sterk jákvæð áhrif á gögninn sem koma líklega frá því að fólk hefur séð öll röngu svörinn áður
+1. Það finnst ekki passa að hafa það þannig með, meðan það sást ekki mikill munur á 1 og 3,4. Þá hugsa ég að það er verra en hitt
+Nota 4 í bili.
+
+Hvernig lítur predict línan út, þegar það er skoðað minni fjölda fsta leift?
+allt lítur líkt út, hef samt ekki gert neitt próf til að staðfesta eitt eða annað,
+
+Hvernig er meðaltal á réttum svörum fyrir hvert fsfat skipt milli hsta?
+Hað lítue út fyrir að vera að vaxa smá í byrjun hjá hsta==0, en því lengra sem farið er, því meira dreifast punktarnir. Þetta er að gerast líklegast því að það eru minni og minni punktar hlið því hærra fsfat er. Svo þá kemur minna jafnvægi í punktunum.
+
+
+Question for Gunnar:
+Is it possible to get a hash with the wrong answers in each group?

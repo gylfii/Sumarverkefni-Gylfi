@@ -6,121 +6,64 @@ library(MASS)
 library(ggplot2)
 library(gridExtra)
 
-#lesum inn gögninn okkar, fyrst fyrir NOTA+ skoðað eins og hitt
-hashAnswer <- read.csv('Data/hashAnswer.csv')
+#lesum inn gögninn okkar
+hashAnswer <- read.csv('Data/hashAnswer4.csv')
 hashAnswer <- hashAnswer %>% subset(select=-c(X))
 hashAnswer$hsta <- hashAnswer$hsta%>%as.character()
 
-ans.glm <- glm(correct~fsfat,family = binomial(link="logit"),data=hashAnswer)
-ans.glm2 <- glm(correct~fsfat+hsta,family = binomial(link="logit"),data=hashAnswer)
-ans.glm3 <- glm(correct~fsfat*hsta,family = binomial(link="logit"),data=hashAnswer)
 
-#næst fyrir þegar NOTA+ er horft á aðeins öðruvísi
-hashAnswer2 <- read.csv('Data/hashAnswer2.csv')
-hashAnswer2 <- hashAnswer2 %>% subset(select=-c(X))
-hashAnswer2$hsta <- hashAnswer2$hsta%>%as.character()
+#Skoðum stuttlega þegar skorið er af gögnunum
+hashAnswery150 <- hashAnswer%>% filter(fsfat<150)
+hashAnswery200 <- hashAnswer%>% filter(fsfat<200)
+hashAnswery250 <- hashAnswer%>% filter(fsfat<250)
+hashAnswery300 <- hashAnswer%>% filter(fsfat<300)
 
-ans2.glm <- glm(correct~fsfat,family = binomial(link="logit"),data=hashAnswer2)
-ans2.glm2 <- glm(correct~fsfat+hsta,family = binomial(link="logit"),data=hashAnswer2)
-ans2.glm3 <- glm(correct~fsfat*hsta,family = binomial(link="logit"),data=hashAnswer2)
+ans.glm150 <- glm(correct~fsfat*hsta,family = binomial(link="logit"),data=hashAnswery150)
+ans.glm200 <- glm(correct~fsfat*hsta,family = binomial(link="logit"),data=hashAnswery200)
+ans.glm250 <- glm(correct~fsfat*hsta,family = binomial(link="logit"),data=hashAnswery250)
+ans.glm300 <- glm(correct~fsfat*hsta,family = binomial(link="logit"),data=hashAnswery300)
 
-#næst er að skoða fyrir þegar NOTA + er horft á miðað við fyrst skiptið í hverjum fyrirlestri
-hashAnswer3 <- read.csv('Data/hashAnswer3.csv')
-hashAnswer3 <- hashAnswer3 %>% subset(select=-c(X))
-hashAnswer3$hsta <- hashAnswer3$hsta%>%as.character()
-
-ans3.glm <- glm(correct~fsfat,family = binomial(link="logit"),data=hashAnswer3)
-ans3.glm2 <- glm(correct~fsfat+hsta,family = binomial(link="logit"),data=hashAnswer3)
-ans3.glm3 <- glm(correct~fsfat*hsta,family = binomial(link="logit"),data=hashAnswer3)
-
-#Svo er gögninn öll, án NOTA+
-hashAnswer4 <- read.csv('Data/hashAnswer4.csv')
-hashAnswer4 <- hashAnswer4 %>% subset(select=-c(X))
-hashAnswer4$hsta <- hashAnswer4$hsta%>%as.character()
-
-ans4.glm <- glm(correct~fsfat,family = binomial(link="logit"),data=hashAnswer4)
-ans4.glm2 <- glm(correct~fsfat+hsta,family = binomial(link="logit"),data=hashAnswer4)
-ans4.glm3 <- glm(correct~fsfat*hsta,family = binomial(link="logit"),data=hashAnswer4)
-
-?glm
-
-#Teiknum fyrst aðeins gögninn með 
-p11 <- ggplot(data=cbind(hashAnswer,pred=predict.glm(ans.glm,type = "response")),aes(x=fsfat,y=correct))+
+p1 <- ggplot(data=cbind(hashAnswery150,pred=predict.glm(ans.glm150,type = "response")),aes(x=fsfat,y=correct, color=hsta))+
   geom_point()+
   geom_line(aes(y=pred))+
-  ggtitle("Answer1")
-p12 <- ggplot(data=cbind(hashAnswer,pred=predict.glm(ans.glm2,type = "response")),aes(x=fsfat,y=correct,color=hsta))+
+  ggtitle("Undir 150")+
+  annotate("text",x=100,y=0.4,label= paste("fjoldi nemenda sem fóru lengra er",hashAnswer%>%
+                                             filter(fsfat>150) %>% summarise(n_distinct(studentId)), sep = " " ))
+p2 <- ggplot(data=cbind(hashAnswery200,pred=predict.glm(ans.glm200,type = "response")),aes(x=fsfat,y=correct, color=hsta))+
   geom_point()+
   geom_line(aes(y=pred))+
-  ggtitle("Answer1")
-p13 <- ggplot(data=cbind(hashAnswer,pred=predict.glm(ans.glm3,type = "response")),aes(x=fsfat,y=correct, color=hsta))+
+  ggtitle("Undir 200")+
+  annotate("text",x=150,y=0.4,label= paste("fjoldi nemenda sem fóru lengra er",hashAnswer%>%
+                                             filter(fsfat>200) %>% summarise(n_distinct(studentId)), sep = " " ))
+
+p3 <- ggplot(data=cbind(hashAnswery250,pred=predict.glm(ans.glm250,type = "response")),aes(x=fsfat,y=correct, color=hsta))+
   geom_point()+
   geom_line(aes(y=pred))+
-  ggtitle("Answer1")
+  ggtitle("Undir 250")+
+  annotate("text",x=200,y=0.4,label= paste("fjoldi nemenda sem fóru lengra er",hashAnswer%>%
+                                             filter(fsfat>250) %>% summarise(n_distinct(studentId)), sep = " " ))
 
-p21 <- ggplot(data=cbind(hashAnswer2,pred=predict.glm(ans2.glm,type = "response")),aes(x=fsfat,y=correct))+
+p4 <- ggplot(data=cbind(hashAnswery300,pred=predict.glm(ans.glm300,type = "response")),aes(x=fsfat,y=correct, color=hsta))+
   geom_point()+
   geom_line(aes(y=pred))+
-  ggtitle("Answer2")
-p22 <- ggplot(data=cbind(hashAnswer2,pred=predict.glm(ans2.glm2,type = "response")),aes(x=fsfat,y=correct,color=hsta))+
-  geom_point()+
-  geom_line(aes(y=pred))+
-  ggtitle("Answer2")
-p23 <- ggplot(data=cbind(hashAnswer2,pred=predict.glm(ans2.glm3,type = "response")),aes(x=fsfat,y=correct, color=hsta))+
-  geom_point()+
-  geom_line(aes(y=pred))+
-  ggtitle("Answer2")
+  ggtitle("Undir 300")+
+  annotate("text",x=250,y=0.4,label= paste("fjoldi nemenda sem fóru lengra er",hashAnswer%>%
+                                             filter(fsfat>300) %>% summarise(n_distinct(studentId)), sep = " " ))
 
-p31 <- ggplot(data=cbind(hashAnswer3,pred=predict.glm(ans3.glm,type = "response")),aes(x=fsfat,y=correct))+
-  geom_point()+
-  geom_line(aes(y=pred))+
-  ggtitle("Answer3")
-p32 <- ggplot(data=cbind(hashAnswer3,pred=predict.glm(ans3.glm2,type = "response")),aes(x=fsfat,y=correct,color=hsta))+
-  geom_point()+
-  geom_line(aes(y=pred))+
-  ggtitle("Answer3")
-p33 <- ggplot(data=cbind(hashAnswer3,pred=predict.glm(ans3.glm3,type = "response")),aes(x=fsfat,y=correct, color=hsta))+
-  geom_point()+
-  geom_line(aes(y=pred))+
-  ggtitle("Answer3")
-
-p41 <- ggplot(data=cbind(hashAnswer4,pred=predict.glm(ans4.glm,type = "response")),aes(x=fsfat,y=correct))+
-  geom_point()+
-  geom_line(aes(y=pred))+
-  ggtitle("Answer4")
-p42 <- ggplot(data=cbind(hashAnswer4,pred=predict.glm(ans4.glm2,type = "response")),aes(x=fsfat,y=correct,color=hsta))+
-  geom_point()+
-  geom_line(aes(y=pred))+
-  ggtitle("Answer4")
-p43 <- ggplot(data=cbind(hashAnswer4,pred=predict.glm(ans4.glm3,type = "response")),aes(x=fsfat,y=correct, color=hsta))+
-  geom_point()+
-  geom_line(aes(y=pred))+
-  ggtitle("Answer4")
-
-grid.arrange(p11, p21, nrow=1)
-grid.arrange(p12, p22, nrow=1)
-grid.arrange(p13, p23, nrow=1)
-
-grid.arrange(p11, p21, p31, nrow=1)
-grid.arrange(p12, p22, p32, nrow=1)
-grid.arrange(p13, p23, p33, nrow=1)
-
-grid.arrange(p11, p21, p31, p41, nrow=2)
-grid.arrange(p12, p22, p32, p42, nrow=2)
-grid.arrange(p13, p23, p33, p43, nrow=2)
-
-hashAnswer %>% summarise(n_distinct(studentId))
-hashAnswer %>% filter(fsfat>300) %>% summarise(n_distinct(studentId))
-
-hashAnswer %>% group_by(lectureId) %>% summarise(n_distinct())
-
-ggplot(data=hashAnswer)+geom_bar(aes(x=hsta,y=stat(prop),group=1))
+grid.arrange(p1, p2, p3, p4, nrow= 2)
 
 
-summary(ans.glm)
-summary(ans.glm2)
-summary(ans.glm3)
+#skoða svo aðeins meðaltal eftir fsfta
 
-
-glimpse(hashAnswer)
-summary(hashAnswer)
+p5 <- hashAnswer %>% group_by(fsfat,hsta) %>% filter(fsfat<100) %>%
+  summarise("med"=mean(correct),"fjold"=n_distinct(studentId)) %>%
+  ggplot(aes(x=fsfat,y=med,color=hsta), show.legend=FALSE)+
+  geom_point(show.legend = FALSE)+
+  geom_smooth(show.legend = FALSE)
+p5
+p6 <- hashAnswer %>% group_by(fsfat,hsta) %>% filter(fsfat<100) %>% 
+  summarise("fjoldi"=n_distinct(studentId)) %>%
+  ggplot(aes(x=fsfat,y=fjoldi,color=hsta))+
+  geom_line(show.legend = FALSE)
+p6
+grid.arrange(p5,p6,nrow=1)
