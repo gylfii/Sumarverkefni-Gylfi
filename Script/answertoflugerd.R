@@ -5,6 +5,7 @@ library(tidyr)
 library(MASS)
 library(ggplot2)
 library(magrittr)
+library(lubridate)
 #les inn öll gögninn, nota mestalagi bara answer gagnasafnið
 twDb<-src_mysql("tw_quizdb", host = "127.0.0.1", port = 3306, user = "gss24", password = "JuwofKWT2Ewc")
 answer<-tbl(twDb,"answer")
@@ -27,18 +28,30 @@ MyAnswer<-as.data.frame(myAnswer)
 
 
 #Set inn fjöldi svara framAd Thessu og hefséð áður
-MyAnswer <- MyAnswer[order(MyAnswer$timeStart),] %>% group_by(lectureId,studentId) %>% mutate(fsfat=row_number()-1)
+#MyAnswer <- MyAnswer[order(MyAnswer$timeStart),] %>% group_by(lectureId,studentId) %>% mutate(fsfat=row_number()-1)
+MyAnswer <- MyAnswer %>% arrange(timeStart) %>% group_by(lectureId,studentId) %>% mutate(fsfat=row_number()-1)
 hashAnswer <- inner_join(MyAnswer,hashes) %>%
   pivot_longer(c(hash,hash2,hash3),values_to = "hash") %>% filter(!is.na(hash))
 minstadagsetning <- hashAnswer %>% group_by(studentId,hash) %>% summarise('mindag'=min(timeStart))
 hashAnsdag <- full_join(hashAnswer,minstadagsetning)
 
 hashAnsdag$hsta <- ifelse(hashAnsdag$mindag==hashAnsdag$timeStart,0,1)
-hashAnsdag4 <- hashAnsdag[!grepl('NOTA+',hashAnsdag$hash),]
+#hashAnsdag <- hashAnsdag %>% mutate("dtStart"=ymd_hms(.$timeStart),"dtEnd"=ymd_hms(.$timeEnd))
+hashAnsdag$dtStart <- ymd_hms(hashAnsdag$timeStart)
+hashAnsdag$dtEnd <- ymd_hms(hashAnsdag$timeEnd)
+hashAnsdag <-  hashAnsdag %>% group_by(studentId, hash, timeStart) %>% arrange(studentId,hash, timeStart)
+hashAnsdag$timeDif <- hashAnsdag %>% arrange(studentId, hash, timeStart) %$% 
+  ifelse(hash==lag(hash,1),as.duration(dtStart-lag(dtEnd)),NA)
 
+?lag
+View(hashAnsdag %>% arrange(studentId, hash, timeStart))
+
+
+hashAnsdag4 <- hashAnsdag[!grepl('NOTA+',hashAnsdag$hash),]
+?as.duration
 #Vel dálka og save-a
-hashanswers <- hashAnsdag %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,hsta)
-hashanswers4 <- hashAnsdag4 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,hsta)
+hashanswers <- hashAnsdag %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,hsta,timeDif)
+hashanswers4 <- hashAnsdag4 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,hsta,timeDif)
 write.csv(hashanswers,'Data/hashAnswer.csv')
 write.csv(hashanswers4,'Data/hashAnswer4.csv')
 

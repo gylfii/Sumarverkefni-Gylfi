@@ -10,6 +10,7 @@ library(gridExtra)
 hashAnswer <- read.csv('Data/hashAnswer4.csv')
 hashAnswer <- hashAnswer %>% subset(select=-c(X))
 hashAnswer$hsta <- hashAnswer$hsta%>%as.character()
+hashAnswer$timeDif <- hashAnswer$timeDif/360
 
 
 #Skoðum stuttlega þegar skorið er af gögnunum
@@ -19,9 +20,12 @@ hashAnswery250 <- hashAnswer%>% filter(fsfat<250)
 hashAnswery300 <- hashAnswer%>% filter(fsfat<300)
 
 ans.glm150 <- glm(correct~fsfat*hsta,family = binomial(link="logit"),data=hashAnswery150)
+ans2.glm150 <- glm(correct~fsfat+timeDif,family = binomial(link = "logit"), data = hashAnswery150)
 ans.glm200 <- glm(correct~fsfat*hsta,family = binomial(link="logit"),data=hashAnswery200)
 ans.glm250 <- glm(correct~fsfat*hsta,family = binomial(link="logit"),data=hashAnswery250)
 ans.glm300 <- glm(correct~fsfat*hsta,family = binomial(link="logit"),data=hashAnswery300)
+
+summary(ans2.glm150)
 
 p1 <- ggplot(data=cbind(hashAnswery150,pred=predict.glm(ans.glm150,type = "response")),aes(x=fsfat,y=correct, color=hsta))+
   geom_point()+
@@ -29,6 +33,13 @@ p1 <- ggplot(data=cbind(hashAnswery150,pred=predict.glm(ans.glm150,type = "respo
   ggtitle("Undir 150")+
   annotate("text",x=100,y=0.4,label= paste("fjoldi nemenda sem fóru lengra er",hashAnswer%>%
                                              filter(fsfat>150) %>% summarise(n_distinct(studentId)), sep = " " ))
+p12 <-ggplot(data=cbind(hashAnswery150,pred=predict.glm(ans2.glm150,type = "response")),aes(x=fsfat,y=correct, color=hsta))+
+  geom_point()+
+  geom_line(aes(y=pred))+
+  ggtitle("Undir 150")+
+  annotate("text",x=100,y=0.4,label= paste("fjoldi nemenda sem fóru lengra er",hashAnswer%>%
+                                             filter(fsfat>150) %>% summarise(n_distinct(studentId)), sep = " " ))
+ggplot(hashAnswery150,aes(x=fsfat,y=timeDif))+geom_point()
 p2 <- ggplot(data=cbind(hashAnswery200,pred=predict.glm(ans.glm200,type = "response")),aes(x=fsfat,y=correct, color=hsta))+
   geom_point()+
   geom_line(aes(y=pred))+
