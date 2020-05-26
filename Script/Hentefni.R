@@ -31,3 +31,35 @@
 # 
 # prufameddag$hedsedAdur <- ifelse(prufameddag$timeStart==prufameddag$mindag,0,1)
 # prufameddag$fjoldisvarafram <- prufameddag%>%with(ave(timeStart,1,lectureId,studentId,FUN = seq_along))
+
+
+
+#Fyrir AnswerTofluGerd. Fyrst er gamla leiðin til að lesa inn efnið!
+# answer <- tbl(twDb, "answer")
+# answer <- answer%>% filter(timeStart>'2020-01-01 01:00:00')
+# question <- tbl(twDb,"question")
+# 
+# #setja upp Svörinn sem við ætlum að skoða
+# # hashes<-read.csv("Data/bighashfile.txt",sep=" ",col.names = c("dir","qName","hash","numQ","notaType"))
+# hashes$plonePath <- paste(hashes$dir,hashes$qName,sep="")
+# pathQ<-unique(paste(hashes$dir,hashes$qName,sep=""))
+# question%>%filter(plonePath%in%pathQ)->myQuestions
+# answer%>%filter(timeStart>"2020-01-01 00:01:01")->answerRed
+# inner_join(answerRed,myQuestions) -> myAnswer
+# as.data.frame(myAnswer) -> MyAnswer
+
+
+#Hér er Töflugerð fyrir töflur 2 og 3, sem var ákveðið að nota ekki
+# hashAnsdag2 <- hashAnsdag
+# hashAnsdag2$hsta <- ifelse(hashAnsdag2$mindag==hashAnsdag2$timeStart | hashAnsdag2$hash=='NOTA+',0,1)
+# 
+# hashAnsdag3 <- hashAnsdag %>% group_by(lectureId,studentId,hash) %>% summarise('minNotadag'=min(timeStart)) %>%
+#   full_join(hashAnsdag)
+# hashAnsdag3$hsta <- ifelse(hashAnsdag3$mindag==hashAnsdag3$timeStart |
+#                              (hashAnsdag3$hash=='NOTA+' & hashAnsdag3$minNotadag==hashAnsdag3$timeStart),0,1)
+
+#Til að Save-a þær töflur
+# hashanswers2 <- hashAnsdag2 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,hsta)
+# hashanswers3 <- hashAnsdag3 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,hsta)
+# write.csv(hashanswers2,'data/hashAnswer2.csv')
+# write.csv(hashanswers3,'Data/hashAnswer3.csv')

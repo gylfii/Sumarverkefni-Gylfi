@@ -55,15 +55,17 @@ grid.arrange(p1, p2, p3, p4, nrow= 2)
 
 #skoða svo aðeins meðaltal eftir fsfta
 
-p5 <- hashAnswer %>% group_by(fsfat,hsta) %>% filter(fsfat<100) %>%
+p5 <- hashAnswer %>% group_by(fsfat,hsta) %>% filter(fsfat>=0) %>%
   summarise("med"=mean(correct),"fjold"=n_distinct(studentId)) %>%
   ggplot(aes(x=fsfat,y=med,color=hsta), show.legend=FALSE)+
   geom_point(show.legend = FALSE)+
   geom_smooth(show.legend = FALSE)
 p5
-p6 <- hashAnswer %>% group_by(fsfat,hsta) %>% filter(fsfat<100) %>% 
+p6 <- hashAnswer %>% group_by(fsfat,hsta) %>% filter(fsfat>=0) %>% 
   summarise("fjoldi"=n_distinct(studentId)) %>%
   ggplot(aes(x=fsfat,y=fjoldi,color=hsta))+
   geom_line(show.legend = FALSE)
 p6
+
 grid.arrange(p5,p6,nrow=1)
+
