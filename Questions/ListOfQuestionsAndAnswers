@@ -31,3 +31,10 @@ Hað lítue út fyrir að vera að vaxa smá í byrjun hjá hsta==0, en því le
 
 Question for Gunnar:
 Is it possible to get a hash with the wrong answers in each group?
+A: He can, but that might not be needed, nor a priority yet.
+
+Hvernig gengur þetta ef skoðað er logistic regression fall milli fyrirlestra?
+Það lítur út fyrir að vera mörg líkur vöxstur á sumur stöðum, en aðrir eru með rosalega stórann vöxtur, spurning er hvað veldur muninum
+
+Hvernig gengur ef skoðað er hvern nemenda fyrir sig?
+Erfitt að sjá, of margir nemendur til að skoða, getur verið að ekki nógu mikið af upplýsingum um hvern nemenda
