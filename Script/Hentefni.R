@@ -63,3 +63,68 @@
 # hashanswers3 <- hashAnsdag3 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,hsta)
 # write.csv(hashanswers2,'data/hashAnswer2.csv')
 # write.csv(hashanswers3,'Data/hashAnswer3.csv')
+
+
+# #This here is a drastic over complication of the subject. Instead it is best to simply use glm directly
+# #This is a working thing when used with studentId, glm is to big to do directly otherwises
+# 
+# fsvfat_model <- function(df) {
+#   glm(correct ~ fsvfat * hsta, family = binomial(link = "logit"), data = df)
+# }
+# fsfat_model <- function(df) {
+#   glm(correct ~ fsfat * hsta, family = binomial(link = "logit"), data = df)
+# }
+# 
+# hashAnswer %>% group_by(lectureId) %>% summarise(n())
+# 
+# #Býr til fall sem hægt er að teikna sitthvort fall fyrir hvert lectureId
+# Drawable_by_Id <- function(df, Id, fun) {
+#   by_Id <- df %>% group_by(!!sym(Id)) %>%
+#     nest() %>% 
+#     filter(map_dbl(data, nrow) > 10)
+#   by_Id <- by_Id %>% 
+#     mutate(model = map(data, fun))
+#   by_Id <- by_Id %>% 
+#     mutate(pred = map(model, predict.glm, type = "response"))
+#   Id_unested <- by_Id %>% 
+#     unnest(data, pred)
+#   return(Id_unested)
+# }
+# lecture_drawa <- Drawable_by_Id(hashAnswer, "lectureId", fsvfat_model)
+# student_unested <- Drawable_by_Id(hashAnswer, "studentId", fsvfat_model)
+# 
+# lecture_drawa_fsfat <- Drawable_by_Id(hashAnswer, "lectureId", fsfat_model)
+# 
+# lecture_drawa %>%
+#   ggplot(aes(x = fsvfat, y = correct, color = hsta)) +
+#   geom_point() + 
+#   geom_line(aes(y = pred)) + 
+#   facet_wrap(vars(lectureId))
+# 
+# 
+# lecture_drawa %>% filter(hsta == 0) %>%
+#   ggplot(aes(x = fsvfat, y = correct, color = lectureId)) +
+#   geom_point() + 
+#   geom_line(aes(y = pred))
+# 
+# lecture_drawa_fsfat %>% filter(hsta == 0) %>%
+#   ggplot(aes(x = fsfat, y = correct, color = lectureId)) +
+#   geom_point() + 
+#   geom_line(aes(y = pred))
+# 
+# student_unested %>% filter(hsta == 0, lectureId == 3214) %>%
+#   ggplot(aes(x = fsvfat, y = correct)) +
+#   geom_point() + 
+#   geom_line(aes(y = pred, group = studentId)) + 
+#   facet_wrap
+
+
+# #Seems that the other method might be needed for the student drawing. Hmmmmmm
+# 
+# ans5 <- glm(correct ~ fsvfat*studentId, family = binomial(link = "logit"), data = hashAnswer)
+# 
+# hashAnswer %>% mutate(pred = predict.glm(ans5, type = "response")) %>%
+#   filter(hsta == 0) %>%
+#   ggplot(aes(x = fsvfat, y = correct, color = studentId)) + 
+#   geom_point() + 
+#   geom_line(aes(y = pred))
