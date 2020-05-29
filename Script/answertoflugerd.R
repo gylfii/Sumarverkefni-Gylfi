@@ -43,15 +43,19 @@ hashAnsdag <-  hashAnsdag %>% group_by(studentId, hash, timeStart) %>% arrange(s
 hashAnsdag$timeDif <- hashAnsdag %>% arrange(studentId, hash, timeStart) %$% 
   ifelse(hash==lag(hash,1),as.duration(dtStart-lag(dtEnd)),NA)
 
-?lag
-View(hashAnsdag %>% arrange(studentId, hash, timeStart))
+# ?lag
+# View(hashAnsdag %>% arrange(studentId, hash, timeStart))
+
+#setjum inn fsvfat sem er fjöldi svara fram að þessu
+hashAnsdag$sumable <- ifelse(hashAnsdag$hsta==0,1,0)
+
+hashAnsdag <- hashAnsdag %>% group_by(studentId,lectureId) %>% arrange(timeStart) %>% mutate(fsvfat=cumsum(sumable))
 
 
 hashAnsdag4 <- hashAnsdag[!grepl('NOTA+',hashAnsdag$hash),]
-?as.duration
 #Vel dálka og save-a
-hashanswers <- hashAnsdag %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,hsta,timeDif)
-hashanswers4 <- hashAnsdag4 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,hsta,timeDif)
+hashanswers <- hashAnsdag %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat,hsta,timeDif)
+hashanswers4 <- hashAnsdag4 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat,hsta,timeDif)
 write.csv(hashanswers,'Data/hashAnswer.csv')
 write.csv(hashanswers4,'Data/hashAnswer4.csv')
 
