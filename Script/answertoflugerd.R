@@ -49,7 +49,7 @@ hashAnsdag$timeDif <- hashAnsdag %>% arrange(studentId, hash, timeStart) %$%
 #setjum inn fsvfat sem er fjöldi svara fram að þessu
 hashAnsdag$sumable <- ifelse(hashAnsdag$hsta==0,1,0)
 
-hashAnsdag <- hashAnsdag %>% group_by(studentId,lectureId) %>% arrange(timeStart) %>% mutate(fsvfat=cumsum(sumable))
+hashAnsdag <- hashAnsdag %>% group_by(studentId,lectureId) %>% arrange(timeStart) %>% mutate(fsvfat=cumsum(sumable)-1)
 
 
 hashAnsdag4 <- hashAnsdag[!grepl('NOTA+',hashAnsdag$hash),]
