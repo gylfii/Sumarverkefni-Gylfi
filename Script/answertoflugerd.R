@@ -50,15 +50,28 @@ hashAnsdag$timeDif <- hashAnsdag %>% arrange(studentId, hash, timeStart) %$%
 hashAnsdag$sumable <- ifelse(hashAnsdag$hsta==0,1,0)
 
 hashAnsdag <- hashAnsdag %>% group_by(studentId,lectureId) %>% arrange(timeStart) %>% mutate(fsvfat=cumsum(sumable)-1)
-
+hashAnsdag <- hashAnsdag %>% group_by(lectureId, studentId, timeStart) %>% mutate(fsvfatu = min(fsvfat))
 
 hashAnsdag4 <- hashAnsdag[!grepl('NOTA+',hashAnsdag$hash),]
 #Vel dálka og save-a
-hashanswers <- hashAnsdag %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat,hsta,timeDif)
-hashanswers4 <- hashAnsdag4 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat,hsta,timeDif)
+hashanswers <- hashAnsdag %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat, fsvfatu,hsta,timeDif)
+hashanswers4 <- hashAnsdag4 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat, fsvfatu,hsta,timeDif)
 write.csv(hashanswers,'Data/hashAnswer.csv')
 write.csv(hashanswers4,'Data/hashAnswer4.csv')
 
+hhA <- hashAnsdag
+
+hhA %>% filter(notaType != "AOTA+") %>%
+  group_by(timeStart, studentId, lectureId) %>%
+  summarise("n" = n()) %>% filter(n != 1) %>% 
+  summarise(n())
+
+hhA %>% filter(notaType == "AOTA+") %>%
+  group_by(timeStart, studentId, lectureId) %>%
+  summarise("n" = n()) %>% filter(n != 3) %>% 
+  summarise(n())
+  
+hhA %>% filter(notaType == "AOTA+") %>% View()
 
 #hugmynd til að reikna tímann milli taka
 #fyrst er sort-að eftir studentId,hash og timestart. Í þessari röð. Svo að gera ifelse setningu sem reiknar
