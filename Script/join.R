@@ -27,7 +27,21 @@ inner_join(answerRed,myQuestions) -> myAnswer
 # myAnswer should now contain all answers to just the questions listed in the hash file
 #
 
+glimpse(question)
+glimpse(host)
+glimpse(coinAward)
+glimpse(lectureStudentSetting) 
+possiblegpow <- lectureStudentSetting %>% as.data.frame() 
+possiblegpow %>% View()
+glimpse(answer)
 glimpse(myAnswer)
 myAnswer %>% summarise(n())
 
 MyAnswer <- as.data.frame(myAnswer)
+MyAnswer %>% summary()
+
+# tAnswer <- as.data.frame(answer)
+# tQuestion <- as.data.frame(question)
+# questionCount <- tAnswer %>% group_by(questionId) %>% summarise("timescount" =  n())
+# isit <- inner_join(tQuestion, questionCount)
+# isit %>% filter(timescount != timesAnswered) %>% summarise(n())

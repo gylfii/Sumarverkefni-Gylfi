@@ -23,10 +23,10 @@ Eftir skoðun þá er 3. eða 4. þægilegast.
 Nota 4 í bili.
 
 Hvernig lítur predict línan út, þegar það er skoðað minni fjölda fsta leift?
-allt lítur líkt út, hef samt ekki gert neitt próf til að staðfesta eitt eða annað,
+allt lítur líkt út, hef samt ekki gert neitt próf til að staðfesta eitt eða annað, samt stærri vöxtur hjá minni spurningum leift.
 
 Hvernig er meðaltal á réttum svörum fyrir hvert fsfat skipt milli hsta?
-Hað lítue út fyrir að vera að vaxa smá í byrjun hjá hsta==0, en því lengra sem farið er, því meira dreifast punktarnir. Þetta er að gerast líklegast því að það eru minni og minni punktar hlið því hærra fsfat er. Svo þá kemur minna jafnvægi í punktunum.
+það lítur út fyrir að vera að vaxa smá í byrjun hjá hsta==0, en því lengra sem farið er, því meira dreifast punktarnir. Þetta er að gerast líklegast því að það eru minni og minni punktar hlið því hærra fsfat er. Svo þá kemur minna jafnvægi í punktunum.
 
 
 Question for Gunnar:
@@ -38,3 +38,9 @@ Hvernig gengur þetta ef skoðað er logistic regression fall milli fyrirlestra?
 
 Hvernig gengur ef skoðað er hvern nemenda fyrir sig?
 Erfitt að sjá, of margir nemendur til að skoða, getur verið að ekki nógu mikið af upplýsingum um hvern nemenda
+
+Hvernig lítur út meðaltal fsfat og fsvfat fyrir minni hópa?
+Það lítur út fyrir að koma vöxtur á byrjun og svo fall eftir því hve margir eru leifðir að svara, bjargast samt smá eftir nógu marga svarmöguleika.
+
+Er hægt að bæta við gpow við gögninn?
+Það er hægt, en aðferðinn sem ég sé þá tapa ég u.þ.b. 75% af gögnunum, svo ég er ekki viss um að það virki.

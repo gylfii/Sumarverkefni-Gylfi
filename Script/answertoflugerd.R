@@ -10,6 +10,7 @@ library(lubridate)
 twDb<-src_mysql("tw_quizdb", host = "127.0.0.1", port = 3306, user = "gss24", password = "JuwofKWT2Ewc")
 answer<-tbl(twDb,"answer")
 question<-tbl(twDb,"question")
+lectureStudentSetting<-tbl(twDb,"lectureStudentSetting")
 #hashes<-read.csv("Data/bighashfile.txt",sep=" ",col.names = c("dir","qName","hash","numQ","notaType"))
 hashes<-read.csv("Data/bighashfile.wide.txt",sep=" ",col.names = c("dir","qName","hash","hash2","hash3","numQ","notaType"),na.strings = ".")
 #pathQ<-unique(paste(hashes$dir,hashes$qName,sep=""))
@@ -21,19 +22,21 @@ left_join(plonePath,as.data.frame(question))->myQuestions
 #myQuestions<-as.data.frame(myQuestions)
 answer%>%filter(timeStart>"2020-01-01 00:01:01")->answerRed
 answerRed<-as.data.frame(answerRed)
+#studentgpow <- lectureStudentSetting %>% as.data.frame() %>% filter(key == "iaa_adaptive_gpow")
 inner_join(answerRed,myQuestions) -> myAnswer
 MyAnswer<-as.data.frame(myAnswer)
+#MyAnswer <- inner_join(MyAnswer, studentgpow)
 
-
-
+#bæti við fjölda incorrect choices, eða nicc
+MyAnswer$nicc <- nchar(gsub("[^0-9]+", "", MyAnswer$incorrectChoices))
 
 #Set inn fjöldi svara framAd Thessu og hefséð áður
 #MyAnswer <- MyAnswer[order(MyAnswer$timeStart),] %>% group_by(lectureId,studentId) %>% mutate(fsfat=row_number()-1)
 MyAnswer <- MyAnswer %>% arrange(timeStart) %>% group_by(lectureId,studentId) %>% mutate(fsfat=row_number()-1)
 hashAnswer <- inner_join(MyAnswer,hashes) %>%
   pivot_longer(c(hash,hash2,hash3),values_to = "hash") %>% filter(!is.na(hash))
-minstadagsetning <- hashAnswer %>% group_by(studentId,hash) %>% summarise('mindag'=min(timeStart))
-hashAnsdag <- full_join(hashAnswer,minstadagsetning)
+hashAnsdag <- hashAnswer %>% group_by(studentId,hash) %>% mutate('mindag'=min(timeStart))
+#hashAnsdag <- full_join(hashAnswer,minstadagsetning)
 
 hashAnsdag$hsta <- ifelse(hashAnsdag$mindag==hashAnsdag$timeStart,0,1)
 #hashAnsdag <- hashAnsdag %>% mutate("dtStart"=ymd_hms(.$timeStart),"dtEnd"=ymd_hms(.$timeEnd))
@@ -54,11 +57,12 @@ hashAnsdag <- hashAnsdag %>% group_by(lectureId, studentId, timeStart) %>% mutat
 
 hashAnsdag4 <- hashAnsdag[!grepl('NOTA+',hashAnsdag$hash),]
 #Vel dálka og save-a
-hashanswers <- hashAnsdag %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat, fsvfatu,hsta,timeDif)
-hashanswers4 <- hashAnsdag4 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat, fsvfatu,hsta,timeDif)
+hashanswers <- hashAnsdag %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat, fsvfatu,hsta,timeDif, nicc)
+hashanswers4 <- hashAnsdag4 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat, fsvfatu,hsta,timeDif, nicc)
 write.csv(hashanswers,'Data/hashAnswer.csv')
 write.csv(hashanswers4,'Data/hashAnswer4.csv')
 
+?dplyr::select
 hhA <- hashAnsdag
 
 hhA %>% filter(notaType != "AOTA+") %>%
