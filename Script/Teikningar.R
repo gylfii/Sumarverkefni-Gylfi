@@ -8,7 +8,9 @@ library(gridExtra)
 library(tidyverse)
 library(modelr)
 library(rlang)
+library(lme4)
 
+?glmer
 #lesum inn gögninn okkar
 hashAnswer <- read.csv('Data/hashAnswer4.csv')
 hashAnswer <- hashAnswer %>% subset(select=-c(X))
