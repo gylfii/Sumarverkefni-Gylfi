@@ -22,10 +22,30 @@ left_join(plonePath,as.data.frame(question))->myQuestions
 #myQuestions<-as.data.frame(myQuestions)
 answer%>%filter(timeStart>"2020-01-01 00:01:01")->answerRed
 answerRed<-as.data.frame(answerRed)
-#studentgpow <- lectureStudentSetting %>% as.data.frame() %>% filter(key == "iaa_adaptive_gpow")
+# view(answerRed)
+studentgpow <- lectureStudentSetting %>% as.data.frame() %>% filter(key == "iaa_adaptive_gpow" & creationDate > "2020-01-01 00:01:01") %>%
+  dplyr::select(lectureId, studentId, lectureVersion, value, creationDate)
+
 inner_join(answerRed,myQuestions) -> myAnswer
 MyAnswer<-as.data.frame(myAnswer)
-#MyAnswer <- inner_join(MyAnswer, studentgpow)
+explory <- left_join(MyAnswer, studentgpow)
+MyAnswer$gpow <- ifelse(is.na(explory$value), 0.25, explory$value)
+
+# View(MyAnswer)
+# explory <- left_join(MyAnswer, studentgpow)
+# explory$gpow <- ifelse(is.na(value), 0.25, value)
+
+# explory %>% filter(is.na(value)) %>% group_by(lectureId, lectureVersion) %>% summarise(n()) %>% View()
+# explory %>% filter(!is.na(value)) %>% group_by(lectureId, lectureVersion) %>% summarise(n())
+# explory %>% group_by(lectureId, lectureVersion, studentId) %>% summarise("count" = n_distinct(value)) %>% filter(count>1)
+# naexplore <- explory %>% filter(any(is.na(value)))
+# explory %>% filter(lectureId == '3203') %>% dplyr::select(lectureId, studentId, timeStart, value) %>% View()
+# table(naexplore$title)
+# explory  %>% group_by(lectureId, lectureVersion) %>%
+#   summarise("check.na" = sum(is.na(value)), "check.notna" = sum(!is.na(value)))
+#   filter(check.na > 0 & check.notna > 0)
+# 
+# explory %>% summarise(n_distinct(lectureId, lectureVersion))
 
 #bæti við fjölda incorrect choices, eða nicc
 MyAnswer$nicc <- nchar(gsub("[^0-9]+", "", MyAnswer$incorrectChoices))
@@ -35,8 +55,10 @@ MyAnswer$nicc <- nchar(gsub("[^0-9]+", "", MyAnswer$incorrectChoices))
 MyAnswer <- MyAnswer %>% arrange(timeStart) %>% group_by(lectureId,studentId) %>% mutate(fsfat=row_number()-1)
 hashAnswer <- inner_join(MyAnswer,hashes) %>%
   pivot_longer(c(hash,hash2,hash3),values_to = "hash") %>% filter(!is.na(hash))
+# explory <- left_join(hashAnswer, studentgpow)
 hashAnsdag <- hashAnswer %>% group_by(studentId,hash) %>% mutate('mindag'=min(timeStart))
 #hashAnsdag <- full_join(hashAnswer,minstadagsetning)
+#unique(hashAnswer$lectureId)
 
 hashAnsdag$hsta <- ifelse(hashAnsdag$mindag==hashAnsdag$timeStart,0,1)
 #hashAnsdag <- hashAnsdag %>% mutate("dtStart"=ymd_hms(.$timeStart),"dtEnd"=ymd_hms(.$timeEnd))
@@ -56,9 +78,11 @@ hashAnsdag <- hashAnsdag %>% group_by(studentId,lectureId) %>% arrange(timeStart
 hashAnsdag <- hashAnsdag %>% group_by(lectureId, studentId, timeStart) %>% mutate(fsvfatu = min(fsvfat))
 
 hashAnsdag4 <- hashAnsdag[!grepl('NOTA+',hashAnsdag$hash),]
+#unique(hashAnsdag$lectureId)
+myAnswer %>% filter(lectureId == 3203) %>% summarise(n_distinct(studentId))
 #Vel dálka og save-a
-hashanswers <- hashAnsdag %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat, fsvfatu,hsta,timeDif, nicc)
-hashanswers4 <- hashAnsdag4 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat, fsvfatu,hsta,timeDif, nicc)
+hashanswers <- hashAnsdag %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat, fsvfatu,hsta,timeDif, nicc, gpow)
+hashanswers4 <- hashAnsdag4 %>% dplyr::select(lectureId,studentId,questionId,correct,hash,fsfat,fsvfat, fsvfatu,hsta,timeDif, nicc, gpow)
 write.csv(hashanswers,'Data/hashAnswer.csv')
 write.csv(hashanswers4,'Data/hashAnswer4.csv')
 
@@ -83,3 +107,9 @@ hhA %>% filter(notaType == "AOTA+") %>% View()
 # Svo er spurning um date, will líklegast fá muninn í min eða klst. Hvernig væri bæst að gera date1-date2 og fá það í mín
 # Við sjáum til.
 # https://stackoverflow.com/questions/33068340/how-to-get-difference-in-minutes-between-two-date-strings
+
+tmp = unique(MyAnswer$lectureId)
+
+filter(tibble(studentgpow), lectureId %in% tmp) %>% View()
+
+MyAnswer %>% filter(lectureId == 3082) %>% View()
