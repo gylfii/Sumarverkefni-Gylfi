@@ -50,6 +50,8 @@ myAnswer %>% summarise(n())
 MyAnswer <- as.data.frame(myAnswer)
 MyAnswer %>% summary()
 
+
+
 # tAnswer <- as.data.frame(answer)
 # tQuestion <- as.data.frame(question)
 # questionCount <- tAnswer %>% group_by(questionId) %>% summarise("timescount" =  n())

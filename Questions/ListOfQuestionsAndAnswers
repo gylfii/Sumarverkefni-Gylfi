@@ -47,3 +47,18 @@ Er hægt að bæta við gpow við gögninn?
 
 
 Hver er prósentann af nemendum sem gerðu meira en x spurningar og hve mikið af gögnunum er það?
+
+
+Hver er svo hlutfall hsta svara og alles þegar skoðað eru aðeins minni gögn?
+
+
+Nú, hvernig er skoðunar aðferðinn hjá mér? Eftir því hvernig líkanið mitt er að líta út. Ég er að skoða línuna þegar hsta == 0, því þar eru nemendur að fá spurningu þar sem þeir hafa ekki séð rétta svarið áður, þetta hefur þá einhverja skoðun á hvernig þeim gengur með tímanum og einhverjar framfarir. Óvissa samt í bili er það að ekki hvort þessar framfarir hjá þeim eru lærdómur eða utanaðbókarlærdómur. Þar sem það getur verið að einhver nemandi er að læra utanað á meðan annar nemandi er að reikna svarið aftur upp á nýtt. Veit ekki alveg hvor er að gera hvað.
+Næst kemur svo líka þá hvað með þegar hsta == 1, nú ég veit ekki alveg hvað ég er að sjá með því, ég hef smá verið að hunsa það aftast í hausnum í einhverjarri stund núna, svo það er ágætis óvissa þar í gangi. Aðal vandinn er að erfitt er að sjá hér hvort utanaðbókarlærdóm eða almennar framfarir eru í gangi. Spurning um hvað er best hér. hmmmmm
+Anna benti á það að hugsuninn um hverjann spurningarhaus fyrir sig gæti verið góð hugmynd, eða kannski frekar að skipta nemendum upp í hópa eftir því hvernig þeir eru að læra? hmmmmmmm óvissa
+Skal spyrja Gunnar einhverntímann hvort það gæti verið gott að skoða hash spurningarhausa og telja þá upp hver oft nemandinn hefur séð þessa spurningu í staðinn fyrir fjölda spurninga sem nemandinn hefur svarað hingað til innin við fyrirlestrinns. Hmmmmm
+
+Allt eitthvað sem væri gott að hugsa í, en mikið byggir á samtali við Gunnar, sem er nú í fríi, svo gott að leifa honum að njóta þess frekar en að bomba spurningar á hann. Les í bili!
+
+RF X62
+
+Muna eftir að nota þarf nested fyrir nemanda, svo ég toga nemendana ekki breytu og breytu. Gíska að ég þarf að toga sitthvort fyrir hvern fyrirlestur
