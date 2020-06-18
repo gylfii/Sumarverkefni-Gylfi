@@ -16,28 +16,33 @@ hashAnswer <- hashAnswer %>% subset(select=-c(X))
 hashAnswer$hsta <- hashAnswer$hsta%>%as.character()
 hashAnswer$lectureId <- hashAnswer$lectureId %>% as.factor()
 hashAnswer$studentId <- hashAnswer$studentId %>% as.factor()
+hashAnswer$nicc <- hashAnswer$nicc %>% as.factor()
+hashAnswer$fsfat <- hashAnswer$fsfat/10
+hashAnswer$fsvfatu <- hashAnswer$fsvfatu/10
+hashAnswer$gpow2 <- as.factor(floor(log2(hashAnswer$gpow)))
 ```
-Þetta eru tutor-web gögn fyrir lík og töl í vormisseri 2020. \\
+Þetta eru tutor-web gögn fyrir lík og töl í vormisseri 2020. 
 ```{r data example}
 glimpse(hashAnswer)
 ```
-Gögninn innihalda factor breyturnar lectureId, studentId og questionId. Sem eru einkenningar fyrirlesturinns, nemendans og spurningarnar. Næst inniheldur það correct sem er binary breyta fyrir því hvort fengið var rétt eða rangt svar. Hash er einkvæm tenging fyrir hvert svar. fsfat er "Fjöldi spurninga fram að þessu" sem telur upp hve margar spurningar nemandinn hefur svarað hingað til í þessum fyrirlestri. fsvfat er "Fjöldi svara fram að þessu" sem telur upp hve ný svör nemandinn hefur séð að þessum punkti. fsvfatu "Fjöldi svara fram að þessu uppfært" þetta er temporary nafn sem kemur fyrir fsvfat nema þegar AOTA+ spurning kemur þá heldur það sama fsvfat fyrir þá spurningu, telst samt venjulega annars. hsta "hef séð þetta áður" þetta er 0 eða 1 sem segir til hvort nemandinn hefur séð svarið áður eða ekki. Að lokum er timeDif sem segir til hve margar sekúndur hafa varið séðan þetta svar kom seinast. \\
-\\
+Gögninn innihalda factor breyturnar lectureId, studentId og questionId. Sem eru einkenningar fyrirlesturinns, nemendans og spurningarnar. Næst inniheldur það correct sem er binary breyta fyrir því hvort fengið var rétt eða rangt svar. Hash er einkvæm tenging fyrir hvert svar. fsfat er "Fjöldi spurninga fram að þessu" sem telur upp hve margar spurningar nemandinn hefur svarað hingað til í þessum fyrirlestri. fsvfat er "Fjöldi svara fram að þessu" sem telur upp hve mörg ný svör nemandinn hefur séð að þessum punkti. fsvfatu "Fjöldi svara fram að þessu uppfært" þetta er temporary nafn sem kemur fyrir fsvfat nema þegar AOTA+ spurning kemur þá heldur það sama fsvfat fyrir þá spurningu, telst samt venjulega annars. hsta "hef séð þetta áður" þetta er 0 eða 1 sem segir til hvort nemandinn hefur séð svarið áður eða ekki. Að lokum er timeDif sem segir til hve margar sekúndur hafa varið séðan þetta svar kom seinast. 
+Deilt er með 10 í fsfat og fsfatu svo að glmer virkar betur, var samt ekki notað í fyrstu myndunum. 
+
 Fyrsta sem ég gerði var að skoða aðeins einföld logistic regression föll, skipt upp eftir því hve margar spurningar, semsagt fsfat ég leifi að svara. Þá fyrir fsfat og fyrir fsvfat, byrjandi með því að skoða fsfat
 ![fsfat](Img/plot1.png)
 
 Svo fyrir fsvfat
 ![fsfat](Img/plot2.png)
-Nú líkanið sem er notað hér er einfalt glm(correct ~ fsfat\*hsta) og glm(correct ~ fsvfat\*hsta). Semsagt $p_i = H(\beta_0 + fsfat\beta_1+fsfat*hsta*\beta_2+hsta\beta_3)$ og $p_i = H(\beta_0 + fsvfat\beta_1+fsvfat*hsta*\beta_2+hsta\beta_3)$, þar sem $H$ er logistic link fallið. (Vantar enn upplýsingar sem ég mun skrifa meira um þegar þörf er, t.d. það að við erum með $p_i$ en ég merki ekki $fsfat$ með $fsfat_i$) \\
+Nú líkanið sem er notað hér er einfalt glm(correct ~ fsfat\*hsta) og glm(correct ~ fsvfat\*hsta). Semsagt $p_i = H(\beta_0 + fsfat\beta_1+fsfat*hsta*\beta_2+hsta\beta_3)$ og $p_i = H(\beta_0 + fsvfat\beta_1+fsvfat*hsta*\beta_2+hsta\beta_3)$, þar sem $H$ er logistic link fallið. (Vantar enn upplýsingar sem ég mun skrifa meira um þegar þörf er, t.d. það að við erum með $p_i$ en ég merki ekki $fsfat$ með $fsfat_i$) 
 
-Þegar skoðað er yfir myndirnar, fyrst fyrir fsfat. Þá ef nemandinn hefur ekki séð spurningunna áður, þá lítur út fyrir að vera að vaxa líkurnar á að nemandinn fær svarið rétt, en það lítur út fyrir að því fleiri svör við skoðum, því hægari línunar vaxa, sést við þegar við skoðum hvar línan er við 50 í hvert skipti, það minnkar og minnkar. þegar nemandinn hefur séð svarið áður, þá hefur vaxinn minni og minni vaxa líka, og verður eins og bein lína að seinast grafinu. Gæti verið góð hugmynd að skoða graf þar sem tekið eru allar línu og sett á sama grafið. Prufa það seinna. \\
+Þegar skoðað er yfir myndirnar, fyrst fyrir fsfat. Þá ef nemandinn hefur ekki séð spurningunna áður, þá lítur út fyrir að vera að vaxa líkurnar á að nemandinn fær svarið rétt, en það lítur út fyrir að því fleiri svör við skoðum, því hægari línunar vaxa, sést við þegar við skoðum hvar línan er við 50 í hvert skipti, það minnkar og minnkar. þegar nemandinn hefur séð svarið áður, þá hefur vaxinn minni og minni vaxa líka, og verður eins og bein lína að seinast grafinu. Gæti verið góð hugmynd að skoða graf þar sem tekið eru allar línu og sett á sama grafið. Prufa það seinna. 
 Nú, ef horft er á allar línurnar í einu þegar spurningin er ný þá fæst
 ![mynd fyir þetta](Img/plot3.png)
-Hér sést að hallin minnkar því fleiri spurnigar eru spyrðar, hmmmm. \\
+Hér sést að hallin minnkar því fleiri spurnigar eru spyrðar, hmmmm. 
 
-Næst Þegar það er skoðað með tilliti til fsvfat, fyrsta sem maður tekur eftir, er að líkurnar að fá rétt svar, eftir því hve mikið af svörum hefur sést hingað til er að minnka miðað við þetta líkann, svo nemandinn verður aðeins verra af með spurningum í því tilviki. Á meðan fyrir þær spurningar sem eru að sjást í fyrsta skiptið er að vaxa eins og var verið að búast við. Lítur út fyrir að þegar fleiri spurningar eru leifðar að svara, þá vex slope-ið hjá svörunum sem hafa sést áður aðeins upp, á meðan fyrir þær sem eru að koma í fyrsta sinn er ekki of mikil breyting á milli. \\
-Afhverju er svona minni breyting hjá fsvfat miðað við fsfat? Þetta hefur líklega að gera við það að þeir sem eru að svara rosalega mikið eru ekki að toga línuna of mikið með hugsa ég. \\
-\\
+Næst Þegar það er skoðað með tilliti til fsvfat, fyrsta sem maður tekur eftir, er að líkurnar að fá rétt svar, eftir því hve mikið af svörum hefur sést hingað til er að minnka miðað við þetta líkann, svo nemandinn verður aðeins verra af með spurningum í því tilviki. Á meðan fyrir þær spurningar sem eru að sjást í fyrsta skiptið er að vaxa eins og var verið að búast við. Lítur út fyrir að þegar fleiri spurningar eru leifðar að svara, þá vex slope-ið hjá svörunum sem hafa sést áður aðeins upp, á meðan fyrir þær sem eru að koma í fyrsta sinn er ekki of mikil breyting á milli. 
+Afhverju er svona minni breyting hjá fsvfat miðað við fsfat? Þetta hefur líklega að gera við það að þeir sem eru að svara rosalega mikið eru ekki að toga línuna of mikið með hugsa ég. 
+
 
 Nú þetta sýnir aðallega smá meiri vaxta, en fyrir spurningunna "Er hægt að mæla framfarir en ekki bara utanaðbókarlærdóm? Bera saman fyrstu svarmöguleika og þá sem hafa komið áður" þá er sést að það eru framfarir þegar svarið kemur fyrst eftir því lengra sem er komið, en að mínu mati er ekki komið með það hvort þetta eru framfarir eða utanbókarlærdómur, þar sem ekki er innifalið röngu svörinn ennþá, því ekki er vitað hvort nemandinn er að ná beinum framförum í nýju spurningunum, eða hvort þetta er það að nemandinn er að setja á minnið röngu svörinn og þá er vöxturinn utanaðbókarlærdómur. hmmmmmm
 
@@ -51,9 +56,146 @@ Nú, það sést að í báðum tilvikum, þá gerist tvennt hjá svörunum sem 
 ![meanplot200](Img/plotbymean200.png)
 ![meanplot250](Img/plotbymean250.png)
 ![meanplot300](Img/plotbymean300.png)
+Sér smá hvar allt er að detta og stökkva aftur upp, en ekki alveg viss hvort það er eitthvað mikilvægt í myndunum þarna.
 Svo að lokum skoðaði ég aðeins logistic regression föllin aftur, en skipt upp eftir lectureId og studentId
 ![lectureIdplot](Img/plotbylectureId.png)
 ![studentIdplot](Img/plotbystudentId.png)
+Það lýtur út fyrir að vera munur milli nemenda og fyrirlesturs, en frá ábendingu þá gæti það verið gotta að skoða aðeins flóknari model með mixed effect, þar sem observation-in eru ekki óháð hvort öðru, en eru háð nemenda til nemenda. Skoða aðeins betur seinna með glmer.
+
+Eftir allar þessa myndir, þá gæti verið gotta að skoða einhverjar töflur um gögninn, svo ég setti upp einhverjar til að skoða það allt, fyrsta taflan hérna er að skoða hve mikið og hvert hlutfallið er af gögnunum sem eru nemendur að fara yfir x mörg svör fyrir hvern fyrirlestur. Nota aðallega til að vita hvar það gæti verið gott að skera gögninn, óþarfi að nota öll svörinn
+```{r table by lecturelimit}
+hashAnswer %>% group_by(lectureId) %>% summarise("FY50" = sum(fsfat >= 5), "HY50" = mean(fsfat > 5), 
+                                                 "FY100" = sum(fsfat >= 10), "HY100" = mean(fsfat > 10),
+                                                 "FY150" = sum(fsfat >= 15), "HY150" = mean(fsfat > 15),
+                                                 "FY200" = sum(fsfat >= 20), "HY200" = mean(fsfat > 20),
+                                                 "FY250" = sum(fsfat >= 25), "HY250" = mean(fsfat > 25),
+                                                 "FY300" = sum(fsfat >= 30), "HY300" = mean(fsfat > 30)) %>% kable(digits = 4)
+
+```
+
+Nú er FYx fjöldi gagna yfir x og HYx hlutfall gagna yfir x. 
+Gott væri að skoða sitthvort sem væri þá til að sjá það aðeins betur beint
+```{r FY and HY}
+hashAnswer %>% group_by(lectureId) %>% summarise("FY50" = sum(fsfat >= 5), "FY100" = sum(fsfat >= 10), 
+                                                 "FY150" = sum(fsfat >= 15), "FY200" = sum(fsfat >= 20), 
+                                                 "FY250" = sum(fsfat >= 25), "FY300" = sum(fsfat >= 30)) %>% 
+  kable(digits = 4)
+hashAnswer %>% group_by(lectureId) %>% summarise("HY50" = mean(fsfat >= 5), "HY100" = mean(fsfat >= 10), 
+                                                 "HY150" = mean(fsfat >= 15), "HY200" = mean(fsfat >= 20), 
+                                                 "HY250" = mean(fsfat >= 25), "HY300" = mean(fsfat >= 30)) %>% 
+  kable(digits = 4)
+```
+
+fyrir alla fyrirlestrana nema 3082 þá eru u.þ.b. 70% af gögnunum undir 50 spurningum svarað, en það er í kringum undir 100 fyrir 3082, svo fleiri spurningum er svarað eftir þá. Spurning hvort þetta kemur frá fáum nemendum sem eru að svara miklu meira en hinir.
+
+
+Svo að lokum fjöldann og hlutfall yfir x fyrir öll gögninn, ekki bara fyrir hvern fyrirlestur fyrir sig
+```{r table by limit}
+a <- hashAnswer %>% summarise("FY50" = sum(fsfat >= 5), "FY100" = sum(fsfat >= 10), 
+                              "FY150" = sum(fsfat >= 15), "FY200" = sum(fsfat >= 20), 
+                              "FY250" = sum(fsfat >= 25), "FY300" = sum(fsfat >= 30))
+b <- hashAnswer %>% summarise("HY50" = mean(fsfat >= 5), "HY100" = mean(fsfat >= 10), 
+                              "HY150" = mean(fsfat >= 15), "HY200" = mean(fsfat >= 20), 
+                              "HY250" = mean(fsfat >= 25), "HY300" = mean(fsfat >= 30))
+ab <- cbind(a, b)
+FHbylim <- ab %>% pivot_longer(c('FY50', 'HY50', 'FY100', 'HY100', 'FY150', 'HY150', 'FY200', 'HY200', 'FY250', 'HY250', 'FY300', 'HY300'), 
+                    names_to = "typewLim", values_to = "values") %>% 
+  separate(typewLim, into = c("type", "limit"), sep = 2) %>% pivot_wider(names_from = type, values_from = values)
+
+
+FHbylim %>% kable(digits = 4)
+```
+
+Lítur út að fyrir heildina þá er 27.75% af gögnunum sem eru svör eftir fyrstu 50, svo bara 8.29% af gögnunum sem eru svör eftir fyrstu 100. Kannski gott að skera þá hjá 100. Mun byrja með það
+
+
+Næst gæti það verið gott að skoða aðeins hlutfall svara sem hafa sést áður og svo fjölda og hlutföll þeirra sem eru rétt eða röng af því.
+Byrja með hlutfall hsta við mynd
+```{r}
+ggplot(hashAnswer, aes(x = hsta)) +
+  geom_bar()
+```
+Lítur út fyrir að um 2/3 allra gagnanna er verið að svara þegar nemandinn hefur séð svarið áður, hugmynd kannski að skoða þetta betur með minni gögn? hmmmmmmmmmm 
+
+skoðum svo aðeins hlutföllin beint fyrir rétt svör, hvort þau hafa séð þetta áður og svo hlutföllin af svörunum sem eru svo innan hvern flokks
+```{r}
+correctnam <- ifelse(hashAnswer$correct == 0, "Vitlaust", "Rétt")
+hstanam <- ifelse(hashAnswer$hsta == "0", "Nýtt", "Hef séð áður")
+corhsta <- prop.table(table(hashAnswer$correct+1, hashAnswer$hsta ))
+corhsta <- rbind(corhsta, c(sum(corhsta[,1]), sum(corhsta[,2])))
+corhsta <- cbind(corhsta, c(sum(corhsta[1,]), sum(corhsta[2,]), sum(corhsta[3,])))
+
+row.names(corhsta) <- c("vitlaust", "rétt", "samtals")
+colnames(corhsta) <- c("fyrsta", "hef séð", "samtals")
+
+corhsta %>% kable(digits = 4)
+```
+
+Hmmm, svo u.þ.b. 82.67% af gögnunum voru rétt svör og alveg 60.82% af gögnunum voru rétt svör sem hafa verið séð áður.
+
+Eftir það, þá er hérna hlutföllin þegar skoðað hve mikið af réttu eða vitlausu er nýtt svar eða hefur sést áður
+```{r}
+prop.table(table(correctnam, hstanam ), margin = 1) %>% kable(digits = 4)
+```
+
+Af réttu svörunum þá hafa 73.57% af svörunum komið áður og bara 26.43% eru ný. Svo fyrir vitlausu svörinn þá er alveg 69.8% af þeim ný svör sem ekki hafa sést áður. Svo mest allt af vitlausu svörunum voru ekki ný, samt ekki hissa af því.
+
+Þegar það er komið þá er líka hægt að skoða hlutföllinn fyrir hve mikið af nýu svörunum og þeirra sem hafa sést áður er rétt eða vitlaust.
+```{r}
+prop.table(table(correctnam, hstanam ), margin = 2) %>% kable(digits = 4)
+```
+
+Af þeim sem hafa sést áður þá er alveg 92.08% af þeim rétt og bara smá partur er vitlaus, meirisegja fyrir nýju svörinn sem ekki hafa sést áður, þá er 64.36% af þeim rétt og 35.64% vitlaust. Svo það er oftast rétt svar, er það kannski útaf utanbókarlærdóm vitlausu möguleikanna eða eitthvað annað?
+
+Eftir þetta, þá gætu verið gott að skoða fljótlega sömu töflur, bara með aðeins minni gögn
+
+```{r}
+hashtemp <- hashAnswer %>% filter(fsfat < 10)
+correctnam <- ifelse(hashtemp$correct == 0, "Vitlaust", "Rétt")
+hstanam <- ifelse(hashtemp$hsta == "0", "Nýtt", "Hef séð áður")
+corhsta <- prop.table(table(hashtemp$correct+1, hashtemp$hsta ))
+corhsta <- rbind(corhsta, c(sum(corhsta[,1]), sum(corhsta[,2])))
+corhsta <- cbind(corhsta, c(sum(corhsta[1,]), sum(corhsta[2,]), sum(corhsta[3,])))
+
+row.names(corhsta) <- c("vitlaust", "rétt", "samtals")
+colnames(corhsta) <- c("fyrsta", "hef séð", "samtals")
+
+corhsta %>% kable(digits = 4)
+
+prop.table(table(correctnam, hstanam ), margin = 1) %>% kable(digits = 4)
+
+prop.table(table(correctnam, hstanam ), margin = 2) %>% kable(digits = 4)
+```
+
+Það sést ekki stór munur þegar tekið eru gögninn innan við fyrstu 100 spurningum svarað. Þetta passar við það að stór hluti gagnanna er undir 100 svörum.
+
+Eftir þetta þá er gott að geta vita hve mikið af réttum svarmöguleikum er eiginlega innan hverjarum fyrirlestri
+```{r}
+hashAnswer %>% group_by(lectureId) %>% summarise('fjöldi svara' = n_distinct(hash)) %>% kable(digits = 4)
+```
+
+lítur út fyrir að 3082 hefur flesta rétta svarmöguleikanna, annars stekkur það milli þeirra með í kringum 40 svarmöguleika og þeirra í kringum 20.
+
+Svo líka aðeins hve mikið af gögnunum er innan hvern fyrirlesturs
+```{r}
+prop.table(table(hashAnswer$lectureId)) %>% kable(digits = 4, col.names = c("lectureId", "Hlutfall"))
+```
+
+3082 er stærsta af fyrirlestrunum, en er bara 22% af heildargögnunum. Gott að vita
+
+Svo að lokum teikning um það sama efni
+```{r}
+hashAnswer %>% group_by(lectureId) %>% mutate("count" = n()) %>% 
+  ggplot(aes(x = reorder(lectureId, count, FUN = mean))) +
+  geom_bar()
+```
+
+Gott að vita.
+
+
+
+
+
 
 
 
