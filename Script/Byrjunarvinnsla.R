@@ -1,15 +1,28 @@
+#Fyrst eru það þægilegu dplyr og tidyr föllin. Svo RMySQL til að fá aðgang á SQL
 library(dbplyr)
 library(dplyr)
 library(RMySQL)
 library(tidyr)
+#Hvað gerir MASS aftur?
 library(MASS)
+#GGplot gott til að teikna
 library(ggplot2)
 library(gridExtra)
+#Tidyverse er geðveikt
 library(tidyverse)
+#modelr var fyrir %$% skipanir minnist mig
 library(modelr)
+#hvað gerir rlang aftur?
 library(rlang)
+#lme4 og lmerTest er fyrir glmer og fleira þægilegt
 library(lme4)
-library(kableExtra)
+library(lmerTest)
+#Car er til að geta notað Anova
+library(car)
+#cAIC4 er svo það sé hægt að prufa stepcAIC, svo stepAIC fyrir glmer fallið, mun líklega ekki nota, tekur of langan tíma
+library(cAIC4)
+#til að geta gert trapz fyrir AUC í ROC
+library(pracma)
 
 hashAnswer <- read.csv('Data/hashAnswer4.csv')
 hashAnswer <- hashAnswer %>% subset(select=-c(X))
@@ -21,6 +34,8 @@ hashAnswer$fsfat <- hashAnswer$fsfat/10
 hashAnswer$fsvfatu <- hashAnswer$fsvfatu/10
 hashAnswer$gpow2 <- as.factor(floor(log2(hashAnswer$gpow)))
 
+hashAnswer %$% ifelse(gpow < 0.25, "Undir 0.25", ifelse(gpow > 0.25, "Yfir 0.25", "Er 0.25")) %>% table() %>% prop.table()
+
 
 tmp <- unique(hashAnswer$lectureId)[-1]
 tmp2 <- unique(hashAnswer$lectureId)
@@ -29,17 +44,168 @@ tmp2 <- unique(hashAnswer$lectureId)
 
 hashTest <- hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
   filter(count > 7 & fsfat < 5)
+hashTest2 <- hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
+  filter(count > 7 & fsfat < 10)
 hashAnswer %>% group_by(lectureId) %>% summarise(n_distinct(studentId))
 
+hashTest2 %$% ifelse(gpow < 0.25, "Undir 0.25", ifelse(gpow > 0.25, "Yfir 0.25", "Er 0.25")) %>% table() %>% prop.table()
 
-
-
+#nokkrar Glmer til að prufa
 ans <- glmer(correct ~ fsvfatu*hsta + nicc + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
-ans2 <- glmer(correct ~ fsfat*hsta + nicc + gpow2 + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
-ans3 <- glmer(correct ~ fsvfatu*hsta + nicc + gpow2 + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e6)))
+options(contrasts = c("contr.sum", "contr.poly"))
+ans1 <- glmer(correct ~ fsvfatu*hsta + nicc + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashTest, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+ans12 <- glmer(correct ~ fsvfatu*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+                data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+ans2 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+ans22 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+
+ans32 <- glmer(correct ~ fsfat*hsta + nicc + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+
+
+
+ans3 <- glmer(correct ~ fsvfatu*hsta + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e6)))
+
+ans42 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 + fsfat * hsta | studentId), family = binomial(link = "logit"), data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+
+ans52 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 + fsfat | studentId), family = binomial(link = "logit"), data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+
+
+stepcAIC(ans22, direction = "backward", trace = TRUE, data = hashTest2)
+
+hashAnswer %>% ggplot(aes(x = fsfat,  y = fsvfatu)) +
+  geom_point()
+
+save(ans42, file = "Data/ans42")
+save(ans22, file = 'Data/ans22')
+
+load("Data/ans22")
+load("Data/ans42")
+
+
+#Aðeins teiknað til að skoða betur
+ggplot(hashAnswer, aes(x = fsfat, y = correct, color = hsta)) +
+  geom_point() +
+  geom_smooth()
+
+hashAnswer %>% filter(hsta == "0") %>% ggplot(aes(x = fsfat * 10, y = correct))+
+  geom_point() +
+  geom_smooth(se = FALSE) + 
+  facet_wrap(vars(lectureId))
+
+?geom_smooth
+
 broom::tidy(ans)
-summary(ans)
+summary(ans12)
+ranef(ans1)
+Anova(ans12, type = 3)
+Anova(ans3, type = 3)
+summary(ans3)
+
+BrierScore <- function(modl, df ) {
+  predicted <- predict(modl, type = "response")
+  truth <- df$correct
+  return(mean((predicted-truth)^2))
+}
+
+BrierScore(ans42, hashTest2)
+BrierScore(ans22, hashTest2)
+
+
+
+
+summary(ans22)
+Anova(ans22, type = 3)
+
+Anova(ans42, type = 3)
+
+summary(ans42)
+
+anova(ans32, ans22)
+anova(ans42, ans22)
+anova(ans42, ans52)
+
+confint(ans22)
+emmeans::emmeans(ans22, ~ fsfat, type = "response")
+
+#Teiknum ROC
+ROCDraw <- function(df, modl) {
+  score <- predict(modl, type = "response")
+  y <- df$correct
+  
+  #False positive rate
+  FPR <- 0
+  
+  #true positive rate
+  TPR <- 0
+  
+  #setjum upp threshold
+  threshold <- seq(from = 0, to = 1, by = 0.01)
+  
+  # number of positive and negative
+  P <- sum(y)
+  N <- length(y) - P
+  
+  #Iterate through all thresholds
+  
+  for (j in 1:length(threshold)) {
+    FP <- 0
+    TP <- 0
+    
+    thresh <- threshold[j]
+    for (i in 1:length(score)) {
+      if (score[i] >= thresh) {
+        if (y[i] == 1){
+          TP <- TP + 1
+        }
+        if (y[i] == 0){
+          FP <- FP + 1
+        }
+      }
+      
+    }
+    FPR[j] <- FP/N
+    TPR[j] <- TP/P
+  }
+  #Reiknum AUC með trapezoid reglunni
+  auc <- -1 * trapz(FPR, TPR)
+  #Að lokum teiknum við aðeins upp
+  p <- data.frame(x = FPR, y = TPR) %>%
+    ggplot(aes(x = FPR, y = TPR)) +
+    geom_area(fill = "lightblue")+
+    geom_line(color = "orange", size = 1.5) +
+    geom_line(data = data.frame(x = seq(0, 1, 0.01), y = seq(0, 1, 0.01)), aes(x = x, y = y), linetype = "dashed") +
+    labs(title = paste0("ROC curve, AUC = ", round(auc, digits = 4))) +
+    xlab("False Positive Rate") +
+    ylab("True Positive Rate") +
+    coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
+      
+  return(p)
+  
+  
+}
+
+p1 <- ROCDraw(hashTest2, ans42)
+p2 <- ROCDraw(hashTest2, ans22)
+p1
+p2
+
+grid.arrange(p1, p2, nrow = 1)
+
+?geom_area
+
+?boot
+
+?geom_line
+?seq
+testhold <- seq(from = 0, to = 1, by = 0.01)
+
+
+#að flótu bragði, þá lítur út fyrir að fsfat virkar betur en fsvfat? skoða betur seinna
+hashTest %>% ungroup() %>% summarise(mean(gpow == 0.25))
+
 summary(ans2)
+Anova(ans2, type = 3)
 summary(ans3)
 predict(ans)
 predict.glm(ans, type = "response")
@@ -47,6 +213,7 @@ hashTest$pred <- predict(ans, type = "response")
 hashTest$pred2 <- predict(ans2, type = "response")
 hashTest$pred3 <- predict(ans3, type = "response")
 
+#stuttar myndir teiknaðar með glmer, mun uppfæra svo
 
 p1 <- hashTest %>% filter(hsta == "0" & lectureId == "3082") %>% ggplot(aes(x = fsvfatu, y = correct, group = studentId), ) +
   geom_point() +
@@ -79,93 +246,4 @@ grid.arrange(p1, p2, nrow = 1)
 grid.arrange(p3, p4, nrow = 1)
 
 
-#Skoðum aðeins hlutföll svara eftir limit
-hashAnswer %>% group_by(lectureId) %>% summarise("FY50" = sum(fsfat >= 5), "FY100" = sum(fsfat >= 10), 
-                                                 "FY150" = sum(fsfat >= 15), "FY200" = sum(fsfat >= 20), 
-                                                 "FY250" = sum(fsfat >= 25), "FY300" = sum(fsfat >= 30))
-hashAnswer %>% group_by(lectureId) %>% summarise("HY50" = mean(fsfat >= 5), "HY100" = mean(fsfat >= 10), 
-                                                 "HY150" = mean(fsfat >= 15), "HY200" = mean(fsfat >= 20), 
-                                                 "HY250" = mean(fsfat >= 25), "HY300" = mean(fsfat >= 30))
-a <- hashAnswer %>% summarise("FY50" = sum(fsfat >= 5), "FY100" = sum(fsfat >= 10), 
-                                                 "FY150" = sum(fsfat >= 15), "FY200" = sum(fsfat >= 20), 
-                                                 "FY250" = sum(fsfat >= 25), "FY300" = sum(fsfat >= 30))
-b <- hashAnswer %>% summarise("HY50" = mean(fsfat >= 5), "HY100" = mean(fsfat >= 10), 
-                                                 "HY150" = mean(fsfat >= 15), "HY200" = mean(fsfat >= 20), 
-                                                 "HY250" = mean(fsfat >= 25), "HY300" = mean(fsfat >= 30))
 
-
-hashAnswer %>% group_by(lectureId) %>% summarise("FY50" = sum(fsfat >= 5), "HY50" = mean(fsfat > 5), 
-                                                 "FY100" = sum(fsfat >= 10), "HY100" = mean(fsfat > 10),
-                                                 "FY150" = sum(fsfat >= 15), "HY150" = mean(fsfat > 15),
-                                                 "FY200" = sum(fsfat >= 20), "HY200" = mean(fsfat > 20),
-                                                 "FY250" = sum(fsfat >= 25), "HY250" = mean(fsfat > 25),
-                                                 "FY300" = sum(fsfat >= 30), "HY300" = mean(fsfat > 30))
-
-#Búa til töflu til að sýna hve mikið af gögnunum fara yfir x
-a <- hashAnswer %>% summarise("FY50" = sum(fsfat >= 5), "FY100" = sum(fsfat >= 10), 
-                              "FY150" = sum(fsfat >= 15), "FY200" = sum(fsfat >= 20), 
-                              "FY250" = sum(fsfat >= 25), "FY300" = sum(fsfat >= 30))
-b <- hashAnswer %>% summarise("HY50" = mean(fsfat >= 5), "HY100" = mean(fsfat >= 10), 
-                              "HY150" = mean(fsfat >= 15), "HY200" = mean(fsfat >= 20), 
-                              "HY250" = mean(fsfat >= 25), "HY300" = mean(fsfat >= 30))
-ab <- cbind(a, b)
-FHbylim <- ab %>% pivot_longer(c('FY50', 'HY50', 'FY100', 'HY100', 'FY150', 'HY150', 'FY200', 'HY200', 'FY250', 'HY250', 'FY300', 'HY300'), 
-                    names_to = "typewLim", values_to = "values") %>% 
-  separate(typewLim, into = c("type", "limit"), sep = 2) %>% pivot_wider(names_from = type, values_from = values)
-
-
-FHbylim
-
-ggplot(hashAnswer, aes(x = hsta)) +
-  geom_bar()
-#Finna aðeins prósentur fyrir rétt svör, röng svör tengt við hve oft það hefur komið upp
-prop.table(table(hashAnswer$correct))
-prop.table(table(hashAnswer$hsta))
-correctnam <- ifelse(hashAnswer$correct == 0, "Vitlaust", "Rétt")
-hstanam <- ifelse(hashAnswer$hsta == "0", "Nýtt", "Hef séð áður")
-corhsta <- prop.table(table(hashAnswer$correct+1, hashAnswer$hsta ))
-corhsta <- rbind(corhsta, c(sum(corhsta[,1]), sum(corhsta[,2])))
-corhsta <- cbind(corhsta, c(sum(corhsta[1,]), sum(corhsta[2,]), sum(corhsta[3,])))
-
-row.names(corhsta) <- c("vitlaust", "rétt", "samtals")
-colnames(corhsta) <- c("fyrsta", "hef séð", "samtals")
-
-corhsta
-
-prop.table(table(correctnam, hstanam ), margin = 1)
-prop.table(table(correctnam, hstanam ), margin = 2)
-
-#Hve mikið af svörum er fyrir hvern fyrirlestur
-hashAnswer %>% group_by(lectureId) %>% summarise(n_distinct(hash))
-
-#timeDif skoðanir, veit ekki hvort það er gott að nota
-hashAnswer %>% group_by(studentId) %>% summarise("seconds" = mean(timeDif, na.rm = T), 
-                                            "minutes" = mean(timeDif, na.rm = T)/60, 
-                                            "hours" = mean(timeDif, na.rm = T)/3600)
-
-prop.table(table(hashAnswer$lectureId))
-
-summary(hashAnswer)
-
-hashAnswer %>% group_by(lectureId) %>% mutate("count" = n()) %>% 
-  ggplot(aes(x = reorder(lectureId, count, FUN = mean))) +
-  geom_bar()
-
-hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
-  ggplot(aes(x = reorder(studentId, count, FUN = mean))) +
-  geom_bar() + 
-  coord_flip()
-
-xtabs(~studentId + correct, data = hashAnswer)
-
-hashAnswer %>% summarise(n_distinct(studentId))
-
-?reorder
-?mean
-?table
-?prop.table
-?geom_bar
-?separate
-?spread
-?pivot_wider
-?pivot_wider_spec
