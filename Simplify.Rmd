@@ -1,0 +1,38 @@
+---
+title: "Einföldun"
+output: rmdformats::readthedown
+---
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+
+source('Script/Settings.R')
+```
+
+
+
+
+## Gögninn
+
+Til að byrja með, er gott að skoða gögninn. Ég hef fjarlægt sum variable séðan seinast, þar sem þær voru að mestu óþarfi
+```{r datashow}
+hashAnswer <- read.csv('Data/hashAnswer4.csv') %>% subset(select = -c(timeStart, fsvfat, fsvfatu, X))
+hashAnswer$hsta <- hashAnswer$hsta%>%as.character()
+hashAnswer$lectureId <- hashAnswer$lectureId %>% as.factor()
+hashAnswer$studentId <- hashAnswer$studentId %>% as.factor()
+hashAnswer$nicc <- hashAnswer$nicc %>% as.factor()
+hashAnswer %>% glimpse()
+```
+Gagnasettið, eins og það er núna hefur 10 breytur. Breyturnar eru:
+  * lectureId: Þetta er Id breyta fyrir hvaða fyrirlestur við erum í.
+  * studentId: Þetta er Id breyta fyrir hvaða nemenda við erum með.
+  * questionId: Þetta er Id breyta fyrir hvaða spurningu við erum með.
+  * correct: Þetta er binary breyta sem segir til hvort það var svarað rétt eða rangt.
+  * hash: Þetta er hash breyta sem segir til hvaða rétta svar við erum með hérna
+  * fsfat: "fjöldi spurninga fram að þessu" þetta segir til um hve margar spurningar nemandinn hefur svarað hingað til innin við þennan fyrirlestur
+  * hsta: "hef séð þetta áður" er breyta sem segir til um hvort að nemandinn hefur séð svarið áður eða ekki
+  * timeDif: Þetta er breyta sem segir okkur hve langt það var séðan nemandinn sá þetta svar áður.
+  * nicc: þetta er "number of incorrect choices", líke þekkt sem NumQ. Segir til hve margir rangir svarmöguleikar það eru.
+  * gpow: gpow er breyta sem er sett á nemenda þegar hann byrjar á fyrirlestrinum sem segir til hve hratt hann fær erfiðari spurningar.
+
+
