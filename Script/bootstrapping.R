@@ -96,8 +96,9 @@ BrierScore <- function(modl, df ) {
 
 #model sem notuð eru fyrir bootwork
 modl42 <- function(df) {
-  glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 + fsfat * hsta | studentId), family = binomial(link = "logit"), 
+  ans <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 + fsfat * hsta | studentId), family = binomial(link = "logit"), 
         data = df, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+  return(ans)
 }
 
 test1 <- data.frame(brier = BrierScore(ans42, hashTest2), 
@@ -126,3 +127,12 @@ Bootwork <- function(df, iteration, Funmod){
   #skila original og bootel
   return(list(original, bootel))
 }
+
+start_time <- Sys.time()
+test1 <- Bootwork(hashTest2, 3, modl42)
+end_time <- Sys.time()
+
+save(test1, file ="Data/test1")
+
+end_time - start_time
+#Time difference of 2.12855 hours
