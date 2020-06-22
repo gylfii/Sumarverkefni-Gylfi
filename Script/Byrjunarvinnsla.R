@@ -58,6 +58,7 @@ ans1 <- glmer(correct ~ fsvfatu*hsta + nicc + lectureId + (1 | studentId), famil
 ans12 <- glmer(correct ~ fsvfatu*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
                 data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 ans2 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+
 ans22 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 
 ans32 <- glmer(correct ~ fsfat*hsta + nicc + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
@@ -66,7 +67,12 @@ ans32 <- glmer(correct ~ fsfat*hsta + nicc + lectureId + (1 | studentId), family
 
 ans3 <- glmer(correct ~ fsvfatu*hsta + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e6)))
 
+start_time <- Sys.time()
+#Time difference of 28.67935 mins
 ans42 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 + fsfat * hsta | studentId), family = binomial(link = "logit"), data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+end_time <- Sys.time()
+
+end_time - start_time
 
 ans52 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 + fsfat | studentId), family = binomial(link = "logit"), data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 
@@ -127,6 +133,16 @@ anova(ans42, ans52)
 
 confint(ans22)
 emmeans::emmeans(ans22, ~ fsfat, type = "response")
+
+
+
+
+
+
+
+
+
+
 
 #Teiknum ROC
 ROCDraw <- function(df, modl) {
@@ -201,6 +217,27 @@ grid.arrange(p1, p2, nrow = 1)
 testhold <- seq(from = 0, to = 1, by = 0.01)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+hashTest2 %>% ungroup() %>% mutate(pred = predict(ans42, type = "response")) %>%
+  filter(hsta == "0" & lectureId == "3082") %>% 
+  ggplot(aes(x = fsvfatu, y = correct, group = studentId), ) +
+  geom_point() +
+  geom_line(aes(y = pred)) + 
+  theme(legend.position = "none")
+
+
+
 #að flótu bragði, þá lítur út fyrir að fsfat virkar betur en fsvfat? skoða betur seinna
 hashTest %>% ungroup() %>% summarise(mean(gpow == 0.25))
 
@@ -244,6 +281,8 @@ p5 <- hashTest %>% filter(lectureId == "3082" & studentId %in% c("18788")) %>%
 p5
 grid.arrange(p1, p2, nrow = 1)
 grid.arrange(p3, p4, nrow = 1)
+
+#Time fixing manuevers
 
 
 
