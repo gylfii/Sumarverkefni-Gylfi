@@ -23,6 +23,8 @@ library(car)
 library(cAIC4)
 #til að geta gert trapz fyrir AUC í ROC
 library(pracma)
+#sma skoda
+library(funModeling)
 
 hashAnswer <- read.csv('Data/hashAnswer4.csv')
 hashAnswer <- hashAnswer %>% subset(select=-c(X))
@@ -59,7 +61,13 @@ ans12 <- glmer(correct ~ fsvfatu*hsta + nicc + gpow + lectureId + (1 | studentId
                 data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 ans2 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 
+start_time <- Sys.time()
+#Time difference of 13.24624 mins
 ans22 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+end_time <- Sys.time()
+
+end_time - start_time
+
 
 ans32 <- glmer(correct ~ fsfat*hsta + nicc + lectureId + (1 | studentId), family = binomial(link = "logit"), data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 
@@ -285,4 +293,6 @@ grid.arrange(p3, p4, nrow = 1)
 #Time fixing manuevers
 
 
+df_status(hashAnswer)
 
+freq(hashAnswer, input = 'hsta')
