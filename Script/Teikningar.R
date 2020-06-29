@@ -137,13 +137,20 @@ grid.arrange(p00, p01, p1, p2, p3, p4, nrow= 2)
 
 p5 <- hashAnswer %>% group_by(fsfat,hsta) %>% filter(fsfat>=0) %>%
   summarise("med"=mean(correct),"fjold"=n_distinct(studentId)) %>%
-  ggplot(aes(x=fsfat,y=med,color=hsta), show.legend=FALSE)+
-  geom_point(show.legend = FALSE)+
-  geom_smooth(show.legend = FALSE)
+  ggplot(aes(x=fsfat,y=med,color=hsta))+
+  geom_point()+
+  geom_smooth()
+p5
+
+ggsave("Imgsimplify/plotbymean.png", p5, width = 10, height = 10)
+
 p6 <- hashAnswer %>% group_by(fsfat,hsta) %>% filter(fsfat>=0) %>% 
-  summarise("fjoldi"=n_distinct(studentId)) %>%
+  summarise("fjoldi"=n()) %>%
   ggplot(aes(x=fsfat,y=fjoldi,color=hsta))+
-  geom_line(show.legend = FALSE)
+  geom_line()
+p6
+ggsave("Imgsimplify/plotbyamount.png", p6, width = 10, height = 10)
+
 
 p7 <- hashAnswer %>% group_by(fsvfatu,hsta) %>%
   summarise("med"=mean(correct),"fjold"=n_distinct(studentId)) %>%
@@ -217,6 +224,24 @@ hashAnswer %>% mutate(pred = predict.glm(ans2, type = "response")) %>%
   geom_point() + 
   geom_line(aes(y = pred))
 
+
+#fall til að save-a myndina limitað eftir vali
+save_by_limit <- function(hashA, limit) {
+  hashl <- hashA %>% filter(fsfat < limit)
+  p5 <- hashl %>% group_by(fsfat,hsta) %>% 
+    summarise("med"=mean(correct),"fjold"=n_distinct(studentId)) %>%
+    ggplot(aes(x=fsfat,y=med,color=hsta))+
+    geom_point()+
+    geom_smooth() +
+    ggtitle(paste0("Undir ", limit))
+  tpath <- paste0('Imgsimplify/plotbymean', limit, '.png')
+  ggsave(tpath, p5, width = 10, height = 10)
+}
+
+save_by_limit(hashAnswer, 50)
+save_by_limit(hashAnswer, 100)
+
+
 # Teiknum myndirnar fyrir fsvfat á móti correct, með einni línu fyrir hvert Id
 
 ans4 <- glm(correct ~ fsvfat*hsta*lectureId, family = binomial(link = "logit"), data = hashAnswer)
@@ -279,3 +304,47 @@ p2 <- student_unested1 %>% filter(lectureId == 3082 & hsta == 0) %>%
 ps <- grid.arrange(p2, p1, nrow = 1)
 
 ggsave('Img/plotbystudentId.png', ps, width = 20, height = 10)
+
+
+#skoða aðeins plotByMean aftur, nema þetta sinn með tilliti til hvern fyrirlesturs fyrir sig
+
+
+# hashAnswer %>% group_by(fsfat,hsta) %>% filter(fsfat>=0) %>%
+#   summarise("med"=mean(correct),"fjold"=n_distinct(studentId)) %>%
+#   ggplot(aes(x=fsfat,y=med,color=hsta))+
+#   geom_point()+
+#   geom_smooth()
+
+#Teikningar gagnasett
+dfmean <- hashAnswer %>% group_by(fsfat, hsta, lectureId) %>% filter(fsfat <50) %>%
+  summarise("med"=mean(correct), "fjoldi" = n())
+
+max(dfmean)
+
+dfmean %>% ggplot(aes(x = fsfat, fill = hsta)) +
+  geom_histogram(position = "dodge2", binwidth = 1)
+
+dfmean %>% filter(lectureId == "3082") %>%
+  ggplot() +
+  geom_histogram(aes(x = fsfat, y = fjoldi, fill = hsta), stat = "identity", position = "dodge2", show.legend = F)
+
+?grid.arrange
+
+unique(dfmean$lectureId)
+
+for (lId in unique(dfmean$lectureId)) {
+  #filtering out for this lecture
+  dftemp <- dfmean %>% filter(lectureId == lId)
+  #drawing the cool graph
+  p1t <- dftemp %>%
+    ggplot(aes(x = fsfat, y = med, color = hsta))+
+    geom_point(show.legend = F) + 
+    geom_smooth(show.legend = F)
+  #Drawing the histogram
+  p2t <- dftemp %>% ggplot(aes(x = fsfat, y = fjoldi, fill = hsta)) +
+    geom_bar(stat = "identity", position = "dodge2", show.legend = F)
+  #combining the 2
+  pcom <- grid.arrange(p1t, p2t, nrow = 1, top = paste0('fyrirlestur ', lId))
+  ggsave(paste0('Img/lecmean', lId, '.png'), pcom, width = 20, height = 10)
+  
+}
