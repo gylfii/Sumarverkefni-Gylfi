@@ -128,3 +128,15 @@
 #   ggplot(aes(x = fsvfat, y = correct, color = studentId)) + 
 #   geom_point() + 
 #   geom_line(aes(y = pred))
+
+# ```{r}
+# hashAnswer %>% mutate(limit = ifelse(fsfat < 50, "0m49", 
+#                                      ifelse(fsfat < 100, "50m99",
+#                                             ifelse(fsfat < 150, "100m149",
+#                                                    ifelse(fsfat < 200, "150m199",
+#                                                           ifelse(fsfat < 250, "200m249",
+#                                                                  ifelse(fsfat < 300, "250m299", "Y300"))))))) %>%
+#   group_by(limit) %>% summarise(FY = n_distinct(studentId), HY = n_distinct(studentId)/294)
+#   
+# 
+# ```

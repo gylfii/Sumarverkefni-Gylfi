@@ -94,10 +94,23 @@ BrierScore <- function(modl, df ) {
   return(mean((predicted-truth)^2))
 }
 
+SBrierScore <- function(modl, df) {
+  predicted <- predict(modl, type = "response")
+  truth <- df$correct
+  Bs <- mean((predicted-truth)^2)
+  Bmax <- mean(predict(modl, type = "response")) * (1-mean(predict(modl, type = "response")))
+  return(1 - Bs/Bmax)
+}
 #model sem notuð eru fyrir bootwork
 modl42 <- function(df) {
   ans <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 + fsfat * hsta | studentId), family = binomial(link = "logit"), 
         data = df, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+  return(ans)
+}
+
+modl22 <- function(df) {
+  ans <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+               data = df, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
   return(ans)
 }
 
@@ -109,6 +122,7 @@ Bootwork <- function(df, iteration, Funmod){
   #Byrjum fyrst að keyra það fyrir upprunalega gagnasafnið
   ormodel <- Funmod(df)
   original <- data.frame(brier = BrierScore(ormodel, df), 
+                         StanBrier = SBrierScore(ormodel, df),
                          AUC = AUC(predict(ormodel, type = "response"), df$correct))
   
   #Bý til nýjann grunn til að safna saman efnið frá bootstrappinu
@@ -120,6 +134,7 @@ Bootwork <- function(df, iteration, Funmod){
     Bmodel <- Funmod(Bdf)
     #Reiknað breyturnar sem það þarf að reikna
     Nadditions <- data.frame(brier = BrierScore(Bmodel, Bdf), 
+                             StanBrier = SBrierScore(Bmodel, Bdf),
                              AUC = AUC(predict(Bmodel, type = "response"), Bdf$correct))
     #Geyma efnið í gagnasafninu
     bootel <- rbind(bootel, Nadditions)
@@ -136,3 +151,15 @@ save(test1, file ="Data/test1")
 
 end_time - start_time
 #Time difference of 2.12855 hours
+
+start_time <- Sys.time()
+test2 <- Bootwork(hashTest2, 3, modl22)
+end_time <- Sys.time()
+
+end_time - start_time
+#Time difference of 1.450277 hours
+#Vandi, failed to converge 50% skiptana T.T
+
+#another run for the bootstrap to see the new standardized brier
+#Time difference of 1.279231 hours
+#Though sadly, it failed to converge 75% of the time T.T
