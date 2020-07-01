@@ -1,6 +1,13 @@
 ---
 title: "Einföldun"
-output: rmdformats::readthedown
+output: 
+  bookdown::pdf_document2:
+    fig_caption: yes
+    toc: no
+    includes:
+      before_body: template/fp.sty # Forsíða
+      in_header: template/header.tex # TeX haus
+    keep_tex: yes
 ---
 
 ```{r setup, include=FALSE}
