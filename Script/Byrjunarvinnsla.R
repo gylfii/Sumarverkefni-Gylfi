@@ -141,8 +141,19 @@ anova(ans42, ans52)
 
 confint(ans22)
 emmeans::emmeans(ans22, ~ fsfat, type = "response")
+tmp <- emmeans::emmeans(ans22, ~fsfat*hsta + nicc + gpow + lectureId, type = "response")
 
+summary(tmp)
 
+tmp <- ranef(ans22) %>% as.data.frame()
+
+tmp %>%
+  ggplot(aes(x = grp, y = condval)) + 
+  geom_bar(stat = "identity")
+
+hashTest2 %>% group_by(fsfat) %>% summarise(count = n()) %>%
+  ggplot(aes(x = fsfat, y = count)) +
+  geom_line()
 
 
 
