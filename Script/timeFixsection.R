@@ -47,8 +47,9 @@ hashTest2 <- hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
 
 start_time <- Sys.time()
 #Time difference of 28.67935 mins
-fit1 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 + fsfat * hsta | studentId), 
-              family = binomial(link = "logit"), data = hashTest2)
+fit1 <- glmer(correct ~ fsfat * hsta + nicc + gpow + lectureId + (1 | studentId), 
+              family = binomial(link = "logit"), data = hashTest2, nAGQ = 0, 
+              control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 end_time <- Sys.time()
 
 end_time - start_time
@@ -67,7 +68,7 @@ min(tt[ll == 0])
 afurl <- "https://raw.githubusercontent.com/lme4/lme4/master/misc/issues/allFit.R"
 eval(parse(text=getURL(afurl)))
 
-aa2 <- allFit(ans42)
+aa2 <- allFit(fit1)
 
 save(aa, file = "Data/aa1")
 save(aa2, file = "Data/aa2")

@@ -79,7 +79,7 @@ bootcreate <- function(df) {
   return(bootmade)
 }
 
-test1 <- bootcreate(hashAnswer)
+test1 <- bootcreate(hashTest2)
 
 test2 <- as.data.frame(x = NULL, y = NULL, z = NULL)
 for (i in 1:100){
@@ -110,15 +110,21 @@ modl42 <- function(df) {
 
 modl22 <- function(df) {
   ans <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
-               data = df, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+               data = df, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
   return(ans)
 }
+
+fit <- modl22(hashTest2)
+
+summary(fit)
+
 
 test1 <- data.frame(brier = BrierScore(ans42, hashTest2), 
                       AUC = AUC(predict(ans42, type = "response"), hashTest2$correct))
 
 #Bootwork er svo aðal Bootstrap fallið
 Bootwork <- function(df, iteration, Funmod){
+  options(contrasts = c("contr.sum", "contr.poly"))
   #Byrjum fyrst að keyra það fyrir upprunalega gagnasafnið
   ormodel <- Funmod(df)
   original <- data.frame(brier = BrierScore(ormodel, df), 
@@ -152,8 +158,11 @@ save(test1, file ="Data/test1")
 end_time - start_time
 #Time difference of 2.12855 hours
 
+
+
+
 start_time <- Sys.time()
-test2 <- Bootwork(hashTest2, 3, modl22)
+test2 <- Bootwork(hashTest2, 10, modl22)
 end_time <- Sys.time()
 
 end_time - start_time
@@ -163,3 +172,48 @@ end_time - start_time
 #another run for the bootstrap to see the new standardized brier
 #Time difference of 1.279231 hours
 #Though sadly, it failed to converge 75% of the time T.T
+
+start_time <- Sys.time()
+BootedData <- Bootwork(hashTest2, 200, modl22)
+end_time <- Sys.time()
+
+end_time - start_time
+
+
+summary(fit)
+summary(ans22)
+
+
+
+broom::tidy(fit)
+broom::tidy(fit3)
+broom::tidy(ans22)
+
+BrierScore(fit, hashTest2)
+BrierScore(ans22, hashTest2)
+
+AUC(predict(fit, type = "response"), hashTest2$correct)
+AUC(predict(ans22, type = "response"), hashTest2$correct)
+
+
+# start_time <- Sys.time()
+# fit2 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+#       data = hashTest2, control=glmerControl(optimizer="nloptwrap",optCtrl=list(maxfun=2e5)))
+# end_time <- Sys.time()
+# 
+# end_time - start_time
+# 
+# start_time <- Sys.time()
+# fit3 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+#               data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+# end_time <- Sys.time()
+# 
+# end_time - start_time
+# 
+# 
+# start_time <- Sys.time()
+# ans22 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+#                data = hashTest2, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+# end_time <- Sys.time()
+# 
+# end_time - start_time
