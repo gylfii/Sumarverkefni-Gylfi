@@ -124,16 +124,18 @@ test1 <- data.frame(brier = BrierScore(ans42, hashTest2),
 
 #Bootwork er svo aðal Bootstrap fallið
 Bootwork <- function(df, iteration, Funmod){
-  options(contrasts = c("contr.sum", "contr.poly"))
   #Byrjum fyrst að keyra það fyrir upprunalega gagnasafnið
+  print('hey')
   ormodel <- Funmod(df)
+  print('another hey')
   original <- data.frame(brier = BrierScore(ormodel, df), 
                          StanBrier = SBrierScore(ormodel, df),
                          AUC = AUC(predict(ormodel, type = "response"), df$correct))
-  
+  print('consider this hey')
   #Bý til nýjann grunn til að safna saman efnið frá bootstrappinu
   bootel <- data.frame(brier = numeric(0), AUC = numeric(0))
   for (i in 1:iteration){
+    print(i)
     #Bý til nýtt safn með bootstrap
     Bdf <- bootcreate(df)
     #Bý til model fyrir þetta bootstrap
@@ -179,6 +181,13 @@ end_time <- Sys.time()
 
 end_time - start_time
 
+save(BootedData, file = "Data/BootedData")
+load('Data/BootedData')
+?memory.limit
+memory.size()
+memory.size(max = T)
+memory.limit(100000)
+wait <- modl22(hashTest2)
 
 summary(fit)
 summary(ans22)
