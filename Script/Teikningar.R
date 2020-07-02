@@ -348,3 +348,51 @@ for (lId in unique(dfmean$lectureId)) {
   ggsave(paste0('Img/lecmean', lId, '.png'), pcom, width = 20, height = 10)
   
 }
+
+
+#teikna meðaltals myndirnar byggt ofaná hlutföllin
+hashAnswer$hluta <- hashAnswer$hluta %>% as.factor()
+hashAnswer$hluta2 <- cut_interval(hashAnswer$hluta, n = 5)
+
+#Mean fyrir hluta og alls konar myndir með því
+dfmean2 <- hashAnswer %>% group_by(fsfat, hluta2) %>% filter(fsfat < 50 & hsta == "0") %>%
+  summarise("med" = mean(correct), "fjoldi" = n())
+
+dfmean3 <- hashAnswer %>% filter(fsfat < 50) %>% group_by(fsfat, hsta) %>%
+  summarise("med" = mean(correct), fjoldi = n())
+
+ggplot(dfmean3, aes(x = fsfat, y = med, color = hsta)) +
+  geom_point() +
+  geom_smooth() +
+  geom_smooth(data = dfmean2, aes(color = hluta2), se = F)
+
+p2 <- dfmean3 %>% filter(hsta == 0) %>% ggplot(aes(x = fsfat, y = med)) +
+  geom_point() +
+  geom_smooth() +
+  geom_smooth(data = dfmean2 %>% filter(fjoldi > 5), aes(color = hluta2), se = F) +
+  coord_cartesian(ylim = c(yminim, ymaxim))
+
+p2
+p1 <- dfmean2 %>% ggplot(aes(x = fsfat, y = fjoldi, color = hluta2)) +
+  geom_line(show.legend = F) 
+
+p2 <- dfmean3 %>% filter(hsta == 0) %>% ggplot(aes(x = fsfat, y = fjoldi)) +
+  geom_line()
+
+grid.arrange(p1, p2, nrow = 1)
+
+p1 <- dfmean2 %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) + 
+  geom_point() +
+  geom_smooth(se = F)  
+
+p3 <- dfmean2 %>% filter(fjoldi > 5) %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
+  geom_point() +
+  geom_smooth(se = F)
+yminim <- dfmean3 %$% min(med)
+ymaxim <- dfmean3 %$% max(med)
+
+ggsave('Img/meanbyhlutfall.png', p1, width = 15, height = 10)
+ggsave('Img/meabwhsbyhlutfall.png', p2, width = 15, height = 10)
+ggsave('Img/meanbyhlutfallLim.png', p3, width = 15, height = 10)
+
+?geom_smooth

@@ -34,6 +34,8 @@ hashAnswer$studentId <- hashAnswer$studentId %>% as.factor()
 hashAnswer$nicc <- hashAnswer$nicc %>% as.factor()
 hashAnswer$fsfat <- hashAnswer$fsfat/10
 hashAnswer$fsvfatu <- hashAnswer$fsvfatu/10
+
+hashAnswer$hluta2 <- cut_interval(hashAnswer$hluta, n = 5)
 hashAnswer$gpow2 <- as.factor(floor(log2(hashAnswer$gpow)))
 
 hashAnswer %$% ifelse(gpow < 0.25, "Undir 0.25", ifelse(gpow > 0.25, "Yfir 0.25", "Er 0.25")) %>% table() %>% prop.table()
@@ -307,3 +309,41 @@ grid.arrange(p3, p4, nrow = 1)
 df_status(hashAnswer)
 
 freq(hashAnswer, input = 'hsta')
+
+
+#aðeins að skoða fyrir hluta og hluta2
+
+fit1 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+fit2 <- glmer(correct ~ hluta*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+fit3 <- glmer(correct ~ hluta2+hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+fit5 <- glmer(correct ~ hluta2*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+anova(fit1, fit2)
+anova(fit2, fit3)
+anova(fit3, fit5)
+anova(fit1, fit3)
+
+fit4 <- glmer(correct ~ fsfat*hluta2*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+Anova(fit3, type = 3)
+fit6 <- glmer(correct ~ hluta2 + fsfat * hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+Anova(fit6, type = 3)
+fit7 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+Anova(fit7, type = 3)
+anova(fit3, fit7)
+
+fit7tidy <- broom::tidy(fit7)
+fit1tidy <- broom::tidy(fit1)
+
+BrierScore(fit1, hashTest2)
+BrierScore(fit3, hashTest2)
+BrierScore(fit7, hashTest2)
+
+AUC(predict(fit1, type = "response"), hashTest2$correct)
+AUC(predict(fit3, type = "response"), hashTest2$correct)
+AUC(predict(fit7, type = "response"), hashTest2$correct)
