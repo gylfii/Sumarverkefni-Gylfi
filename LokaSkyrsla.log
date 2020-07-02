@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.7.1)  1 JUL 2020 11:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.7.1)  1 JUL 2020 15:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -8,8 +8,8 @@ LaTeX2e <2020-02-02> patch level 5
 L3 programming layer <2020-06-18> (c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf
 -dist/tex/latex/base/article.cls
 Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
-(c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size10.clo
-File: size10.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
+(c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
 )
 \c@part=\count167
 \c@section=\count168
@@ -767,12 +767,12 @@ LaTeX Info: Redefining \nameref on input line 114.
 * \topmargin=-37.0pt
 * \headheight=12.0pt
 * \headsep=25.0pt
-* \topskip=10.0pt
+* \topskip=12.0pt
 * \footskip=30.0pt
-* \marginparwidth=65.0pt
-* \marginparsep=11.0pt
+* \marginparwidth=44.0pt
+* \marginparsep=10.0pt
 * \columnsep=10.0pt
-* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
@@ -800,36 +800,36 @@ x.map}]
 AED: lastpage setting LastPage
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
-Make it at least 22.48878pt.
+Make it at least 14.49998pt.
 We now make it that large for the rest of the document.
 This may cause the page layout to be inconsistent, however.
 
 [2]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 137.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 137.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 170.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 170.
 (./LokaSkyrsla.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 137.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 137.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 170.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 170.
 Package rerunfilecheck Info: File `LokaSkyrsla.out' has not changed.
-(rerunfilecheck)             Checksum: F48EB7A3BFE698678883C2DE762F15DB;308.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 137.
+(rerunfilecheck)             Checksum: 94C93560A8D019468EC437FEBBB37AE5;1185.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 170.
  ) 
 Here is how much of TeX's memory you used:
- 15241 strings out of 482404
- 223829 string characters out of 5945449
- 499249 words of memory out of 5000000
- 30756 multiletter control sequences out of 15000+600000
- 553441 words of font info for 32 fonts, out of 8000000 for 9000
+ 15274 strings out of 482404
+ 224356 string characters out of 5945449
+ 502477 words of memory out of 5000000
+ 30773 multiletter control sequences out of 15000+600000
+ 553764 words of font info for 33 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  38i,11n,45p,905b,350s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.e
 nc}<c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmb
 x12.pfb><c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/l
-m/lmr10.pfb>
-Output written on LokaSkyrsla.pdf (2 pages, 57513 bytes).
+m/lmr12.pfb>
+Output written on LokaSkyrsla.pdf (2 pages, 63716 bytes).
 PDF statistics:
- 39 PDF objects out of 1000 (max. 8388607)
- 32 compressed objects within 1 object stream
- 7 named destinations out of 1000 (max. 500000)
- 17 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 81 PDF objects out of 1000 (max. 8388607)
+ 74 compressed objects within 1 object stream
+ 23 named destinations out of 1000 (max. 500000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 

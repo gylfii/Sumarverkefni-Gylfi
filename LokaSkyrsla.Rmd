@@ -7,7 +7,7 @@ output:
       before_body: template/fp.sty # Forsíða
       in_header: template/header.tex # TeX haus
     keep_tex: yes
-fontsize: 10pt
+fontsize: 12pt
 geometry: margin=1in
 graphics: yes
 ---
@@ -19,4 +19,35 @@ source('Script/Settings.R')
 ```
 
 # Inngangur
+Tutor-web er... Gott að spyrja um góða leið til að útskýra það í byrjunn
 
+Spurningar í tutor-web eru stundum búnar til þannig að kennari semur fyrst einn haus og svo tvo hauga af fullyrðingum, einn með réttum svörum og einn með röngum svörum. Svo eru spurningarnar búnar til með því að velja slembið rétt svar og slurk af röngum svörum (kannski með allt/ekkert ofangreint er rétt). Ef nemandi lærir ekki bara utanað, heldur er að auka skilning á verkefnið, þá ættu að sjást smátt og smátt framfarir í einkunn líka fyrir nýjar fullyrðingar. `r #Frá Gunnari þegar kynnt var verkefnið. Þarf að endur orða`
+
+Svo spurning kemur um að hvort það sé hægt að mæla framfarir, en ekki bara utanaðbókarlærdóm. `r #NEED TO GET THIS PROBERLY WORDED LATER`
+
+SKOÐA HVAÐ HÆGT SÉ AÐ BÆTA ÞEGAR SEINNA KEMUR.
+
+# Aðferð
+
+## framkvæmd 
+
+
+## Þáttakendur
+Úrtak rannsóknarinnar voru nemendur í líkindareikningur og tölfræði á vormisserinu 2020. Þar voru 294 nemendur sem svöruðu samtals 108.017 spurningum í heild.
+
+# Tölfræðileg úrvinnsla
+
+## Hugbúnaður
+Öll tölfræðileg úrvinnsla, meðhöndlun gagna og líkanasmíð fór fram á forritunarmálinu `r #Textabútur sem var copy-paste aður frá hinni greininni. Laga til seinna`
+R v4.0.0 í viðmótinu RStudio v1.3.959
+
+## Gögn
+
+
+## Gagnahreinsun
+
+
+## Breytur
+
+
+## Aðferðarfræði við líkanasmið
