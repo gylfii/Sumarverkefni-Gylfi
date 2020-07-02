@@ -112,9 +112,9 @@ hashAnsdag$sumable <- ifelse(hashAnsdag$hsta==0,1,0)
 
 hashAnsdag <- hashAnsdag %>% group_by(studentId,lectureId) %>% arrange(timeStart) %>% mutate(fsvfat=cumsum(sumable)-1)
 hashAnsdag <- hashAnsdag %>% group_by(lectureId, studentId, timeStart) %>% mutate(fsvfatu = min(fsvfat))
-hashAnsdag$hluta <- hashAnsdag %$% ifelse((notaType == "AOTA-" & hsta == 1) | 
-                                            (notaType == "Nota-" & hluta > 0), hluta + 1/nicc, hluta)
- 
+hashAnsdag$hluta <- hashAnsdag %$% ifelse((notaType == "AOTA-" & hluta > 0) | 
+                                            (notaType == "NOTA-" & hsta == 1), hluta + 1/nicc, hluta)
+
 
 hashAnsdag4 <- hashAnsdag[!grepl('NOTA+',hashAnsdag$hash),]
 #unique(hashAnsdag$lectureId)
