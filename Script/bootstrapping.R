@@ -114,6 +114,23 @@ modl22 <- function(df) {
   return(ans)
 }
 
+modfit1 <- function(df) {
+  ans <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+               data = df, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+  return(ans)
+}
+
+modfit3 <- function(df) {
+  ans <- glmer(correct ~ hluta2+hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+               data = df, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+  return(ans)
+}
+
+modfit7 <- function(df) {
+  ans <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+               data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+  return(ans)
+}
 fit <- modl22(hashTest2)
 
 summary(fit)
@@ -124,18 +141,15 @@ test1 <- data.frame(brier = BrierScore(ans42, hashTest2),
 
 #Bootwork er svo aðal Bootstrap fallið
 Bootwork <- function(df, iteration, Funmod){
+  options(contrasts = c("contr.sum", "contr.poly"))
   #Byrjum fyrst að keyra það fyrir upprunalega gagnasafnið
-  print('hey')
   ormodel <- Funmod(df)
-  print('another hey')
   original <- data.frame(brier = BrierScore(ormodel, df), 
                          StanBrier = SBrierScore(ormodel, df),
                          AUC = AUC(predict(ormodel, type = "response"), df$correct))
-  print('consider this hey')
   #Bý til nýjann grunn til að safna saman efnið frá bootstrappinu
   bootel <- data.frame(brier = numeric(0), AUC = numeric(0))
   for (i in 1:iteration){
-    print(i)
     #Bý til nýtt safn með bootstrap
     Bdf <- bootcreate(df)
     #Bý til model fyrir þetta bootstrap
@@ -183,6 +197,21 @@ end_time - start_time
 
 save(BootedData, file = "Data/BootedData")
 load('Data/BootedData')
+
+#Hér eru verkfærinn fyrir reikninginn hjá fit1, fit3 og fit7 eftir að hafa bætt við hluta
+memory.limit(300000)
+bootedfit1 <- Bootwork(hashTest2, 2500, modfit1)
+save(bootedfit1, file = "Data/Bootedfit1")
+
+bootedfit3 <- Bootwork(hashTest2, 2500, modfit3)
+save(bootedfit3, file = "Data/Bootedfit3")
+
+bootedfit7 <- Bootwork(hashTest2, 2500, modfit7)
+save(bootedfit7, file = "Data/Bootedfit7")
+
+
+
+
 ?memory.limit
 memory.size()
 memory.size(max = T)
