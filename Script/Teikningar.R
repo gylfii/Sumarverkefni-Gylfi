@@ -361,6 +361,10 @@ dfmean2 <- hashAnswer %>% group_by(fsfat, hluta2) %>% filter(fsfat < 50 & hsta =
 dfmean3 <- hashAnswer %>% filter(fsfat < 50) %>% group_by(fsfat, hsta) %>%
   summarise("med" = mean(correct), fjoldi = n())
 
+dfmean4 <- hashAnswer %>% filter(fsfat < 100 & hsta == "0") %>% group_by(fsfat, hluta2) %>%
+  summarise("med" = mean(correct), "fjoldi" = n())
+
+cor(hashTest2$fsfat, hashTest2$hluta)
 ggplot(dfmean3, aes(x = fsfat, y = med, color = hsta)) +
   geom_point() +
   geom_smooth() +
@@ -388,11 +392,14 @@ p1 <- dfmean2 %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
 p3 <- dfmean2 %>% filter(fjoldi > 5) %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
   geom_point() +
   geom_smooth(se = F)
-yminim <- dfmean3 %$% min(med)
-ymaxim <- dfmean3 %$% max(med)
+dfmean4 %>% filter(fjoldi > 5) %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
+  geom_point() +
+  geom_smooth(se = F)
+yminim <- min(dfmean3$med)
+ymaxim <- max(dfmean3$med)
 
 ggsave('Img/meanbyhlutfall.png', p1, width = 15, height = 10)
-ggsave('Img/meabwhsbyhlutfall.png', p2, width = 15, height = 10)
+ggsave('Img/meabwhsbyhlutfall.png', p2, width = 10, height = 10)
 ggsave('Img/meanbyhlutfallLim.png', p3, width = 15, height = 10)
 
 ?geom_smooth

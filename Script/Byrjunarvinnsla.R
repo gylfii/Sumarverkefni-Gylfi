@@ -312,7 +312,8 @@ freq(hashAnswer, input = 'hsta')
 
 
 #aðeins að skoða fyrir hluta og hluta2
-
+options(contrasts = c("contr.sum", "contr.poly"))
+hashTest3 <- hashTest2 %>% filter(fsfat < 5)
 fit1 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
               data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 fit2 <- glmer(correct ~ hluta*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
@@ -322,28 +323,67 @@ fit3 <- glmer(correct ~ hluta2+hsta + nicc + gpow + lectureId + (1 | studentId),
 fit5 <- glmer(correct ~ hluta2*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
               data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 anova(fit1, fit2)
+anova(fit1, fit3)
 anova(fit2, fit3)
 anova(fit3, fit5)
 anova(fit1, fit3)
 
 fit4 <- glmer(correct ~ fsfat*hluta2*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
               data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
-Anova(fit3, type = 3)
+Anova(fit4, type = 3)
 fit6 <- glmer(correct ~ hluta2 + fsfat * hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
               data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 Anova(fit6, type = 3)
 fit7 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
               data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 Anova(fit7, type = 3)
+Anova(fit3, type = 3)
 anova(fit3, fit7)
+
+fit13 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashTest3, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+fit33 <- glmer(correct ~ hluta2+hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashTest3, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+fit73 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashTest3, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+Anova(fit13, type = 3)
+Anova(fit33, type = 3)
+Anova(fit73, type = 3)
+
 
 fit7tidy <- broom::tidy(fit7)
 fit1tidy <- broom::tidy(fit1)
 
-BrierScore(fit1, hashTest2)
-BrierScore(fit3, hashTest2)
-BrierScore(fit7, hashTest2)
+SBrierScore(fit13, hashTest3)
+SBrierScore(fit33, hashTest3)
+SBrierScore(fit73, hashTest3)
 
 AUC(predict(fit1, type = "response"), hashTest2$correct)
 AUC(predict(fit3, type = "response"), hashTest2$correct)
 AUC(predict(fit7, type = "response"), hashTest2$correct)
+
+hashTest2 %>% filter(hsta == 0 & fsfat < 5) %>%
+  group_by(hluta2) %>% summarise(n())
+p1 <- hashTest2 %>% 
+  add_predictions(fit1, type = "response") %>%
+  ggplot(aes(x = pred, y = correct)) + 
+  geom_smooth() + 
+  geom_abline(intercept = 0, slope = 1, lty = 2) +
+  labs(title = "fit1")
+p2 <- hashTest2 %>% 
+  add_predictions(fit3, type = "response") %>%
+  ggplot(aes(x = pred, y = correct)) + 
+  geom_smooth() + 
+  geom_abline(intercept = 0, slope = 1, lty = 2) +
+  labs(title = "fit3")
+p3 <- hashTest2 %>% 
+  add_predictions(fit7, type = "response") %>%
+  ggplot(aes(x = pred, y = correct)) + 
+  geom_smooth() + 
+  geom_abline(intercept = 0, slope = 1, lty = 2) +
+  labs(title = "fit7")
+
+pr <- grid.arrange(p1, p2, p3, nrow = 1)
+
+ggsave('Img/predplot.png', pr, width = 21, height = 7)
+library(tinytex)
