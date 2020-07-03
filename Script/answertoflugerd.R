@@ -115,8 +115,10 @@ hashAnsdag <- hashAnsdag %>% group_by(lectureId, studentId, timeStart) %>% mutat
 hashAnsdag$hluta <- hashAnsdag %$% ifelse((notaType == "AOTA-" & hluta > 0) | 
                                             (notaType == "NOTA-" & hsta == 1), hluta + 1/nicc, hluta)
 
-
-hashAnsdag4 <- hashAnsdag[!grepl('NOTA+',hashAnsdag$hash),]
+hashAnsdag4 <- hashAnsdag
+hashAnsdag4$hsta <- ifelse(hashAnsdag4$hash == 'NOTA+', 
+                           ifelse(hashAnsdag4$hluta >= 1, 1, 0), hashAnsdag4$hsta)
+#hashAnsdag4 <- hashAnsdag[!grepl('NOTA+',hashAnsdag$hash),]
 #unique(hashAnsdag$lectureId)
 # myAnswer %>% filter(lectureId == 3203) %>% summarise(n_distinct(studentId))
 #Vel dálka og save-a

@@ -354,9 +354,9 @@ Anova(fit73, type = 3)
 fit7tidy <- broom::tidy(fit7)
 fit1tidy <- broom::tidy(fit1)
 
-SBrierScore(fit13, hashTest3)
-SBrierScore(fit33, hashTest3)
-SBrierScore(fit73, hashTest3)
+SBrierScore(fit1, hashTest2)
+SBrierScore(fit3, hashTest2)
+SBrierScore(fit7, hashTest2)
 
 AUC(predict(fit1, type = "response"), hashTest2$correct)
 AUC(predict(fit3, type = "response"), hashTest2$correct)

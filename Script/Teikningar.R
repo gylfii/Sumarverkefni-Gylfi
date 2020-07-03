@@ -403,3 +403,6 @@ ggsave('Img/meabwhsbyhlutfall.png', p2, width = 10, height = 10)
 ggsave('Img/meanbyhlutfallLim.png', p3, width = 15, height = 10)
 
 ?geom_smooth
+
+hashTest3 %>% ggplot(aes(x = hluta2, color = hsta)) +
+  geom_bar(position = "dodge2")
