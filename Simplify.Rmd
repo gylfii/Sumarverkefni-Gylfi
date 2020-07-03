@@ -165,6 +165,7 @@ Stóri munurinn milli þeirra er að ég hef meira í mixed effect modelinu sein
 
 ### Uppfært aðferð til að keyra hraðar
 ```{r fastermodel, cache=TRUE}
+
 options(contrasts = c("contr.sum", "contr.poly"))
 ans22 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
                data = hashLim100, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))

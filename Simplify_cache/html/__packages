@@ -1,10 +1,4 @@
 base
-methods
-datasets
-utils
-grDevices
-graphics
-stats
 dbplyr
 dplyr
 DBI
@@ -38,7 +32,6 @@ tinytex
 Matrix
 lme4
 lmerTest
-stats4
 nlme
 cAIC4
 pracma
