@@ -19,6 +19,11 @@ library(kableExtra)
 library(bookdown)
 library(scales)
 library(tinytex)
+library(lme4)
+library(lmerTest)
+library(cAIC4)
+library(pracma)
+library(funModeling)
 theme_set(theme_tufte() +
             theme(panel.border = element_rect('black', fill = NA),
                   text = element_text(size = 14),

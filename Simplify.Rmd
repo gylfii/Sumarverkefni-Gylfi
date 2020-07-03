@@ -1,13 +1,6 @@
 ---
 title: "Einföldun"
-output: 
-  bookdown::pdf_document2:
-    fig_caption: yes
-    toc: no
-    includes:
-      before_body: template/fp.sty # Forsíða
-      in_header: template/header.tex # TeX haus
-    keep_tex: yes
+output: rmdformats::readthedown
 ---
 
 ```{r setup, include=FALSE}
@@ -164,10 +157,20 @@ Stóri munurinn milli þeirra er að ég hef meira í mixed effect modelinu sein
 
 Ég keyri módelinn ekki hér, því þau eru of löng, en hef save-að þau til seinni notkunar, svo hægt sé að load-a þeim upp
 ```{r loadmodel}
-#Þetta er fyrri modelið
-load("Data/ans22")
-#Þetta er seinna modelið
-load("Data/ans42")
+# #Þetta er fyrri modelið
+# load("Data/ans22")
+# #Þetta er seinna modelið
+# load("Data/ans42")
+```
+
+### Uppfært aðferð til að keyra hraðar
+```{r fastermodel, cache=TRUE}
+options(contrasts = c("contr.sum", "contr.poly"))
+ans22 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+               data = hashLim100, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+ans42 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 + fsfat * hsta | studentId), 
+               family = binomial(link = "logit"), data = hashLim100, nAGQ = 0,
+               control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 ```
 
 
@@ -206,9 +209,16 @@ BrierScore <- function(modl, df ) {
   truth <- df$correct
   return(mean((predicted-truth)^2))
 }
+SBrierScore <- function(modl, df) {
+  predicted <- predict(modl, type = "response")
+  truth <- df$correct
+  Bs <- mean((predicted-truth)^2)
+  Bmax <- mean(predict(modl, type = "response")) * (1-mean(predict(modl, type = "response")))
+  return(1 - Bs/Bmax)
+}
 
-br22 <- BrierScore(ans22, hashLim100)
-br42 <- BrierScore(ans42, hashLim100)
+br22 <- SBrierScore(ans22, hashLim100)
+br42 <- SBrierScore(ans42, hashLim100)
 
 br22
 br42
@@ -231,4 +241,103 @@ Auc42 - Auc22
 Hér sést að AUC er stærra hjá seinna modelinu en fyrra, um `r round(Auc42-Auc22, digits = 6)`. Ef ég skil Auc rétt, þá er seinni modelið með betra AUC.
 
 En er þetta betra Brier og betra AUC nokkuð nógu mikið betra til að leifa tvöfalt lengri keyrslutíma fyrir eitthvað sem tekur svona langan tíma? Er ekki ennþá viss.
+
+# Nýjar niðurstöður frá nýrri breytu
+
+## Nýja breytan
+Ég fékk aðgang að hash fyrir röngu svörinn hjá gögnunum. Með þeim gögnum hef ég búið til breytu sem ég kalla hluta, sem stendur fyrir "hlutfall rangra svara sem hafa sést áður", semsagt þegar nemandi er að svara spurningu i. og hefur séð 50% af röngu svar möguleikunum áður, þá er hluta= 0.5.
+
+Það var samt smá hugsun fyrir aftan NOTA- og AOTA- spurningum, semsagt spurningar þar sem það er "none of the above" eða "All of the above" og það er vitlaust. Ég setti þau rök að ef NOTA- spurningu er að ræða og nemendann hefur séð rétta svarmöguleikann áður, þá er talið eins og NOTA- svarmöguleikinn hafi sést áður. Svo ef það er AOTA- spurning og nemandinn hefur séð eitthvað af hinum röngu svarmöguleikunum áður, þá segjum við að AOTA- svarið hafi sést áður.
+
+Til að einfalda svo aðeins, fyrir teikningar. Þá bætti ég við hluta2 breytu, sem er discretizised hluta breyta. Semsagt skip í 5 hluta.
+```{r}
+hashAnswer$hluta2 <- cut_interval(hashAnswer$hluta, n = 5)
+hashLim50 <- hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
+  filter(count > 7 & fsfat < 50)
+hashLim100 <- hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
+  filter(count > 7 & fsfat < 100)
+hashLim50$fsfat <- hashLim50$fsfat/10
+hashLim100$fsfat <- hashLim100$fsfat/10
+```
+## Teikningar
+
+Með þeirri nýju breytu er hægt að teikna nokkur gröf. Hér að ofan var teiknað meðaltals myndina
+![plot by mean 50r](Imgsimplify/plotbymean50.png)
+
+Þar sést að það er einhver vöxtur í gangi hjá spurningum með nýjum svörum á meðan fleiri spurningum er svarað. En hvernig líta meðaltals línurnar út ef flokkað er með tilliti til hluta2 flokkana, skoðað bara fyrir tilvikin þegar hsta == 0?
+Þá fæst svona mynd:
+![plot by hlutfall](Img/meanbyhlutfall.png)
+Það er einhver stór vöxtur að koma hjá endanum, ég held að það kemur frá því að það eru ekki mikið af upplýsingum fyrir aftan suma punktana, svo ég teikna aftur upp myndina, nema að ég fjarlægji punkta þar sem ekki eru fleiri en 5 gildi fyrir aftan
+![plot by hlutfallLim](Img/meanbyhlutfallLim.png)
+
+Hér sést að línurnar eru aðeins beinar hér. Gott viðmið gæti komið ef prufað er að teikna línurnar ofan á upprunalegu meðaltals myndina
+![plot by hlutfallLim](Img/meabwhsbyhlutfall.png)
+Þetta bentir til að fyrir aftan vöxtinn sem sást áðan, þá eru einhverjar hlutfalls breytur að toga að aftan.
+
+## Töflur
+Gott er að skoða aðeins fjöldana fyrir aftan töfluna hér að ofan
+T.d. er hægt að skoða hve mikið af gögnum það eru við hvert hlutfall
+```{r}
+hashLim50 %>% filter(hsta == "0") %>% group_by(hluta2) %>%
+  summarise(n())
+```
+
+## uppfærð model
+Þar sem komið er með nýja breytu, þá er hægt að skoða það miðað við upprunalega modelið og sjá hvernig það gengur
+Keyri þrjú módel
+```{r}
+fit1 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashLim100, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+fit3 <- glmer(correct ~ hluta2+hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashLim100, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+fit7 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashLim100, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+```
+
+Hér er:
+  * fit1: upprunalega líkanið
+  
+  * fit3: upprunalega líkanið, nema það er víxlað fsfat fyrir hluta2
+  
+  * fit7: það er líkan sem hefur bæði fsfat og hluta2
+  
+Gott er kannski að skoða muninn á milli þeirra, með anova
+```{r}
+anova(fit1, fit3)
+anova(fit3, fit7)
+```
+
+Hér segjir að fit3 er marktækara en fit1 og fit7 er marktækara en fit3. 
+Gott er að skoða aðeins standardized brier score muninn hjá þeim og svo líka AUC muninn
+
+```{r}
+sb1 <- SBrierScore(fit1, hashLim100)
+sb3 <- SBrierScore(fit3, hashLim100)
+sb7 <- SBrierScore(fit7, hashLim100)
+
+fitauc1 <- AUC(predict(fit1, type = "response"), hashLim100$correct)
+fitauc3 <- AUC(predict(fit3, type = "response"), hashLim100$correct)
+fitauc7 <-AUC(predict(fit7, type = "response"), hashLim100$correct)
+
+sb1
+sb3
+sb7
+
+fitauc1
+fitauc3
+fitauc7
+```
+Það er smár munur milli hverja, en ekki það mikill. Munurinn hjá standardized brier fyrir fit1 og fit3 er bara `r round(sb3 - sb1, digits = 4)`. Sem segir til að munurinn á að nota hlutfall rangra svara séð í staðinn fyrir fjöldi spurninga fram að þessu er mjög lítill miðað við standardized brier. Það gæti verið að benda til að það gæti verið að áhrifinn að aftan vöxtinn hjá fsfat er aðallega bara hluta2. 
+Að sama dúr er líka bara aðeins betra milli fit3 og fit7, með `r round(sb7 - sb3, digits = 4)`, sem er enn minni en hinn. Svo á meðan það er marktækur munur á milli fit3 og fit7, þá er fit7 ekki endilega það mikið betra en fit3.
+Sömu niðurstöðurnar ef skoðað er munin hjá AUC í fit1 og fit3 `r round(fitauc3 - fitauc1, digits = 4)` og munin milli fit3 og fit7 sem `r round(fitauc7 - fitauc3, digits = 4)`. Á meðan AUC vex smá, þá er það ekki endilega nógu mikið til að segja til hvort eitt er betra en hitt. Ef ég skil þetta rétt.
+
+
+## Teikna fyrir model
+
+Svo í lokinn, er kannski gott að geta teiknað upp fyrir hvert þeirra predicted effect á móti correct, til að sjá hvernig það lítur út
+![predplot](Img/predplot.png)
+
+Það lítur út fyrir að vera beint að mesta lagi, sem bendir að það er að ná vel á móti alvöru niðurstöðunum. En það er ekki mikill munur á milli þeirra. Svo eitt er ekki endilega betra en næsta?
+
+
 

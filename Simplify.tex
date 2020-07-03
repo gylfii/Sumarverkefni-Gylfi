@@ -122,8 +122,8 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[R]{Þórarinn Jónmundsson}
-\fancyhead[C]{Dæmi um skýrslu}
+\fancyhead[R]{Gylfi Snær Sigurðsson}
+\fancyhead[C]{Er hægt að mæla framfarir en ekki bara utanaðbókarlærdóm?}
 \fancyhead[L]{Sumarverkefni}
 \fancyfoot[L]{Háskóli Íslands}
 \fancyfoot[R]{\thepage}
@@ -160,7 +160,7 @@
 \begin{center}
 \LARGE{\textbf{Sumarverkefni}}\\
 \vspace*{2\baselineskip}
-\Large{\textbf{Dæmi um skýrslu}}
+\Large{\textbf{Er hægt að mæla framfarir en ekki bara utanaðbókarlærdóm?}}
 \end{center}
 % \end{titlepage}
 \thispagestyle{empty}
@@ -192,18 +192,19 @@ Til að byrja með, er gott að skoða gögninn. Ég hef fjarlægt sumar breytur
 \end{Shaded}
 
 \begin{verbatim}
-## Rows: 115,197
-## Columns: 10
+## Rows: 96,018
+## Columns: 11
 ## $ lectureId  <fct> 3082, 3082, 3082, 3082, 3082, 3082, 3082, 3082, 3082, 30...
-## $ studentId  <fct> 1, 1, 1, 1, 1, 18788, 18788, 18788, 18788, 18788, 18788,...
-## $ questionId <int> 45591, 44899, 45647, 45647, 45647, 44920, 45021, 45480, ...
-## $ correct    <int> 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,...
+## $ studentId  <fct> 1, 1, 18788, 18788, 18788, 18788, 18788, 18788, 18788, 1...
+## $ questionId <int> 45591, 44899, 44920, 45021, 45480, 45463, 45101, 44974, ...
+## $ correct    <int> 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1,...
 ## $ hash       <chr> "d3a978206c877eee8627a29c7a94238d8339d66fc4be460d9e6b6cb...
-## $ fsfat      <int> 0, 1, 2, 2, 2, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 10, 1...
-## $ hsta       <chr> "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "...
-## $ timeDif    <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 254, NA, NA,...
-## $ nicc       <fct> 3, 3, 3, 3, 3, 3, 7, 3, 3, 4, 5, 6, 6, 5, 3, 3, 3, 3, 7,...
-## $ gpow       <dbl> 8.2506619, 8.2506619, 8.2506619, 8.2506619, 8.2506619, 0...
+## $ fsfat      <int> 0, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15,...
+## $ hsta       <chr> "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "...
+## $ hluta      <dbl> 0.0000000, 0.0000000, 0.0000000, 0.1428571, 0.0000000, 0...
+## $ timeDif    <int> NA, NA, NA, NA, NA, NA, NA, NA, 254, NA, NA, NA, NA, NA,...
+## $ nicc       <fct> 3, 3, 3, 7, 3, 3, 4, 5, 6, 6, 5, 3, 7, 3, 6, 5, 5, 3, 3,...
+## $ gpow       <dbl> 8.2506619, 8.2506619, 0.3681775, 0.3681775, 0.3681775, 0...
 \end{verbatim}
 
 Gagnasettið, eins og það er núna hefur 10 breytur. Breyturnar eru:
@@ -293,17 +294,17 @@ Hérna kemur skýringinn, það lítur út fyrir að vera stórt fall af gögnum
 \hline
 limit & FY & HY\\
 \hline
-50 & 31964 & 0.2775\\
+50 & 28325 & 0.2950\\
 \hline
-100 & 9553 & 0.0829\\
+100 & 8734 & 0.0910\\
 \hline
-150 & 3204 & 0.0278\\
+150 & 2970 & 0.0309\\
 \hline
-200 & 1149 & 0.0100\\
+200 & 1098 & 0.0114\\
 \hline
-250 & 332 & 0.0029\\
+250 & 323 & 0.0034\\
 \hline
-300 & 84 & 0.0007\\
+300 & 84 & 0.0009\\
 \hline
 \end{tabular}
 
@@ -406,24 +407,24 @@ Stóri munurinn milli þeirra er að ég hef meira í mixed effect modelinu sein
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Þetta er fyrri modelið}
-\KeywordTok{load}\NormalTok{(}\StringTok{"Data/ans22"}\NormalTok{)}
+\CommentTok{# #Þetta er fyrri modelið}
+\CommentTok{# load("Data/ans22")}
+\CommentTok{# #Þetta er seinna modelið}
+\CommentTok{# load("Data/ans42")}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## Registered S3 methods overwritten by 'lme4':
-##   method                          from
-##   cooks.distance.influence.merMod car 
-##   influence.merMod                car 
-##   dfbeta.influence.merMod         car 
-##   dfbetas.influence.merMod        car
-\end{verbatim}
+\hypertarget{uppfuxe6rt-auxf0feruxf0-til-auxf0-keyra-hrauxf0ar}{%
+\subsubsection{Uppfært aðferð til að keyra hraðar}\label{uppfuxe6rt-auxf0feruxf0-til-auxf0-keyra-hrauxf0ar}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Þetta er seinna modelið}
-\KeywordTok{load}\NormalTok{(}\StringTok{"Data/ans42"}\NormalTok{)}
+\KeywordTok{options}\NormalTok{(}\DataTypeTok{contrasts =} \KeywordTok{c}\NormalTok{(}\StringTok{"contr.sum"}\NormalTok{, }\StringTok{"contr.poly"}\NormalTok{))}
+\NormalTok{ans22 <-}\StringTok{ }\KeywordTok{glmer}\NormalTok{(correct }\OperatorTok{~}\StringTok{ }\NormalTok{fsfat}\OperatorTok{*}\NormalTok{hsta }\OperatorTok{+}\StringTok{ }\NormalTok{nicc }\OperatorTok{+}\StringTok{ }\NormalTok{gpow }\OperatorTok{+}\StringTok{ }\NormalTok{lectureId }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{studentId), }\DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link =} \StringTok{"logit"}\NormalTok{), }
+               \DataTypeTok{data =}\NormalTok{ hashLim100, }\DataTypeTok{nAGQ =} \DecValTok{0}\NormalTok{, }\DataTypeTok{control=}\KeywordTok{glmerControl}\NormalTok{(}\DataTypeTok{optimizer=}\StringTok{"bobyqa"}\NormalTok{,}\DataTypeTok{optCtrl=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{maxfun=}\FloatTok{2e5}\NormalTok{)))}
+\NormalTok{ans42 <-}\StringTok{ }\KeywordTok{glmer}\NormalTok{(correct }\OperatorTok{~}\StringTok{ }\NormalTok{fsfat}\OperatorTok{*}\NormalTok{hsta }\OperatorTok{+}\StringTok{ }\NormalTok{nicc }\OperatorTok{+}\StringTok{ }\NormalTok{gpow }\OperatorTok{+}\StringTok{ }\NormalTok{lectureId }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{fsfat }\OperatorTok{*}\StringTok{ }\NormalTok{hsta }\OperatorTok{|}\StringTok{ }\NormalTok{studentId), }
+               \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link =} \StringTok{"logit"}\NormalTok{), }\DataTypeTok{data =}\NormalTok{ hashLim100, }\DataTypeTok{nAGQ =} \DecValTok{0}\NormalTok{,}
+               \DataTypeTok{control=}\KeywordTok{glmerControl}\NormalTok{(}\DataTypeTok{optimizer=}\StringTok{"bobyqa"}\NormalTok{,}\DataTypeTok{optCtrl=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{maxfun=}\FloatTok{2e5}\NormalTok{)))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -439,50 +440,50 @@ Summaríið þeirra er svo
 \end{Shaded}
 
 \begin{verbatim}
-## Generalized linear mixed model fit by maximum likelihood (Laplace
-##   Approximation) [glmerMod]
+## Generalized linear mixed model fit by maximum likelihood (Adaptive
+##   Gauss-Hermite Quadrature, nAGQ = 0) [glmerMod]
 ##  Family: binomial  ( logit )
 ## Formula: correct ~ fsfat * hsta + nicc + gpow + lectureId + (1 | studentId)
-##    Data: hashTest2
+##    Data: hashLim100
 ## Control: glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e+05))
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##  78644.1  78873.8 -39298.1  78596.1   105586 
+##  62028.4  62253.4 -30990.2  61980.4    87232 
 ## 
 ## Scaled residuals: 
 ##      Min       1Q   Median       3Q      Max 
-## -11.2266   0.1580   0.2543   0.4171   3.7824 
+## -11.9180   0.1437   0.2316   0.4062   3.7665 
 ## 
 ## Random effects:
 ##  Groups    Name        Variance Std.Dev.
-##  studentId (Intercept) 0.7422   0.8615  
-## Number of obs: 105610, groups:  studentId, 283
+##  studentId (Intercept) 0.7562   0.8696  
+## Number of obs: 87256, groups:  studentId, 283
 ## 
 ## Fixed effects:
 ##              Estimate Std. Error z value Pr(>|z|)    
-## (Intercept)  1.565915   0.060601  25.840  < 2e-16 ***
-## fsfat        0.192314   0.005003  38.442  < 2e-16 ***
-## hsta1       -0.952244   0.016145 -58.980  < 2e-16 ***
-## nicc1        0.623305   0.135571   4.598 4.27e-06 ***
-## nicc2        0.331299   0.054191   6.114 9.74e-10 ***
-## nicc3       -0.247856   0.027513  -9.009  < 2e-16 ***
-## nicc4       -0.014195   0.036763  -0.386 0.699402    
-## nicc5       -0.183080   0.035432  -5.167 2.38e-07 ***
-## nicc6       -0.256486   0.035157  -7.295 2.98e-13 ***
-## gpow         0.123848   0.033556   3.691 0.000224 ***
-## lectureId1  -1.018070   0.024856 -40.959  < 2e-16 ***
-## lectureId2   0.017850   0.033273   0.536 0.591628    
-## lectureId3   0.558622   0.044085  12.672  < 2e-16 ***
-## lectureId4  -0.547061   0.026746 -20.454  < 2e-16 ***
-## lectureId5  -0.170183   0.030146  -5.645 1.65e-08 ***
-## lectureId6   0.138075   0.034613   3.989 6.63e-05 ***
-## lectureId7   0.291268   0.037391   7.790 6.72e-15 ***
-## lectureId8   0.447420   0.045693   9.792  < 2e-16 ***
-## lectureId9   0.288598   0.044901   6.427 1.30e-10 ***
-## lectureId10 -0.088576   0.036978  -2.395 0.016602 *  
-## lectureId11  0.062259   0.039052   1.594 0.110879    
-## lectureId12  0.145584   0.039316   3.703 0.000213 ***
-## fsfat:hsta1  0.027901   0.004562   6.116 9.57e-10 ***
+## (Intercept)  1.659542   0.062155  26.700  < 2e-16 ***
+## fsfat        0.203916   0.005618  36.297  < 2e-16 ***
+## hsta1       -1.069679   0.019517 -54.808  < 2e-16 ***
+## nicc1        0.611590   0.136589   4.478 7.55e-06 ***
+## nicc2        0.309886   0.054664   5.669 1.44e-08 ***
+## nicc3       -0.140135   0.029050  -4.824 1.41e-06 ***
+## nicc4       -0.032914   0.037133  -0.886 0.375404    
+## nicc5       -0.211427   0.035790  -5.907 3.47e-09 ***
+## nicc6       -0.273325   0.035506  -7.698 1.38e-14 ***
+## gpow         0.127291   0.035618   3.574 0.000352 ***
+## lectureId1  -1.067109   0.027788 -38.401  < 2e-16 ***
+## lectureId2   0.093693   0.038362   2.442 0.014593 *  
+## lectureId3   0.615713   0.049407  12.462  < 2e-16 ***
+## lectureId4  -0.582781   0.030428 -19.153  < 2e-16 ***
+## lectureId5  -0.206038   0.033502  -6.150 7.75e-10 ***
+## lectureId6   0.107225   0.038847   2.760 0.005777 ** 
+## lectureId7   0.266837   0.042952   6.212 5.22e-10 ***
+## lectureId8   0.452446   0.051391   8.804  < 2e-16 ***
+## lectureId9   0.333222   0.051628   6.454 1.09e-10 ***
+## lectureId10 -0.116136   0.041688  -2.786 0.005339 ** 
+## lectureId11  0.076908   0.044417   1.732 0.083359 .  
+## lectureId12  0.154198   0.044362   3.476 0.000509 ***
+## fsfat:hsta1  0.046067   0.005156   8.935  < 2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
@@ -501,54 +502,54 @@ Summaríið þeirra er svo
 \end{Shaded}
 
 \begin{verbatim}
-## Generalized linear mixed model fit by maximum likelihood (Laplace
-##   Approximation) [glmerMod]
+## Generalized linear mixed model fit by maximum likelihood (Adaptive
+##   Gauss-Hermite Quadrature, nAGQ = 0) [glmerMod]
 ##  Family: binomial  ( logit )
 ## Formula: correct ~ fsfat * hsta + nicc + gpow + lectureId + (1 + fsfat *  
 ##     hsta | studentId)
-##    Data: hashTest2
+##    Data: hashLim100
 ## Control: glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e+05))
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##  77962.3  78278.0 -38948.2  77896.3   105577 
+##  61585.5  61894.9 -30759.8  61519.5    87223 
 ## 
 ## Scaled residuals: 
 ##      Min       1Q   Median       3Q      Max 
-## -13.6590   0.1379   0.2467   0.4156   3.1668 
+## -12.1835   0.1301   0.2263   0.4023   3.0975 
 ## 
 ## Random effects:
 ##  Groups    Name        Variance Std.Dev. Corr             
-##  studentId (Intercept) 0.675882 0.82212                   
-##            fsfat       0.024972 0.15803   0.02            
-##            hsta1       0.072061 0.26844  -0.31  0.12      
-##            fsfat:hsta1 0.003271 0.05719   0.50 -0.01 -0.60
-## Number of obs: 105610, groups:  studentId, 283
+##  studentId (Intercept) 0.661245 0.81317                   
+##            fsfat       0.020476 0.14309   0.07            
+##            hsta1       0.066818 0.25849  -0.24  0.03      
+##            fsfat:hsta1 0.003598 0.05998   0.49  0.10 -0.63
+## Number of obs: 87256, groups:  studentId, 283
 ## 
 ## Fixed effects:
 ##              Estimate Std. Error z value Pr(>|z|)    
-## (Intercept)  1.477046   0.059899  24.659  < 2e-16 ***
-## fsfat        0.259132   0.012380  20.931  < 2e-16 ***
-## hsta1       -0.881182   0.025763 -34.203  < 2e-16 ***
-## nicc1        0.626590   0.135552   4.623 3.79e-06 ***
-## nicc2        0.340028   0.054450   6.245 4.24e-10 ***
-## nicc3       -0.251857   0.027567  -9.136  < 2e-16 ***
-## nicc4       -0.013454   0.036861  -0.365  0.71512    
-## nicc5       -0.185017   0.035551  -5.204 1.95e-07 ***
-## nicc6       -0.257133   0.035274  -7.290 3.11e-13 ***
-## gpow         0.118689   0.036084   3.289  0.00100 ** 
-## lectureId1  -1.027480   0.025664 -40.036  < 2e-16 ***
-## lectureId2   0.016464   0.033579   0.490  0.62392    
-## lectureId3   0.572888   0.044263  12.943  < 2e-16 ***
-## lectureId4  -0.573858   0.027279 -21.036  < 2e-16 ***
-## lectureId5  -0.166690   0.030503  -5.465 4.64e-08 ***
-## lectureId6   0.140893   0.034812   4.047 5.18e-05 ***
-## lectureId7   0.301169   0.037644   8.000 1.24e-15 ***
-## lectureId8   0.452285   0.045846   9.865  < 2e-16 ***
-## lectureId9   0.293143   0.045167   6.490 8.57e-11 ***
-## lectureId10 -0.088364   0.037386  -2.364  0.01810 *  
-## lectureId11  0.062045   0.039242   1.581  0.11385    
-## lectureId12  0.148848   0.039586   3.760  0.00017 ***
-## fsfat:hsta1  0.014892   0.007534   1.977  0.04808 *  
+## (Intercept)  1.571471   0.060301  26.060  < 2e-16 ***
+## fsfat        0.257279   0.011425  22.520  < 2e-16 ***
+## hsta1       -0.996831   0.026795 -37.202  < 2e-16 ***
+## nicc1        0.616526   0.136683   4.511 6.46e-06 ***
+## nicc2        0.315650   0.054950   5.744 9.23e-09 ***
+## nicc3       -0.139659   0.029133  -4.794 1.64e-06 ***
+## nicc4       -0.032797   0.037253  -0.880  0.37864    
+## nicc5       -0.215453   0.035925  -5.997 2.01e-09 ***
+## nicc6       -0.275479   0.035656  -7.726 1.11e-14 ***
+## gpow         0.123290   0.037942   3.249  0.00116 ** 
+## lectureId1  -1.074036   0.028469 -37.726  < 2e-16 ***
+## lectureId2   0.085378   0.038623   2.211  0.02707 *  
+## lectureId3   0.621246   0.049472  12.558  < 2e-16 ***
+## lectureId4  -0.604654   0.030955 -19.533  < 2e-16 ***
+## lectureId5  -0.203030   0.033852  -5.998 2.00e-09 ***
+## lectureId6   0.110226   0.039069   2.821  0.00478 ** 
+## lectureId7   0.275982   0.043225   6.385 1.72e-10 ***
+## lectureId8   0.454300   0.051527   8.817  < 2e-16 ***
+## lectureId9   0.341082   0.051850   6.578 4.76e-11 ***
+## lectureId10 -0.108184   0.042085  -2.571  0.01015 *  
+## lectureId11  0.078091   0.044570   1.752  0.07976 .  
+## lectureId12  0.156135   0.044570   3.503  0.00046 ***
+## fsfat:hsta1  0.036528   0.007074   5.164 2.42e-07 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
@@ -575,13 +576,13 @@ Ef við skoðum aðeins Anova hjá þeim báðum
 ## 
 ## Response: correct
 ##                Chisq Df Pr(>Chisq)    
-## (Intercept)  667.695  1  < 2.2e-16 ***
-## fsfat       1477.763  1  < 2.2e-16 ***
-## hsta        3478.680  1  < 2.2e-16 ***
-## nicc         172.253  6  < 2.2e-16 ***
-## gpow          13.622  1  0.0002235 ***
-## lectureId   2128.746 12  < 2.2e-16 ***
-## fsfat:hsta    37.411  1   9.57e-10 ***
+## (Intercept)  712.894  1  < 2.2e-16 ***
+## fsfat       1317.475  1  < 2.2e-16 ***
+## hsta        3003.912  1  < 2.2e-16 ***
+## nicc         146.443  6  < 2.2e-16 ***
+## gpow          12.772  1  0.0003519 ***
+## lectureId   1883.178 12  < 2.2e-16 ***
+## fsfat:hsta    79.834  1  < 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
@@ -596,14 +597,14 @@ Ef við skoðum aðeins Anova hjá þeim báðum
 ## Analysis of Deviance Table (Type III Wald chisquare tests)
 ## 
 ## Response: correct
-##                 Chisq Df Pr(>Chisq)    
-## (Intercept)  608.0674  1  < 2.2e-16 ***
-## fsfat        438.1232  1  < 2.2e-16 ***
-## hsta        1169.8764  1  < 2.2e-16 ***
-## nicc         177.1123  6  < 2.2e-16 ***
-## gpow          10.8193  1   0.001004 ** 
-## lectureId   2102.7021 12  < 2.2e-16 ***
-## fsfat:hsta     3.9071  1   0.048082 *  
+##                Chisq Df Pr(>Chisq)    
+## (Intercept)  679.149  1  < 2.2e-16 ***
+## fsfat        507.145  1  < 2.2e-16 ***
+## hsta        1383.977  1  < 2.2e-16 ***
+## nicc         149.801  6  < 2.2e-16 ***
+## gpow          10.559  1   0.001157 ** 
+## lectureId   1864.030 12  < 2.2e-16 ***
+## fsfat:hsta    26.666  1  2.419e-07 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
@@ -622,14 +623,14 @@ Hvor er svo sterkari? Skoðum aðeins anova milli þeirra
 \end{Shaded}
 
 \begin{verbatim}
-## Data: hashTest2
+## Data: hashLim100
 ## Models:
 ## ans22: correct ~ fsfat * hsta + nicc + gpow + lectureId + (1 | studentId)
 ## ans42: correct ~ fsfat * hsta + nicc + gpow + lectureId + (1 + fsfat * 
 ## ans42:     hsta | studentId)
 ##       npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)    
-## ans22   24 78644 78874 -39298    78596                         
-## ans42   33 77962 78278 -38948    77896 699.83  9  < 2.2e-16 ***
+## ans22   24 62028 62253 -30990    61980                         
+## ans42   33 61586 61895 -30760    61520 460.88  9  < 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
@@ -645,16 +646,23 @@ Setjum upp fall fyrir BrierScore og reiknum svo það fyrir þau bæði
 \NormalTok{  truth <-}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{correct}
   \KeywordTok{return}\NormalTok{(}\KeywordTok{mean}\NormalTok{((predicted}\OperatorTok{-}\NormalTok{truth)}\OperatorTok{^}\DecValTok{2}\NormalTok{))}
 \NormalTok{\}}
+\NormalTok{SBrierScore <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(modl, df) \{}
+\NormalTok{  predicted <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(modl, }\DataTypeTok{type =} \StringTok{"response"}\NormalTok{)}
+\NormalTok{  truth <-}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{correct}
+\NormalTok{  Bs <-}\StringTok{ }\KeywordTok{mean}\NormalTok{((predicted}\OperatorTok{-}\NormalTok{truth)}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\NormalTok{  Bmax <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(}\KeywordTok{predict}\NormalTok{(modl, }\DataTypeTok{type =} \StringTok{"response"}\NormalTok{)) }\OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(}\KeywordTok{predict}\NormalTok{(modl, }\DataTypeTok{type =} \StringTok{"response"}\NormalTok{)))}
+  \KeywordTok{return}\NormalTok{(}\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{Bs}\OperatorTok{/}\NormalTok{Bmax)}
+\NormalTok{\}}
 
-\NormalTok{br22 <-}\StringTok{ }\KeywordTok{BrierScore}\NormalTok{(ans22, hashLim100)}
-\NormalTok{br42 <-}\StringTok{ }\KeywordTok{BrierScore}\NormalTok{(ans42, hashLim100)}
+\NormalTok{br22 <-}\StringTok{ }\KeywordTok{SBrierScore}\NormalTok{(ans22, hashLim100)}
+\NormalTok{br42 <-}\StringTok{ }\KeywordTok{SBrierScore}\NormalTok{(ans42, hashLim100)}
 
 \NormalTok{br22}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.1144404
+## [1] 0.2411666
 \end{verbatim}
 
 \begin{Shaded}
@@ -664,7 +672,7 @@ Setjum upp fall fyrir BrierScore og reiknum svo það fyrir þau bæði
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.11211
+## [1] 0.2557395
 \end{verbatim}
 
 \begin{Shaded}
@@ -674,10 +682,10 @@ Setjum upp fall fyrir BrierScore og reiknum svo það fyrir þau bæði
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.002330465
+## [1] -0.0145729
 \end{verbatim}
 
-Nú er brierScore-ið hjá seinna minna, en bara um u.þ.b. 0.00233. Ég játa að ég veit ekki alveg enn hvað það þýðir milli styrkleikjanna þeirra, hvort það sé rosalega mikill munur eða bara smár munur.
+Nú er brierScore-ið hjá seinna minna, en bara um u.þ.b. -0.014573. Ég játa að ég veit ekki alveg enn hvað það þýðir milli styrkleikjanna þeirra, hvort það sé rosalega mikill munur eða bara smár munur.
 
 Næst er að reikna AUC þeirra.
 
@@ -691,7 +699,7 @@ Næst er að reikna AUC þeirra.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.8205122
+## [1] 0.8331737
 \end{verbatim}
 
 \begin{Shaded}
@@ -701,7 +709,7 @@ Næst er að reikna AUC þeirra.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.8311404
+## [1] 0.842699
 \end{verbatim}
 
 \begin{Shaded}
@@ -711,11 +719,224 @@ Næst er að reikna AUC þeirra.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.01062822
+## [1] 0.009525255
 \end{verbatim}
 
-Hér sést að AUC er stærra hjá seinna modelinu en fyrra, um 0.010628. Ef ég skil Auc rétt, þá er seinni modelið með betra AUC.
+Hér sést að AUC er stærra hjá seinna modelinu en fyrra, um 0.009525. Ef ég skil Auc rétt, þá er seinni modelið með betra AUC.
 
 En er þetta betra Brier og betra AUC nokkuð nógu mikið betra til að leifa tvöfalt lengri keyrslutíma fyrir eitthvað sem tekur svona langan tíma? Er ekki ennþá viss.
+
+\hypertarget{nuxfdjar-niuxf0urstuxf6uxf0ur-fruxe1-nuxfdrri-breytu}{%
+\section{Nýjar niðurstöður frá nýrri breytu}\label{nuxfdjar-niuxf0urstuxf6uxf0ur-fruxe1-nuxfdrri-breytu}}
+
+\hypertarget{nuxfdja-breytan}{%
+\subsection{Nýja breytan}\label{nuxfdja-breytan}}
+
+Ég fékk aðgang að hash fyrir röngu svörinn hjá gögnunum. Með þeim gögnum hef ég búið til breytu sem ég kalla hluta, sem stendur fyrir ``hlutfall rangra svara sem hafa sést áður'', semsagt þegar nemandi er að svara spurningu i. og hefur séð 50\% af röngu svar möguleikunum áður, þá er hluta= 0.5.
+
+Það var samt smá hugsun fyrir aftan NOTA- og AOTA- spurningum, semsagt spurningar þar sem það er ``none of the above'' eða ``All of the above'' og það er vitlaust. Ég setti þau rök að ef NOTA- spurningu er að ræða og nemendann hefur séð rétta svarmöguleikann áður, þá er talið eins og NOTA- svarmöguleikinn hafi sést áður. Svo ef það er AOTA- spurning og nemandinn hefur séð eitthvað af hinum röngu svarmöguleikunum áður, þá segjum við að AOTA- svarið hafi sést áður.
+
+Til að einfalda svo aðeins, fyrir teikningar. Þá bætti ég við hluta2 breytu, sem er discretizised hluta breyta. Semsagt skip í 5 hluta.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hashAnswer}\OperatorTok{$}\NormalTok{hluta2 <-}\StringTok{ }\KeywordTok{cut_interval}\NormalTok{(hashAnswer}\OperatorTok{$}\NormalTok{hluta, }\DataTypeTok{n =} \DecValTok{5}\NormalTok{)}
+\NormalTok{hashLim50 <-}\StringTok{ }\NormalTok{hashAnswer }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(studentId) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\StringTok{"count"}\NormalTok{ =}\StringTok{ }\KeywordTok{n}\NormalTok{()) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(count }\OperatorTok{>}\StringTok{ }\DecValTok{7} \OperatorTok{&}\StringTok{ }\NormalTok{fsfat }\OperatorTok{<}\StringTok{ }\DecValTok{50}\NormalTok{)}
+\NormalTok{hashLim100 <-}\StringTok{ }\NormalTok{hashAnswer }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(studentId) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\StringTok{"count"}\NormalTok{ =}\StringTok{ }\KeywordTok{n}\NormalTok{()) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(count }\OperatorTok{>}\StringTok{ }\DecValTok{7} \OperatorTok{&}\StringTok{ }\NormalTok{fsfat }\OperatorTok{<}\StringTok{ }\DecValTok{100}\NormalTok{)}
+\NormalTok{hashLim50}\OperatorTok{$}\NormalTok{fsfat <-}\StringTok{ }\NormalTok{hashLim50}\OperatorTok{$}\NormalTok{fsfat}\OperatorTok{/}\DecValTok{10}
+\NormalTok{hashLim100}\OperatorTok{$}\NormalTok{fsfat <-}\StringTok{ }\NormalTok{hashLim100}\OperatorTok{$}\NormalTok{fsfat}\OperatorTok{/}\DecValTok{10}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{teikningar}{%
+\subsection{Teikningar}\label{teikningar}}
+
+Með þeirri nýju breytu er hægt að teikna nokkur gröf. Hér að ofan var teiknað meðaltals myndina
+\includegraphics{Imgsimplify/plotbymean50.png}
+
+Þar sést að það er einhver vöxtur í gangi hjá spurningum með nýjum svörum á meðan fleiri spurningum er svarað. En hvernig líta meðaltals línurnar út ef flokkað er með tilliti til hluta2 flokkana, skoðað bara fyrir tilvikin þegar hsta == 0?
+Þá fæst svona mynd:
+\includegraphics{Img/meanbyhlutfall.png}
+Það er einhver stór vöxtur að koma hjá endanum, ég held að það kemur frá því að það eru ekki mikið af upplýsingum fyrir aftan suma punktana, svo ég teikna aftur upp myndina, nema að ég fjarlægji punkta þar sem ekki eru fleiri en 5 gildi fyrir aftan
+\includegraphics{Img/meanbyhlutfallLim.png}
+
+Hér sést að línurnar eru aðeins beinar hér. Gott viðmið gæti komið ef prufað er að teikna línurnar ofan á upprunalegu meðaltals myndina
+\includegraphics{Img/meabwhsbyhlutfall.png}
+Þetta bentir til að fyrir aftan vöxtinn sem sást áðan, þá eru einhverjar hlutfalls breytur að toga að aftan.
+
+\hypertarget{tuxf6flur}{%
+\subsection{Töflur}\label{tuxf6flur}}
+
+Gott er að skoða aðeins fjöldana fyrir aftan töfluna hér að ofan
+T.d. er hægt að skoða hve mikið af gögnum það eru við hvert hlutfall
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hashLim50 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(hsta }\OperatorTok{==}\StringTok{ "0"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(hluta2) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\KeywordTok{n}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 2
+##   hluta2    `n()`
+##   <fct>     <int>
+## 1 [0,0.2]    8285
+## 2 (0.2,0.4]  4667
+## 3 (0.4,0.6]  3868
+## 4 (0.6,0.8]  7028
+## 5 (0.8,1]    7226
+\end{verbatim}
+
+\hypertarget{uppfuxe6ruxf0-model}{%
+\subsection{uppfærð model}\label{uppfuxe6ruxf0-model}}
+
+Þar sem komið er með nýja breytu, þá er hægt að skoða það miðað við upprunalega modelið og sjá hvernig það gengur
+Keyri þrjú módel
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit1 <-}\StringTok{ }\KeywordTok{glmer}\NormalTok{(correct }\OperatorTok{~}\StringTok{ }\NormalTok{fsfat}\OperatorTok{*}\NormalTok{hsta }\OperatorTok{+}\StringTok{ }\NormalTok{nicc }\OperatorTok{+}\StringTok{ }\NormalTok{gpow }\OperatorTok{+}\StringTok{ }\NormalTok{lectureId }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{studentId), }\DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link =} \StringTok{"logit"}\NormalTok{), }
+              \DataTypeTok{data =}\NormalTok{ hashLim100, }\DataTypeTok{nAGQ =} \DecValTok{0}\NormalTok{, }\DataTypeTok{control=}\KeywordTok{glmerControl}\NormalTok{(}\DataTypeTok{optimizer=}\StringTok{"bobyqa"}\NormalTok{,}\DataTypeTok{optCtrl=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{maxfun=}\FloatTok{2e5}\NormalTok{)))}
+\NormalTok{fit3 <-}\StringTok{ }\KeywordTok{glmer}\NormalTok{(correct }\OperatorTok{~}\StringTok{ }\NormalTok{hluta2}\OperatorTok{+}\NormalTok{hsta }\OperatorTok{+}\StringTok{ }\NormalTok{nicc }\OperatorTok{+}\StringTok{ }\NormalTok{gpow }\OperatorTok{+}\StringTok{ }\NormalTok{lectureId }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{studentId), }\DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link =} \StringTok{"logit"}\NormalTok{), }
+              \DataTypeTok{data =}\NormalTok{ hashLim100, }\DataTypeTok{nAGQ =} \DecValTok{0}\NormalTok{, }\DataTypeTok{control=}\KeywordTok{glmerControl}\NormalTok{(}\DataTypeTok{optimizer=}\StringTok{"bobyqa"}\NormalTok{,}\DataTypeTok{optCtrl=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{maxfun=}\FloatTok{2e5}\NormalTok{)))}
+\NormalTok{fit7 <-}\StringTok{ }\KeywordTok{glmer}\NormalTok{(correct }\OperatorTok{~}\StringTok{ }\NormalTok{hluta2 }\OperatorTok{+}\StringTok{ }\NormalTok{fsfat }\OperatorTok{+}\StringTok{ }\NormalTok{hsta }\OperatorTok{+}\StringTok{ }\NormalTok{nicc }\OperatorTok{+}\StringTok{ }\NormalTok{gpow }\OperatorTok{+}\StringTok{ }\NormalTok{lectureId }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{studentId), }\DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link =} \StringTok{"logit"}\NormalTok{), }
+              \DataTypeTok{data =}\NormalTok{ hashLim100, }\DataTypeTok{nAGQ =} \DecValTok{0}\NormalTok{, }\DataTypeTok{control=}\KeywordTok{glmerControl}\NormalTok{(}\DataTypeTok{optimizer=}\StringTok{"bobyqa"}\NormalTok{,}\DataTypeTok{optCtrl=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{maxfun=}\FloatTok{2e5}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+Hér er:
+* fit1: upprunalega líkanið
+
+\begin{itemize}
+\item
+  fit3: upprunalega líkanið, nema það er víxlað fsfat fyrir hluta2
+\item
+  fit7: það er líkan sem hefur bæði fsfat og hluta2
+\end{itemize}
+
+Gott er kannski að skoða muninn á milli þeirra, með anova
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{anova}\NormalTok{(fit1, fit3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Data: hashLim100
+## Models:
+## fit1: correct ~ fsfat * hsta + nicc + gpow + lectureId + (1 | studentId)
+## fit3: correct ~ hluta2 + hsta + nicc + gpow + lectureId + (1 | studentId)
+##      npar   AIC   BIC logLik deviance Chisq Df Pr(>Chisq)    
+## fit1   24 62028 62253 -30990    61980                        
+## fit3   26 61571 61815 -30760    61519   461  2  < 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{anova}\NormalTok{(fit3, fit7)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Data: hashLim100
+## Models:
+## fit3: correct ~ hluta2 + hsta + nicc + gpow + lectureId + (1 | studentId)
+## fit7: correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | 
+## fit7:     studentId)
+##      npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)    
+## fit3   26 61571 61815 -30760    61519                         
+## fit7   27 61178 61431 -30562    61124 395.34  1  < 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+Hér segjir að fit3 er marktækara en fit1 og fit7 er marktækara en fit3.
+Gott er að skoða aðeins standardized brier score muninn hjá þeim og svo líka AUC muninn
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sb1 <-}\StringTok{ }\KeywordTok{SBrierScore}\NormalTok{(fit1, hashLim100)}
+\NormalTok{sb3 <-}\StringTok{ }\KeywordTok{SBrierScore}\NormalTok{(fit3, hashLim100)}
+\NormalTok{sb7 <-}\StringTok{ }\KeywordTok{SBrierScore}\NormalTok{(fit7, hashLim100)}
+
+\NormalTok{fitauc1 <-}\StringTok{ }\KeywordTok{AUC}\NormalTok{(}\KeywordTok{predict}\NormalTok{(fit1, }\DataTypeTok{type =} \StringTok{"response"}\NormalTok{), hashLim100}\OperatorTok{$}\NormalTok{correct)}
+\NormalTok{fitauc3 <-}\StringTok{ }\KeywordTok{AUC}\NormalTok{(}\KeywordTok{predict}\NormalTok{(fit3, }\DataTypeTok{type =} \StringTok{"response"}\NormalTok{), hashLim100}\OperatorTok{$}\NormalTok{correct)}
+\NormalTok{fitauc7 <-}\KeywordTok{AUC}\NormalTok{(}\KeywordTok{predict}\NormalTok{(fit7, }\DataTypeTok{type =} \StringTok{"response"}\NormalTok{), hashLim100}\OperatorTok{$}\NormalTok{correct)}
+
+\NormalTok{sb1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.2411666
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sb3}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.2479733
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sb7}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.2524708
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fitauc1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.8331737
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fitauc3}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.8358489
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fitauc7}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.8392987
+\end{verbatim}
+
+Það er smár munur milli hverja, en ekki það mikill. Munurinn hjá standardized brier fyrir fit1 og fit3 er bara 0.0068. Sem segir til að munurinn á að nota hlutfall rangra svara séð í staðinn fyrir fjöldi spurninga fram að þessu er mjög lítill miðað við standardized brier. Það gæti verið að benda til að það gæti verið að áhrifinn að aftan vöxtinn hjá fsfat er aðallega bara hluta2.
+Að sama dúr er líka bara aðeins betra milli fit3 og fit7, með 0.0045, sem er enn minni en hinn. Svo á meðan það er marktækur munur á milli fit3 og fit7, þá er fit7 ekki endilega það mikið betra en fit3.
+Sömu niðurstöðurnar ef skoðað er munin hjá AUC í fit1 og fit3 0.0027 og munin milli fit3 og fit7 sem 0.0034. Á meðan AUC vex smá, þá er það ekki endilega nógu mikið til að segja til hvort eitt er betra en hitt. Ef ég skil þetta rétt.
+
+\hypertarget{teikna-fyrir-model}{%
+\subsection{Teikna fyrir model}\label{teikna-fyrir-model}}
+
+Svo í lokinn, er kannski gott að geta teiknað upp fyrir hvert þeirra predicted effect á móti correct, til að sjá hvernig það lítur út
+\includegraphics{Img/predplot.png}
+
+Það lítur út fyrir að vera beint að mesta lagi, sem bendir að það er að ná vel á móti alvöru niðurstöðunum. En það er ekki mikill munur á milli þeirra. Svo eitt er ekki endilega betra en næsta?
 
 \end{document}
