@@ -387,3 +387,28 @@ pr <- grid.arrange(p1, p2, p3, nrow = 1)
 
 ggsave('Img/predplot.png', pr, width = 21, height = 7)
 library(tinytex)
+
+
+#prufum aðeins áhrif, þegar hsta er alveg sleppt
+
+realTest <- hashTest2 %>% filter(hsta == "0")
+
+rfit1 <- glmer(correct ~ hluta2 + fsfat + nicc + gpow + lectureId + (1 + fsfat | studentId), family = binomial(link = "logit"), 
+               data = realTest, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+rfit2 <- glmer(correct ~ fsfat + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+               data = realTest, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+rfit3 <- glmer(correct ~ hluta2 + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+               data = realTest, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+
+Anova(rfit1, type = 3)
+Anova(rfit2, type = 3)
+Anova(rfit3, type = 3)
+
+anova(rfit2, rfit3)
+anova(rfit3, rfit1)
+
+yus <- broom::tidy(rfit1)
+broom::tidy(rfit2)
+
+yus2 <- ranef(rfit1)
+yus2 <- yus2$studentId

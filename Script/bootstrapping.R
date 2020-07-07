@@ -27,6 +27,8 @@ library(pracma)
 library(boot)
 #Fyrir AUC reikninga
 library(cvAUC)
+#Annaðhvort þeirra gefur mem_used() til að skoða hve mikið af mininnu er notað
+library(pryr)
 
 hashAnswer <- read.csv('Data/hashAnswer4.csv')
 hashAnswer <- hashAnswer %>% subset(select=-c(X))
@@ -36,6 +38,7 @@ hashAnswer$studentId <- hashAnswer$studentId %>% as.factor()
 hashAnswer$nicc <- hashAnswer$nicc %>% as.factor()
 hashAnswer$fsfat <- hashAnswer$fsfat/10
 hashAnswer$fsvfatu <- hashAnswer$fsvfatu/10
+hashAnswer$hluta2 <- cut_interval(hashAnswer$hluta, n = 5)
 
 hashTest2 <- hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
   filter(count > 7 & fsfat < 10)
@@ -114,11 +117,23 @@ modl22 <- function(df) {
   return(ans)
 }
 
+modtest <- function(df) {
+  ans <- glm(correct ~ fsfat*hsta + nicc + gpow + lectureId, family = binomial(link = "logit"), data = df)
+  return(ans)
+}
+
 modfit1 <- function(df) {
   ans <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
                data = df, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
   return(ans)
 }
+
+testBoot <- Bootwork(hashTest2, 100, modtest)
+#Nelder_Mead failed
+#nlminbwrap failed
+#nmkbw
+
+
 
 modfit3 <- function(df) {
   ans <- glmer(correct ~ hluta2+hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
@@ -128,7 +143,7 @@ modfit3 <- function(df) {
 
 modfit7 <- function(df) {
   ans <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
-               data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+               data = df, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
   return(ans)
 }
 fit <- modl22(hashTest2)
@@ -143,23 +158,36 @@ test1 <- data.frame(brier = BrierScore(ans42, hashTest2),
 Bootwork <- function(df, iteration, Funmod){
   options(contrasts = c("contr.sum", "contr.poly"))
   #Byrjum fyrst að keyra það fyrir upprunalega gagnasafnið
-  ormodel <- Funmod(df)
+  ormodel <- modtest(df)
   original <- data.frame(brier = BrierScore(ormodel, df), 
                          StanBrier = SBrierScore(ormodel, df),
                          AUC = AUC(predict(ormodel, type = "response"), df$correct))
   #Bý til nýjann grunn til að safna saman efnið frá bootstrappinu
   bootel <- data.frame(brier = numeric(0), AUC = numeric(0))
+  print('It begun')
   for (i in 1:iteration){
+    # gc()
+    print(i)
+    print("Fyrir bootcreate skipun: ")
+    print(mem_used())
     #Bý til nýtt safn með bootstrap
     Bdf <- bootcreate(df)
+    
+    print("Eftir Bootcreate og fyrir líkangerð: ")
+    print(mem_used())
     #Bý til model fyrir þetta bootstrap
-    Bmodel <- Funmod(Bdf)
+    #Bmodel <- Funmod(Bdf)
+    Bmodel <- modtest(Bdf)
+    print("Eftir líkangerð: ")
+    print(mem_used())
+    
     #Reiknað breyturnar sem það þarf að reikna
     Nadditions <- data.frame(brier = BrierScore(Bmodel, Bdf), 
                              StanBrier = SBrierScore(Bmodel, Bdf),
                              AUC = AUC(predict(Bmodel, type = "response"), Bdf$correct))
     #Geyma efnið í gagnasafninu
     bootel <- rbind(bootel, Nadditions)
+    rm(Bmodel)
   }
   #skila original og bootel
   return(list(original, bootel))
@@ -200,16 +228,19 @@ load('Data/BootedData')
 
 #Hér eru verkfærinn fyrir reikninginn hjá fit1, fit3 og fit7 eftir að hafa bætt við hluta
 memory.limit(300000)
-bootedfit1 <- Bootwork(hashTest2, 2500, modfit1)
+set.seed(117)
+bootedfit1 <- Bootwork(hashTest2, 200, modfit1)
 save(bootedfit1, file = "Data/Bootedfit1")
 
-bootedfit3 <- Bootwork(hashTest2, 2500, modfit3)
+set.seed(118)
+bootedfit3 <- Bootwork(hashTest2, 200, modfit3)
 save(bootedfit3, file = "Data/Bootedfit3")
 
-bootedfit7 <- Bootwork(hashTest2, 2500, modfit7)
+set.seed(119)
+bootedfit7 <- Bootwork(hashTest2, 200, modfit7)
 save(bootedfit7, file = "Data/Bootedfit7")
 
-
+?gc
 
 
 ?memory.limit
