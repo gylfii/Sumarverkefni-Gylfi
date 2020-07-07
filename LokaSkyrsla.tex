@@ -158,13 +158,240 @@ R v4.0.0 í viðmótinu RStudio v1.3.959
 \hypertarget{guxf6gn}{%
 \subsection{Gögn}\label{guxf6gn}}
 
-\hypertarget{gagnahreinsun}{%
-\subsection{Gagnahreinsun}\label{gagnahreinsun}}
+Gögninn sem voru fenginn voru tekinn beint úr sql gagnagrunns eða fenginn sem .txt skrá. Þar var fengið gagnasett fyrir öll svör nemanda, gagnasett fyrir allar spurningar og svo gagnasett fyrir stillingu nemenda innan við hvers fyrirlesturs. Svo texta skrár með hash fyrir alla réttu svara og rangra svara innan við vormisserinu 2020. Af þeim breytum var svo ákveðið að halda í gagnasafninu eftirfarandi breytur:
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+Breyta & Tegund & Skýring\tabularnewline
+\midrule
+\endhead
+lectureId & Merkibreyta & Númer fyrirlesturs\tabularnewline
+studentId & Merkibreyta & Númer nemenda\tabularnewline
+questionId & Merkibreyta & Númer spurningar\tabularnewline
+correct & Flokkabreyta & Hvort svarað var rétt eða rangt\tabularnewline
+hash & Flokkabreyta & Hver svarmöguleikinn er\tabularnewline
+fsfat & Samfelld breyta & Fjöldi spurninga svarað fram að þessari spurningu\tabularnewline
+hsta & Flokkabreyta & Hef séð þetta rétta svar áður\tabularnewline
+hluta & Samfelld breyta & Hlutfall rangra svara sem hafa sést áður\tabularnewline
+timeDif & Samfelld breyta & Tímamunur séðan rétta svarið sást seinast\tabularnewline
+nicc & Flokkabreyta & Fjöldi vitlausa svarmöguleika\tabularnewline
+gpow & Samfelld breyta & Erfileika hraði fyrir uppkomandi spurningar\tabularnewline
+hluta2 & Flokkabreyta & Discretized hlutfall rangra svara sem hafa sést áður\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{gagnavinnsla}{%
+\subsection{Gagnavinnsla}\label{gagnavinnsla}}
+
+Til að geta fengið gögninn sem eru hér að ofan. Þá þurfti að gera einhverjar vinnslur til að fá þær.
+
+Til að hægt væri að setja öll gögninn saman, þá þurfti að tengja saman öll gagnasettin. Fyrst svörinn og spurningarnar, til að geta tengt við réttu svörinn. Eftir það var tengt við sillingu nemenda til að finna gpow hvers nemenda. Svo far tengt röngu svörinn og reiknað var hluta. Mínus þaðan er að þar var tapað u.þ.b. 6023 línum. Svo í lokinn var tengt réttu svörinn og reiknað hvort nemandinn hafi séð svarið áður eða ekki fyrir hverja spurningu.
+
+Ákveðið var að taka minna en allt gagnasafnið, með því að skoða ekki spurningar sem koma eftir að nemandinn hefur svarað 100 sinnum. Þetta kemur frá þeirri hugsun að bara smár hluti af gögnunum eru þau seinu gildin sem eru að fara yfir 100 spurningum svarað.
+
+SÉ SEINNA HVAÐ GÆTI VERIÐ GOTT AÐ BÆTA VIÐ HÉRNA, ER EKKI ENN VISS
 
 \hypertarget{breytur}{%
 \subsection{Breytur}\label{breytur}}
 
+Það voru nokkrar breytur sem var þurft að búa til, þeir voru fsfat, hsta og hluta.
+
+Fyrir fsfat, semsagt ``Fjöldi spurninga fram að þessu'', telur spurningarnar sem hafa verið svarað hingað til. Aðferðin til að búa til fsfat fór svona:
+1. Raða safninu eftir tíma sem spurninginn byrjaði
+2. fyrir hvern nemenda í hverjum fyrirlestri, telja upp frá 0 eftir röðinni.
+Þegar það var keyrt, þá var komið fsfat.
+
+Að næstu fyrir hsta, semsagt ``hef séð þetta rétta svar áður''. Fyrir hvern nemenda, þá var fundið fyrsta skiptið sem nemandinn sá svarið, svo var sett að ef nemandinn sá það í fyrsta skiptið, þá hafði hann ekki séð svarið áður, annars hefur nemandinn séð svarið áður. Nema í tilvikum þar sem NOTA+ spurning er að ræða, semsagt ``None of the above'' er rétta svarið. Þá var sett að ef hlutfall rangra svara sem nemandinn hafi séð áður væri 100\%, þá er talið að nemandinn hafi séð rétta svarið áður.
+
+Að lokum var sett upp hluta, semsagt ``hlutfall rangra svara sem hafa sést áður''. Þar var fyrst fundið fyrir hvern nemenda, hvort ranga svarið hafi sést áður og sett upp eins og hsta. Eftir það var tekið meðaltal rangra svara sem hafa sést áður. Frá því kom hlutfallið. Sér hugsun þurfti að koma tengt spurningu með ``all of the above'' sem rangur möguleiki og ``None of the above'' sem rangur möguleiki. Fyrir fyrra tilvikið var skoðað hvort eitthvað af hinum röngu valmöguleikunum hafa sést áður, ef svo þá var hugsað eins og ``all of the above'' ranga svarið hafi sést áður. Fyrir ``NOTA-'' þá var skoðað hvort rétta svarið hafi sést áður, ef svo þá var hugsað eins og ``NOTA-'' svarmöguleikinn hafi sést áður.
+
+Fyrir hluta2, þá var ``discretizised'' hluta í 5 jafn langa parta
+
+NÚ, ÉG VEIT EKKI HVORT ÞAÐ ER MEIRA TIL AÐ SEGJA HÉR, EN GEYMUM ÞETTA Í BILI
+NÉ HVORT ÞETTA ÆTTI AÐ VERA Í GREININNI TIL AÐ BYRJA MEÐ, GETUR VEL VERIÐ AÐ ÞETTA ER ALVEG ÓNOTANLEGT
+
 \hypertarget{auxf0feruxf0arfruxe6uxf0i-viuxf0-luxedkanasmiuxf0}{%
 \subsection{Aðferðarfræði við líkanasmið}\label{auxf0feruxf0arfruxe6uxf0i-viuxf0-luxedkanasmiuxf0}}
+
+Það voru gerðar þrjú ``mixed effect logistic regression'' líkön, þar sem aðalmunur þeirra er að:
+
+\begin{itemize}
+\tightlist
+\item
+  Fyrsta líkanið inniheldur víxláhrif milli fsfat og hsta, en inniheldur ekki hluta2.
+\item
+  Annað líkanið inniheldur hluta2, en inniheldur ekki fsfat.
+\item
+  Þriðja líkanið inniheldur fsfat og hluta2, en ekki víxláhrif milli fsfat og hsta.
+\end{itemize}
+
+Með þessum líkönum, væri hægt að skoða hvort það koma framfarir. Þar sem hugsuninn byggist á því að ef fsfat er ennþá sterkt, þá eru framfarir að sjást. Því sem fleiri spurningar eru svarað, þá eru líkurnar á að næstu spurningu er svarað rétt að hækka. Hægt er að sjá það sem framfarir. Á móti kemur áhrif utanbókarlærdóms, sem kemur frá réttu og röngu svarmöguleikunum sem koma aftur.
+
+KANNSKI HÆGT AÐ NEFNA MEIRA HÉR, EN VEIT EKKI. FINNST ÞETTA VERA MIKIÐ SVONA SKRÝTIÐ. ORÐA ÞETTA LÍKA AÐEINS ÖÐRUVÍSI, SÉ TIL SEINNA
+
+\hypertarget{niuxf0urstuxf6uxf0ur}{%
+\section{Niðurstöður}\label{niuxf0urstuxf6uxf0ur}}
+
+\hypertarget{luxfdsandi-tuxf6lfruxe6uxf0i}{%
+\subsection{lýsandi tölfræði}\label{luxfdsandi-tuxf6lfruxe6uxf0i}}
+
+\hypertarget{uxf6ll-guxf6gn}{%
+\subsubsection{öll gögn}\label{uxf6ll-guxf6gn}}
+
+Góð byrjun er að skoða fyrst hlutföll gagnanna allra. Fyrir Aðal flokkabreyturnar, þá gæti verið gott að fylgjast með hlutfall gagnanna undir hverjum flokki
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{4cm}ll}
+\toprule
+  & fjoldi & hlutfall\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{correct}}\\
+\hspace{1em}Rangt & 16811 & 16.5\%\\
+\hspace{1em}Rétt & 85183 & 83.5\%\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{hsta}}\\
+\hspace{1em}Sést í fyrsta skipti & 36915 & 36.2\%\\
+\hspace{1em}Hef séð svarið áður & 65079 & 63.8\%\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{hluta2}}\\
+\hspace{1em}0\% - 20\% & 9698 & 9.5\%\\
+\hspace{1em}20\% - 40\% & 6404 & 6.3\%\\
+\hspace{1em}40\% - 60\% & 5362 & 5.3\%\\
+\hspace{1em}60\% - 80\% & 16347 & 16\%\\
+\hspace{1em}80\% - 100\% & 64183 & 62.9\%\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{lectureId}}\\
+\hspace{1em}3082 & 23651 & 23.2\%\\
+\hspace{1em}3201 & 7109 & 7\%\\
+\hspace{1em}3202 & 4825 & 4.7\%\\
+\hspace{1em}3203 & 10982 & 10.8\%\\
+\hspace{1em}3204 & 9117 & 8.9\%\\
+\hspace{1em}3208 & 7287 & 7.1\%\\
+\hspace{1em}3209 & 5904 & 5.8\%\\
+\hspace{1em}3210 & 4712 & 4.6\%\\
+\hspace{1em}3211 & 4438 & 4.4\%\\
+\hspace{1em}3212 & 6553 & 6.4\%\\
+\hspace{1em}3213 & 5704 & 5.6\%\\
+\hspace{1em}3214 & 5480 & 5.4\%\\
+\hspace{1em}3215 & 6232 & 6.1\%\\
+\bottomrule
+\end{longtable}
+
+Mikið af gögnunum hér eru rétt svo, svör sem nemendur hafa séð áður og spurningar þar sem nemandinn hefur séð 80\%-100\% af röngu svarmöguleikunum áður. Svo mikið af gögnunum eru ekkert nýtt.
+
+Vandinn gæti verið frá því að einhverjir nemendur eru að svara miklu fleiri spurningum en aðrir. Skoðum aðeins hvernig hlutfall af svörunum fara yfir einhvern sérstakan punkt
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrr}
+\toprule
+limit & FY & HY\\
+\midrule
+50 & 29990 & 0.2940\\
+100 & 9155 & 0.0898\\
+150 & 3072 & 0.0301\\
+200 & 1127 & 0.0110\\
+250 & 331 & 0.0032\\
+\addlinespace
+300 & 86 & 0.0008\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Til að geta fengið betri skoðun á gögnunum, þá var ákveðið að skipta gögnunum upp í tvö gagnasöfn, í fyrri er ekki leift meiri 100 fsfat og í seinni er ekki leift meira en 50 fsfat. Það gagnasafn er notað héðan í frá.
+
+\hypertarget{stytt-guxf6gninn}{%
+\subsubsection{Stytt gögninn}\label{stytt-guxf6gninn}}
+
+Það getur verið sterkur áhugi að teikna sömu töflu aftur, nema í tilviki með bara upp að 100 spurningum svarað í einu og svo 50 spurningum svarað í einu.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{4cm}ll}
+\toprule
+  & fjoldi & hlutfall\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{correct}}\\
+\hspace{1em}Rangt & 13979 & 19.4\%\\
+\hspace{1em}Rétt & 57996 & 80.6\%\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{hsta}}\\
+\hspace{1em}Sést í fyrsta skipti & 32933 & 45.8\%\\
+\hspace{1em}Hef séð svarið áður & 39042 & 54.2\%\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{hluta2}}\\
+\hspace{1em}0\% - 20\% & 9570 & 13.3\%\\
+\hspace{1em}20\% - 40\% & 6266 & 8.7\%\\
+\hspace{1em}40\% - 60\% & 5163 & 7.2\%\\
+\hspace{1em}60\% - 80\% & 13751 & 19.1\%\\
+\hspace{1em}80\% - 100\% & 37225 & 51.7\%\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{lectureId}}\\
+\hspace{1em}3082 & 10549 & 14.7\%\\
+\hspace{1em}3201 & 5991 & 8.3\%\\
+\hspace{1em}3202 & 4494 & 6.2\%\\
+\hspace{1em}3203 & 7555 & 10.5\%\\
+\hspace{1em}3204 & 6498 & 9\%\\
+\hspace{1em}3208 & 5521 & 7.7\%\\
+\hspace{1em}3209 & 4543 & 6.3\%\\
+\hspace{1em}3210 & 4249 & 5.9\%\\
+\hspace{1em}3211 & 3959 & 5.5\%\\
+\hspace{1em}3212 & 4628 & 6.4\%\\
+\hspace{1em}3213 & 4747 & 6.6\%\\
+\hspace{1em}3214 & 4407 & 6.1\%\\
+\hspace{1em}3215 & 4834 & 6.7\%\\
+\bottomrule
+\end{longtable}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{4cm}ll}
+\toprule
+  & fjoldi & hlutfall\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{correct}}\\
+\hspace{1em}Rangt & 15954 & 17.2\%\\
+\hspace{1em}Rétt & 76856 & 82.8\%\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{hsta}}\\
+\hspace{1em}Sést í fyrsta skipti & 36290 & 39.1\%\\
+\hspace{1em}Hef séð svarið áður & 56520 & 60.9\%\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{hluta2}}\\
+\hspace{1em}0\% - 20\% & 9652 & 10.4\%\\
+\hspace{1em}20\% - 40\% & 6392 & 6.9\%\\
+\hspace{1em}40\% - 60\% & 5331 & 5.7\%\\
+\hspace{1em}60\% - 80\% & 15956 & 17.2\%\\
+\hspace{1em}80\% - 100\% & 55479 & 59.8\%\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{lectureId}}\\
+\hspace{1em}3082 & 17648 & 19\%\\
+\hspace{1em}3201 & 7033 & 7.6\%\\
+\hspace{1em}3202 & 4825 & 5.2\%\\
+\hspace{1em}3203 & 10266 & 11.1\%\\
+\hspace{1em}3204 & 8429 & 9.1\%\\
+\hspace{1em}3208 & 7023 & 7.6\%\\
+\hspace{1em}3209 & 5751 & 6.2\%\\
+\hspace{1em}3210 & 4709 & 5.1\%\\
+\hspace{1em}3211 & 4432 & 4.8\%\\
+\hspace{1em}3212 & 5892 & 6.3\%\\
+\hspace{1em}3213 & 5575 & 6\%\\
+\hspace{1em}3214 & 5288 & 5.7\%\\
+\hspace{1em}3215 & 5939 & 6.4\%\\
+\bottomrule
+\end{longtable}
+
+\hypertarget{luxedkanasmiuxf0}{%
+\subsection{líkanasmið}\label{luxedkanasmiuxf0}}
+
+\hypertarget{breytur-1}{%
+\subsubsection{breytur}\label{breytur-1}}
+
+\hypertarget{val-uxe1-luxedkani}{%
+\subsubsection{val á líkani}\label{val-uxe1-luxedkani}}
+
+\hypertarget{matsguxe6uxf0i-luxedkana}{%
+\subsubsection{Matsgæði líkana}\label{matsguxe6uxf0i-luxedkana}}
+
+\hypertarget{mat-stika-lokaluxedkana}{%
+\subsubsection{Mat stika lokalíkana}\label{mat-stika-lokaluxedkana}}
 
 \end{document}

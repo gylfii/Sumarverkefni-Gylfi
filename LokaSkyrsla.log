@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.7.1)  1 JUL 2020 15:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.7.1)  7 JUL 2020 10:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -796,40 +796,95 @@ tion *" in \thebibliography on input line 114.
 [1
 
 {c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdfte
-x.map}] 
-AED: lastpage setting LastPage
+x.map}]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
 Make it at least 14.49998pt.
 We now make it that large for the rest of the document.
 This may cause the page layout to be inconsistent, however.
 
-[2]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 170.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 170.
+[2] [3]
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 2
+21.
+(c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+Underfull \vbox (badness 10000) detected at line 270
+ []
+
+[4]
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 2
+86.
+(c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
+File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 2
+86.
+(c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
+File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
+286.
+(c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
+File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
+286.
+(c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
+File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <12> on input line 286.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <8> on input line 286.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <6> on input line 286.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 286
+.
+(c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 286
+.
+(c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [5]
+Underfull \vbox (badness 10000) detected at line 335
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 372
+ []
+
+[6] 
+AED: lastpage setting LastPage
+[7]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 397.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 397.
 (./LokaSkyrsla.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 170.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 170.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 397.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 397.
 Package rerunfilecheck Info: File `LokaSkyrsla.out' has not changed.
-(rerunfilecheck)             Checksum: 94C93560A8D019468EC437FEBBB37AE5;1185.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 170.
+(rerunfilecheck)             Checksum: 576281D5D5C361B3F4D3B6626115610A;2386.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 397.
  ) 
 Here is how much of TeX's memory you used:
- 15274 strings out of 482404
- 224356 string characters out of 5945449
- 502477 words of memory out of 5000000
- 30773 multiletter control sequences out of 15000+600000
- 553764 words of font info for 33 fonts, out of 8000000 for 9000
+ 15458 strings out of 482404
+ 228410 string characters out of 5945449
+ 514121 words of memory out of 5000000
+ 30893 multiletter control sequences out of 15000+600000
+ 569397 words of font info for 51 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,11n,45p,905b,350s stack positions out of 5000i,500n,10000p,200000b,80000s
-{c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.e
-nc}<c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmb
-x12.pfb><c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/l
-m/lmr12.pfb>
-Output written on LokaSkyrsla.pdf (2 pages, 63716 bytes).
+ 38i,11n,45p,905b,472s stack positions out of 5000i,500n,10000p,200000b,80000s
+{c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.
+enc}{c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec
+.enc}<c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/l
+mbx12.pfb><c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public
+/lm/lmr12.pfb>
+Output written on LokaSkyrsla.pdf (7 pages, 77874 bytes).
 PDF statistics:
- 81 PDF objects out of 1000 (max. 8388607)
- 74 compressed objects within 1 object stream
- 23 named destinations out of 1000 (max. 500000)
- 81 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 164 PDF objects out of 1000 (max. 8388607)
+ 151 compressed objects within 2 object streams
+ 51 named destinations out of 1000 (max. 500000)
+ 153 words of extra memory for PDF output out of 10000 (max. 10000000)
 
