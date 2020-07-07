@@ -117,10 +117,10 @@ modl22 <- function(df) {
   return(ans)
 }
 
-modtest <- function(df) {
-  ans <- glm(correct ~ fsfat*hsta + nicc + gpow + lectureId, family = binomial(link = "logit"), data = df)
-  return(ans)
-}
+# modtest <- function(df) {
+#   ans <- glm(correct ~ fsfat*hsta + nicc + gpow + lectureId, family = binomial(link = "logit"), data = df)
+#   return(ans)
+# }
 
 modfit1 <- function(df) {
   ans <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
@@ -128,7 +128,7 @@ modfit1 <- function(df) {
   return(ans)
 }
 
-testBoot <- Bootwork(hashTest2, 100, modtest)
+testBoot <- Bootwork(hashTest2, 10)
 #Nelder_Mead failed
 #nlminbwrap failed
 #nmkbw
@@ -155,31 +155,25 @@ test1 <- data.frame(brier = BrierScore(ans42, hashTest2),
                       AUC = AUC(predict(ans42, type = "response"), hashTest2$correct))
 
 #Bootwork er svo aðal Bootstrap fallið
-Bootwork <- function(df, iteration, Funmod){
+# Þarf að manually setja inn glmer fallið sem maður þarf þar inni
+Bootwork <- function(df, iteration){
   options(contrasts = c("contr.sum", "contr.poly"))
   #Byrjum fyrst að keyra það fyrir upprunalega gagnasafnið
-  ormodel <- modtest(df)
+  ormodel <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+                   data = df, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
   original <- data.frame(brier = BrierScore(ormodel, df), 
                          StanBrier = SBrierScore(ormodel, df),
                          AUC = AUC(predict(ormodel, type = "response"), df$correct))
   #Bý til nýjann grunn til að safna saman efnið frá bootstrappinu
-  bootel <- data.frame(brier = numeric(0), AUC = numeric(0))
+  bootel <- data.frame(brier = numeric(0), StanBrier - numeric(0), AUC = numeric(0))
   print('It begun')
   for (i in 1:iteration){
-    # gc()
-    print(i)
-    print("Fyrir bootcreate skipun: ")
-    print(mem_used())
     #Bý til nýtt safn með bootstrap
     Bdf <- bootcreate(df)
-    
-    print("Eftir Bootcreate og fyrir líkangerð: ")
-    print(mem_used())
     #Bý til model fyrir þetta bootstrap
     #Bmodel <- Funmod(Bdf)
-    Bmodel <- modtest(Bdf)
-    print("Eftir líkangerð: ")
-    print(mem_used())
+    Bmodel <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+                    data = Bdf, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
     
     #Reiknað breyturnar sem það þarf að reikna
     Nadditions <- data.frame(brier = BrierScore(Bmodel, Bdf), 
@@ -187,7 +181,7 @@ Bootwork <- function(df, iteration, Funmod){
                              AUC = AUC(predict(Bmodel, type = "response"), Bdf$correct))
     #Geyma efnið í gagnasafninu
     bootel <- rbind(bootel, Nadditions)
-    rm(Bmodel)
+    # rm(Bmodel)
   }
   #skila original og bootel
   return(list(original, bootel))
@@ -228,16 +222,20 @@ load('Data/BootedData')
 
 #Hér eru verkfærinn fyrir reikninginn hjá fit1, fit3 og fit7 eftir að hafa bætt við hluta
 memory.limit(300000)
+
+#Muna að setja upp fallið inní
 set.seed(117)
-bootedfit1 <- Bootwork(hashTest2, 200, modfit1)
+bootedfit1 <- Bootwork(hashTest2, 2500)
 save(bootedfit1, file = "Data/Bootedfit1")
 
+#Muna að setja upp fallið inní
 set.seed(118)
-bootedfit3 <- Bootwork(hashTest2, 200, modfit3)
+bootedfit3 <- Bootwork(hashTest2, 2500)
 save(bootedfit3, file = "Data/Bootedfit3")
 
+#muna að setja upp fallið inní
 set.seed(119)
-bootedfit7 <- Bootwork(hashTest2, 200, modfit7)
+bootedfit7 <- Bootwork(hashTest2, 2500)
 save(bootedfit7, file = "Data/Bootedfit7")
 
 ?gc

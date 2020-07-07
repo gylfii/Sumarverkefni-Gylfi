@@ -336,7 +336,10 @@ fit6 <- glmer(correct ~ hluta2 + fsfat * hsta + nicc + gpow + lectureId + (1 | s
 Anova(fit6, type = 3)
 fit7 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
               data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+fit8 <- glmer(correct ~ hluta + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+              data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 Anova(fit7, type = 3)
+Anova(fit8, type = 3)
 Anova(fit3, type = 3)
 anova(fit3, fit7)
 
@@ -350,6 +353,7 @@ Anova(fit13, type = 3)
 Anova(fit33, type = 3)
 Anova(fit73, type = 3)
 
+cor(hashTest2$fsfat, hashTest2$hluta)
 
 fit7tidy <- broom::tidy(fit7)
 fit1tidy <- broom::tidy(fit1)
