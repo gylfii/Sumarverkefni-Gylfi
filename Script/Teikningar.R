@@ -351,7 +351,7 @@ for (lId in unique(dfmean$lectureId)) {
 
 
 #teikna meðaltals myndirnar byggt ofaná hlutföllin
-hashAnswer$hluta <- hashAnswer$hluta %>% as.factor()
+# hashAnswer$hluta <- hashAnswer$hluta %>% as.factor()
 hashAnswer$hluta2 <- cut_interval(hashAnswer$hluta, n = 5)
 
 #Mean fyrir hluta og alls konar myndir með því
@@ -364,7 +364,11 @@ dfmean3 <- hashAnswer %>% filter(fsfat < 50) %>% group_by(fsfat, hsta) %>%
 dfmean4 <- hashAnswer %>% filter(fsfat < 100 & hsta == "0") %>% group_by(fsfat, hluta2) %>%
   summarise("med" = mean(correct), "fjoldi" = n())
 
+dfmean5 <- hashAnswer %>% filter(fsfat < 100) %>% group_by(fsfat, hsta) %>%
+  summarise("med" = mean(correct), fjoldi = n())
+
 cor(hashTest2$fsfat, hashTest2$hluta)
+
 ggplot(dfmean3, aes(x = fsfat, y = med, color = hsta)) +
   geom_point() +
   geom_smooth() +
@@ -373,7 +377,7 @@ ggplot(dfmean3, aes(x = fsfat, y = med, color = hsta)) +
 p2 <- dfmean3 %>% filter(hsta == 0) %>% ggplot(aes(x = fsfat, y = med)) +
   geom_point() +
   geom_smooth() +
-  geom_smooth(data = dfmean2 %>% filter(fjoldi > 5), aes(color = hluta2), se = F) +
+  geom_smooth(data = dfmean2 %>% filter(fjoldi > 1), aes(color = hluta2), se = F) +
   coord_cartesian(ylim = c(yminim, ymaxim))
 
 p2
@@ -389,20 +393,48 @@ p1 <- dfmean2 %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
   geom_point() +
   geom_smooth(se = F)  
 
-p3 <- dfmean2 %>% filter(fjoldi > 5) %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
-  geom_point() +
+p3 <- dfmean2 %>% filter(fjoldi > 1) %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
+  geom_point(aes(size = fjoldi)) +
   geom_smooth(se = F)
+p3
 dfmean4 %>% filter(fjoldi > 5) %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
   geom_point() +
   geom_smooth(se = F)
 yminim <- min(dfmean3$med)
 ymaxim <- max(dfmean3$med)
 
-ggsave('Img/meanbyhlutfall.png', p1, width = 15, height = 10)
+yminim2 <- min(dfmean5$med)
+ymaxim2 <- max(dfmean5$med)
+
+p4 <- dfmean5 %>% filter(hsta == 0) %>% ggplot(aes(x = fsfat, y = med)) +
+  geom_point() +
+  geom_smooth() +
+  geom_smooth(data = dfmean4 %>% filter(fjoldi > 1), aes(color = hluta2), se = F) +
+  coord_cartesian(ylim = c(yminim2, ymaxim2))
+p4
+
+ggsave('Img/meanbyhlutfall.png', p1, width = 10, height = 10)
 ggsave('Img/meabwhsbyhlutfall.png', p2, width = 10, height = 10)
-ggsave('Img/meanbyhlutfallLim.png', p3, width = 15, height = 10)
+ggsave('Img/meanbyhlutfallLim.png', p3, width = 10, height = 10)
+ggsave('Img/meabwhsbyhlutfall100.png', p4, width = 10, height = 10)
 
 ?geom_smooth
 
+
+
+
+
+
 hashTest3 %>% ggplot(aes(x = hluta2, color = hsta)) +
   geom_bar(position = "dodge2")
+
+dfmean2 %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) + 
+  #geom_point() +
+  geom_smooth(se = F) + 
+  geom_text(aes(label = fjoldi))
+
+?geom_text
+
+dfmean2 %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) + 
+  geom_point(aes(size = fjoldi)) +
+  geom_smooth(se = F)  

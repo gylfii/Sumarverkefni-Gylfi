@@ -283,27 +283,66 @@ Vandinn gæti verið frá því að einhverjir nemendur eru að svara miklu flei
 
 \begin{table}[H]
 \centering
-\begin{tabular}{lrr}
+\begin{tabular}{lrl}
 \toprule
 limit & FY & HY\\
 \midrule
-50 & 29990 & 0.2940\\
-100 & 9155 & 0.0898\\
-150 & 3072 & 0.0301\\
-200 & 1127 & 0.0110\\
-250 & 331 & 0.0032\\
+50 & 29990 & 29.4\%\\
+100 & 9155 & 9\%\\
+150 & 3072 & 3\%\\
+200 & 1127 & 1.1\%\\
+250 & 331 & 0.3\%\\
 \addlinespace
-300 & 86 & 0.0008\\
+300 & 86 & 0.1\%\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Til að geta fengið betri skoðun á gögnunum, þá var ákveðið að skipta gögnunum upp í tvö gagnasöfn, í fyrri er ekki leift meiri 100 fsfat og í seinni er ekki leift meira en 50 fsfat. Það gagnasafn er notað héðan í frá.
+Það sést að 29.4\% af gögnunum eru svör eftir 50 spurningar svarað, en bara 9\% gagnanna eftir 100 spurningum. Svo til að geta fengið betri skoðun á gögnunum, þá var ákveðið að skipta gögnunum upp í tvö gagnasöfn, í fyrri er ekki leift meiri 100 fsfat og í seinni er ekki leift meira en 50 fsfat. Það gagnasafn er notað héðan í frá.
 
 \hypertarget{stytt-guxf6gninn}{%
 \subsubsection{Stytt gögninn}\label{stytt-guxf6gninn}}
 
 Það getur verið sterkur áhugi að teikna sömu töflu aftur, nema í tilviki með bara upp að 100 spurningum svarað í einu og svo 50 spurningum svarað í einu.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{4cm}ll}
+\toprule
+  & fjoldi & hlutfall\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{correct}}\\
+\hspace{1em}Rangt & 15954 & 17.2\%\\
+\hspace{1em}Rétt & 76856 & 82.8\%\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{hsta}}\\
+\hspace{1em}Sést í fyrsta skipti & 36290 & 39.1\%\\
+\hspace{1em}Hef séð svarið áður & 56520 & 60.9\%\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{hluta2}}\\
+\hspace{1em}0\% - 20\% & 9652 & 10.4\%\\
+\hspace{1em}20\% - 40\% & 6392 & 6.9\%\\
+\hspace{1em}40\% - 60\% & 5331 & 5.7\%\\
+\hspace{1em}60\% - 80\% & 15956 & 17.2\%\\
+\hspace{1em}80\% - 100\% & 55479 & 59.8\%\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{lectureId}}\\
+\hspace{1em}3082 & 17648 & 19\%\\
+\hspace{1em}3201 & 7033 & 7.6\%\\
+\hspace{1em}3202 & 4825 & 5.2\%\\
+\hspace{1em}3203 & 10266 & 11.1\%\\
+\hspace{1em}3204 & 8429 & 9.1\%\\
+\hspace{1em}3208 & 7023 & 7.6\%\\
+\hspace{1em}3209 & 5751 & 6.2\%\\
+\hspace{1em}3210 & 4709 & 5.1\%\\
+\hspace{1em}3211 & 4432 & 4.8\%\\
+\hspace{1em}3212 & 5892 & 6.3\%\\
+\hspace{1em}3213 & 5575 & 6\%\\
+\hspace{1em}3214 & 5288 & 5.7\%\\
+\hspace{1em}3215 & 5939 & 6.4\%\\
+\bottomrule
+\end{longtable}
+
+Það sést að rangt hlutfallið hækkar aðeins, sama með sést í fyrsa skiptið. Hvað með næstu töflu
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{4cm}ll}
 \toprule
@@ -342,42 +381,79 @@ Til að geta fengið betri skoðun á gögnunum, þá var ákveðið að skipta 
 \bottomrule
 \end{longtable}
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{4cm}ll}
-\toprule
-  & fjoldi & hlutfall\\
-\midrule
-\addlinespace[0.3em]
-\multicolumn{3}{l}{\textbf{correct}}\\
-\hspace{1em}Rangt & 15954 & 17.2\%\\
-\hspace{1em}Rétt & 76856 & 82.8\%\\
-\addlinespace[0.3em]
-\multicolumn{3}{l}{\textbf{hsta}}\\
-\hspace{1em}Sést í fyrsta skipti & 36290 & 39.1\%\\
-\hspace{1em}Hef séð svarið áður & 56520 & 60.9\%\\
-\addlinespace[0.3em]
-\multicolumn{3}{l}{\textbf{hluta2}}\\
-\hspace{1em}0\% - 20\% & 9652 & 10.4\%\\
-\hspace{1em}20\% - 40\% & 6392 & 6.9\%\\
-\hspace{1em}40\% - 60\% & 5331 & 5.7\%\\
-\hspace{1em}60\% - 80\% & 15956 & 17.2\%\\
-\hspace{1em}80\% - 100\% & 55479 & 59.8\%\\
-\addlinespace[0.3em]
-\multicolumn{3}{l}{\textbf{lectureId}}\\
-\hspace{1em}3082 & 17648 & 19\%\\
-\hspace{1em}3201 & 7033 & 7.6\%\\
-\hspace{1em}3202 & 4825 & 5.2\%\\
-\hspace{1em}3203 & 10266 & 11.1\%\\
-\hspace{1em}3204 & 8429 & 9.1\%\\
-\hspace{1em}3208 & 7023 & 7.6\%\\
-\hspace{1em}3209 & 5751 & 6.2\%\\
-\hspace{1em}3210 & 4709 & 5.1\%\\
-\hspace{1em}3211 & 4432 & 4.8\%\\
-\hspace{1em}3212 & 5892 & 6.3\%\\
-\hspace{1em}3213 & 5575 & 6\%\\
-\hspace{1em}3214 & 5288 & 5.7\%\\
-\hspace{1em}3215 & 5939 & 6.4\%\\
-\bottomrule
-\end{longtable}
+Hérna er Rangt hlutfallið aftur aðeins stærra og hsta hlutfallið orðið miklu nær helmingi. Nemendur eru enn að sjá mikið af eindurtekningum, en það er orðið jafnara.
+
+Til að geta séð hvernig árangur kemur með tíma, þá var skoðað meðaltal fyrir hvert fsfat upp að 50 og svo upp að 100. Semsagt hvað er meðaltal réttra svara hjá spurningu nr. x, þetta er svo skipt fyrir bæði réttu svör sem eru að sjást í fyrsta sinn og þau sem hafa sést áður. Skoðað fyrst fyrir fyrstu 50:
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1\linewidth]{Imgsimplify/plotbymean50} 
+
+}
+
+\caption{Upp að 50 meðaltal}\label{fig:pltbymean50}
+\end{figure}
+
+Það lítur út fyrir að einhverjar framfarir gætu verið að gerast hér, þar sem nýju svörinn eru að vaxa með tíma, hvað með þegar skoðað er upp að hundrað:
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1\linewidth]{Imgsimplify/plotbymean100} 
+
+}
+
+\caption{Upp að 100 meðaltal}\label{fig:pltbymean100}
+\end{figure}
+
+Það sést að þegar það er farið lengra, þá fer að sjá þetta í fyrsta skiptið að beinast út og fer svo aðeins niður. Hugmynd að hver vandinn er, það gæti verið að nemendur eru farinn að setja á minnið röngu svarmöguleikana, svo það eru minni svarmöguleikar sem nemandinn er að sjá.
+
+Hugmynd er að skoða líka meðaltals mynd, nema bara fyrir tilvik þegar þetta eru ný svör og skipt upp eftir hlutfall rangra svara sem hafa sést áður. Skoðum fyrst fyrir fyrstu 50 tilvikinn
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1\linewidth]{Img/meanbyhlutfall} 
+
+}
+
+\caption{meðaltal fyrir hlutfall, upp að 50}\label{fig:meanbyhlutfall50}
+\end{figure}
+
+Línurnar eru miklu beinari hér, það er samt mikið stökk hjá endanum, svo hugmynd er að taka út punktana þar sem það eru ekki fleiri en 1 að svara það, þá fæst
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1\linewidth]{Img/meanbyhlutfallLim} 
+
+}
+
+\caption{meðaltal fyrir hlutfall, upp að 50. Með minnsta kosti 2 svör á hverjum punkti}\label{fig:meanbyhlutfall50Lim}
+\end{figure}
+
+Þá er það aðeins jafnara komið.
+
+Til að geta skoðað svo aðeins áhrifinn hlið við hlið hjá Þá er hægt að setja línurnar fyrir hlutföllin ofaná línuna sem kemur þegar skoðað er allt saman, eins og var í Mynd x.
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1\linewidth]{Img/meabwhsbyhlutfall} 
+
+}
+
+\caption{meðaltal fyrir hlutfall, upp að 50. Með meðaltal hjá fyrsta skiptið séð rétta svarið}\label{fig:meanbyhlutfallandhsta}
+\end{figure}
+
+Hér sést að á meðan upprunalega línan er vaxandi, þá er hin öll miklu flatari. Sum eru að sveiflast mikið, en hugsa er að það gerist að mestu útaf þörf fyrir fleiri breytur á þeim punktum.
+
+Að sömu leiti getum við skoðað sömu mynd fyrir tilvikið þegar farið er upp að 100 spurningum svarað
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1\linewidth]{Img/meabwhsbyhlutfall100} 
+
+}
+
+\caption{meðaltal fyrir hlutfall, upp að 100. Með meðaltal hjá fyrsta skiptið séð rétta svarið}\label{fig:meanbyhlutfallandhsta100}
+\end{figure}
 
 \hypertarget{luxedkanasmiuxf0}{%
 \subsection{líkanasmið}\label{luxedkanasmiuxf0}}

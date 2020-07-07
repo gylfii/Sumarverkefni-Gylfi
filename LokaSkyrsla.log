@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.7.1)  7 JUL 2020 10:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.7.1)  7 JUL 2020 14:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -853,38 +853,75 @@ Underfull \vbox (badness 10000) detected at line 335
  []
 
 
-Underfull \vbox (badness 10000) detected at line 372
+Underfull \vbox (badness 10000) detected at line 374
  []
 
-[6] 
-AED: lastpage setting LastPage
+[6]
+<Imgsimplify/plotbymean50.png, id=127, 722.7pt x 722.7pt>
+File: Imgsimplify/plotbymean50.png Graphic file (type png)
+<use Imgsimplify/plotbymean50.png>
+Package pdftex.def Info: Imgsimplify/plotbymean50.png  used on input line 390.
+(pdftex.def)             Requested size: 469.76045pt x 469.76045pt.
 [7]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 397.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 397.
+<Imgsimplify/plotbymean100.png, id=133, 722.7pt x 722.7pt>
+File: Imgsimplify/plotbymean100.png Graphic file (type png)
+<use Imgsimplify/plotbymean100.png>
+Package pdftex.def Info: Imgsimplify/plotbymean100.png  used on input line 401.
+
+(pdftex.def)             Requested size: 469.76045pt x 469.76045pt.
+[8 <./Imgsimplify/plotbymean50.png>]
+<Img/meanbyhlutfall.png, id=140, 722.7pt x 722.7pt>
+File: Img/meanbyhlutfall.png Graphic file (type png)
+<use Img/meanbyhlutfall.png>
+Package pdftex.def Info: Img/meanbyhlutfall.png  used on input line 414.
+(pdftex.def)             Requested size: 469.76045pt x 469.76045pt.
+[9 <./Imgsimplify/plotbymean100.png>]
+<Img/meanbyhlutfallLim.png, id=148, 722.7pt x 722.7pt>
+File: Img/meanbyhlutfallLim.png Graphic file (type png)
+<use Img/meanbyhlutfallLim.png>
+Package pdftex.def Info: Img/meanbyhlutfallLim.png  used on input line 425.
+(pdftex.def)             Requested size: 469.76045pt x 469.76045pt.
+[10 <./Img/meanbyhlutfall.png>]
+<Img/meabwhsbyhlutfall.png, id=155, 722.7pt x 722.7pt>
+File: Img/meabwhsbyhlutfall.png Graphic file (type png)
+<use Img/meabwhsbyhlutfall.png>
+Package pdftex.def Info: Img/meabwhsbyhlutfall.png  used on input line 438.
+(pdftex.def)             Requested size: 469.76045pt x 469.76045pt.
+[11 <./Img/meanbyhlutfallLim.png>]
+<Img/meabwhsbyhlutfall100.png, id=162, 722.7pt x 722.7pt>
+File: Img/meabwhsbyhlutfall100.png Graphic file (type png)
+<use Img/meabwhsbyhlutfall100.png>
+Package pdftex.def Info: Img/meabwhsbyhlutfall100.png  used on input line 451.
+(pdftex.def)             Requested size: 469.76045pt x 469.76045pt.
+[12 <./Img/meabwhsbyhlutfall.png>] 
+AED: lastpage setting LastPage
+[13 <./Img/meabwhsbyhlutfall100.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 473.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 473.
 (./LokaSkyrsla.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 397.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 397.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 473.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 473.
 Package rerunfilecheck Info: File `LokaSkyrsla.out' has not changed.
 (rerunfilecheck)             Checksum: 576281D5D5C361B3F4D3B6626115610A;2386.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 397.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 473.
  ) 
 Here is how much of TeX's memory you used:
- 15458 strings out of 482404
- 228410 string characters out of 5945449
- 514121 words of memory out of 5000000
- 30893 multiletter control sequences out of 15000+600000
+ 15531 strings out of 482404
+ 230076 string characters out of 5945449
+ 514668 words of memory out of 5000000
+ 30945 multiletter control sequences out of 15000+600000
  569397 words of font info for 51 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,11n,45p,905b,472s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,11n,45p,905b,470s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.
 enc}{c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec
 .enc}<c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/l
 mbx12.pfb><c:/Users/gylfi/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public
 /lm/lmr12.pfb>
-Output written on LokaSkyrsla.pdf (7 pages, 77874 bytes).
+Output written on LokaSkyrsla.pdf (13 pages, 510782 bytes).
 PDF statistics:
- 164 PDF objects out of 1000 (max. 8388607)
- 151 compressed objects within 2 object streams
- 51 named destinations out of 1000 (max. 500000)
- 153 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 209 PDF objects out of 1000 (max. 8388607)
+ 178 compressed objects within 2 object streams
+ 63 named destinations out of 1000 (max. 500000)
+ 183 words of extra memory for PDF output out of 10000 (max. 10000000)
 

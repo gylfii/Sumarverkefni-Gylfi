@@ -167,13 +167,12 @@ FHbylim <- ab %>% pivot_longer(c('FY50', 'HY50', 'FY100', 'HY100', 'FY150', 'HY1
                     names_to = "typewLim", values_to = "values") %>% 
   separate(typewLim, into = c("type", "limit"), sep = 2) %>% pivot_wider(names_from = type, values_from = values)
 
-
+FHbylim$HY <- paste0(round(FHbylim$HY * 100, digits = 1), "%")
 FHbylim %>% kable(digits = 4, booktabs = T) %>% 
   kable_styling()
 ```
 
-
-Til að geta fengið betri skoðun á gögnunum, þá var ákveðið að skipta gögnunum upp í tvö gagnasöfn, í fyrri er ekki leift meiri 100 fsfat og í seinni er ekki leift meira en 50 fsfat. Það gagnasafn er notað héðan í frá.
+Það sést að 29.4% af gögnunum eru svör eftir 50 spurningar svarað, en bara 9% gagnanna eftir 100 spurningum. Svo til að geta fengið betri skoðun á gögnunum, þá var ákveðið að skipta gögnunum upp í tvö gagnasöfn, í fyrri er ekki leift meiri 100 fsfat og í seinni er ekki leift meira en 50 fsfat. Það gagnasafn er notað héðan í frá.
 
 
 
@@ -189,17 +188,7 @@ hashLim100 <- hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
 Það getur verið sterkur áhugi að teikna sömu töflu aftur, nema í tilviki með bara upp að 100 spurningum svarað í einu og svo 50 spurningum svarað í einu.
 
 
-```{r shorter table 50,echo=F}
-fullt50 <- createUsable(hashLim50)
 
-fullt50 %>% kable(longtable = T, digits = 5, booktabs = T) %>%
-   kable_styling() %>%
-  pack_rows("correct", 1, 2) %>%
-  pack_rows("hsta", 3, 4) %>%
-  pack_rows("hluta2", 5, 9) %>%
-  pack_rows("lectureId", 10, 22) %>%
-  column_spec(1, width = "4cm")
-```
 
 ```{r shorter table 100, echo=F}
 fullt100 <- createUsable(hashLim100)
@@ -212,9 +201,69 @@ fullt100 %>% kable(longtable = T, digits = 5, booktabs = T) %>%
   pack_rows("lectureId", 10, 22) %>%
   column_spec(1, width = "4cm")
 ```
+Það sést að rangt hlutfallið hækkar aðeins, sama með sést í fyrsa skiptið. Hvað með næstu töflu
+```{r shorter table 50,echo=F}
+fullt50 <- createUsable(hashLim50)
+
+fullt50 %>% kable(longtable = T, digits = 5, booktabs = T) %>%
+   kable_styling() %>%
+  pack_rows("correct", 1, 2) %>%
+  pack_rows("hsta", 3, 4) %>%
+  pack_rows("hluta2", 5, 9) %>%
+  pack_rows("lectureId", 10, 22) %>%
+  column_spec(1, width = "4cm")
+```
+Hérna er Rangt hlutfallið aftur aðeins stærra og hsta hlutfallið orðið miklu nær helmingi. Nemendur eru enn að sjá mikið af eindurtekningum, en það er orðið jafnara.
+
+Til að geta séð hvernig árangur kemur með tíma, þá var skoðað meðaltal fyrir hvert fsfat upp að 50 og svo upp að 100. Semsagt hvað er meðaltal réttra svara hjá spurningu nr. x, þetta er svo skipt fyrir bæði réttu svör sem eru að sjást í fyrsta sinn og þau sem hafa sést áður. Skoðað fyrst fyrir fyrstu 50:
 
 
+```{r pltbymean50, echo=FALSE, fig.align='center', fig.cap="Upp að 50 meðaltal", fig.pos='H', out.width='100%'}
+include_graphics('Imgsimplify/plotbymean50.png')
 
+```
+
+
+Það lítur út fyrir að einhverjar framfarir gætu verið að gerast hér, þar sem nýju svörinn eru að vaxa með tíma, hvað með þegar skoðað er upp að hundrað:
+
+```{r pltbymean100, echo=FALSE, fig.align='center', fig.cap="Upp að 100 meðaltal", fig.pos='H', out.width='100%'}
+include_graphics('Imgsimplify/plotbymean100.png')
+```
+
+Það sést að þegar það er farið lengra, þá fer að sjá þetta í fyrsta skiptið að beinast út og fer svo aðeins niður. Hugmynd að hver vandinn er, það gæti verið að nemendur eru farinn að setja á minnið röngu svarmöguleikana, svo það eru minni svarmöguleikar sem nemandinn er að sjá.
+
+Hugmynd er að skoða líka meðaltals mynd, nema bara fyrir tilvik þegar þetta eru ný svör og skipt upp eftir hlutfall rangra svara sem hafa sést áður. Skoðum fyrst fyrir fyrstu 50 tilvikinn
+
+```{r meanbyhlutfall50, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50", fig.pos='H', out.width='100%'}
+include_graphics('Img/meanbyhlutfall.png')
+```
+
+Línurnar eru miklu beinari hér, það er samt mikið stökk hjá endanum, svo hugmynd er að taka út punktana þar sem það eru ekki fleiri en 1 að svara það, þá fæst
+
+```{r meanbyhlutfall50Lim, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50. Með minnsta kosti 2 svör á hverjum punkti", fig.pos='H', out.width='100%'}
+include_graphics('Img/meanbyhlutfallLim.png')
+```
+
+Þá er það aðeins jafnara komið.
+
+Til að geta skoðað svo aðeins áhrifinn hlið við hlið hjá Þá er hægt að setja línurnar fyrir hlutföllin ofaná línuna sem kemur þegar skoðað er allt saman, eins og var í Mynd x.
+
+```{r meanbyhlutfallandhsta, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50. Með meðaltal hjá fyrsta skiptið séð rétta svarið", fig.pos='H', out.width='100%'}
+include_graphics('Img/meabwhsbyhlutfall.png')
+```
+
+Hér sést að á meðan upprunalega línan er vaxandi, þá er hin öll miklu flatari. Sum eru að sveiflast mikið, en hugsa er að það gerist að mestu útaf þörf fyrir fleiri breytur á þeim punktum.
+
+Að sömu leiti getum við skoðað sömu mynd fyrir tilvikið þegar farið er upp að 100 spurningum svarað
+
+```{r meanbyhlutfallandhsta100, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 100. Með meðaltal hjá fyrsta skiptið séð rétta svarið", fig.pos='H', out.width='100%'}
+include_graphics('Img/meabwhsbyhlutfall100.png')
+```
+
+Það lítur út fyrir að vera einhverjar framfarir í gangi þar, hjá tilvikunum með 20%-60% þá er eitthvað að vaxa, spurning hvort þetta er að vaxa almennilega eða hvort þetta er að koma frá því tilviki að mjög fáar breytur eru að toga þeim upp.
+Sama með fallið hjá 60%-80%.
+
+Það sést að það eru einhverjar hækkun á fjölda réttra svara, en það er stór spurning hvort þetta eru framfarir eða bara að koma frá því að nemendur eru að setja hinar upplýsingar á minið. Skoðað er líkönn til að fá betri skilning hér.
 
 ## líkanasmið
 
