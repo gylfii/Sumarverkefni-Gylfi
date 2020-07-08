@@ -92,16 +92,16 @@ list(1, 2, 3)
 
 #smá fall til að reikna BrierScoreið
 BrierScore <- function(modl, df ) {
-  predicted <- predict(modl, type = "response")
+  predicted <- predict(modl, type = "response", newdata = df, allow.new.levels = T)
   truth <- df$correct
   return(mean((predicted-truth)^2))
 }
 
 SBrierScore <- function(modl, df) {
-  predicted <- predict(modl, type = "response")
+  predicted <- predict(modl, type = "response", newdata = df, allow.new.levels = T)
   truth <- df$correct
   Bs <- mean((predicted-truth)^2)
-  Bmax <- mean(predict(modl, type = "response")) * (1-mean(predict(modl, type = "response")))
+  Bmax <- mean(predicted) * (1-mean(predicted))
   return(1 - Bs/Bmax)
 }
 #model sem notuð eru fyrir bootwork
@@ -129,9 +129,9 @@ modfit1 <- function(df) {
 }
 
 testBoot <- Bootwork(hashTest2, 10)
-#Nelder_Mead failed
-#nlminbwrap failed
-#nmkbw
+# #Nelder_Mead failed
+# #nlminbwrap failed
+# #nmkbw
 
 
 
@@ -165,10 +165,12 @@ Bootwork <- function(df, iteration){
                          StanBrier = SBrierScore(ormodel, df),
                          AUC = AUC(predict(ormodel, type = "response"), df$correct))
   #Bý til nýjann grunn til að safna saman efnið frá bootstrappinu
-  bootel <- data.frame(brier = numeric(0), StanBrier - numeric(0), AUC = numeric(0))
+  bootel <- data.frame(brier = numeric(0), StanBrier = numeric(0), AUC = numeric(0))
+  bootel.or <- data.frame(brier = numeric(0), StanBrier = numeric(0), AUC = numeric(0))
   print('It begun')
   for (i in 1:iteration){
     #Bý til nýtt safn með bootstrap
+    print(paste0(round(i/iteration * 100, digits = 1), "%"))
     Bdf <- bootcreate(df)
     #Bý til model fyrir þetta bootstrap
     #Bmodel <- Funmod(Bdf)
@@ -179,12 +181,17 @@ Bootwork <- function(df, iteration){
     Nadditions <- data.frame(brier = BrierScore(Bmodel, Bdf), 
                              StanBrier = SBrierScore(Bmodel, Bdf),
                              AUC = AUC(predict(Bmodel, type = "response"), Bdf$correct))
+    #Reiknað C.or eða original additions
+    Nadditions.or <- data.frame(brier = BrierScore(Bmodel, df), 
+                                StanBrier = SBrierScore(Bmodel, df),
+                                AUC = AUC(predict(Bmodel, type = "response", newdata = df, allow.new.levels = T), df$correct))
     #Geyma efnið í gagnasafninu
     bootel <- rbind(bootel, Nadditions)
+    bootel.or <- rbind(bootel.or, Nadditions.or)
     # rm(Bmodel)
   }
   #skila original og bootel
-  return(list(original, bootel))
+  return(list(original, bootel, bootel.or))
 }
 
 start_time <- Sys.time()

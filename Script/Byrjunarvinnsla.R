@@ -396,7 +396,6 @@ library(tinytex)
 #prufum aðeins áhrif, þegar hsta er alveg sleppt
 
 realTest <- hashTest2 %>% filter(hsta == "0")
-
 rfit1 <- glmer(correct ~ hluta2 + fsfat + nicc + gpow + lectureId + (1 + fsfat | studentId), family = binomial(link = "logit"), 
                data = realTest, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 rfit2 <- glmer(correct ~ fsfat + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
