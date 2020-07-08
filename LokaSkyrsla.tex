@@ -158,7 +158,31 @@ R v4.0.0 í viðmótinu RStudio v1.3.959
 \hypertarget{guxf6gn}{%
 \subsection{Gögn}\label{guxf6gn}}
 
-Gögninn sem voru fenginn voru tekinn beint úr sql gagnagrunns eða fenginn sem .txt skrá. Þar var fengið gagnasett fyrir öll svör nemanda, gagnasett fyrir allar spurningar og svo gagnasett fyrir stillingu nemenda innan við hvers fyrirlesturs. Svo texta skrár með hash fyrir alla réttu svara og rangra svara innan við vormisserinu 2020. Af þeim breytum var svo ákveðið að halda í gagnasafninu eftirfarandi breytur:
+Gögninn sem voru fenginn voru tekinn beint úr sql gagnagrunns eða fenginn sem .txt skrá. Þar var fengið gagnasett fyrir öll svör nemanda, gagnasett fyrir allar spurningar og svo gagnasett fyrir stillingu nemenda innan við hvern fyrirlestur. Svo texta skrár með hash fyrir alla réttu svarmöguleikana og ranga svarmöguleikana. Af þeim breytum var svo ákveðið að halda í gagnasafninu eftirfarandi breytur:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\toprule
+Breyta & Tegund & Skýring\\
+\midrule
+lectureId & Merkibreyta & Númer fyrirlesturs\\
+studentId & Merkibreyta & Númer nemenda\\
+questionId & Merkibreyta & Númer spurningar\\
+correct & Flokkabreyta & Hvort svarað var rétt eða rangt\\
+hash & Flokkabreyta & Hver svarmöguleikinn er\\
+\addlinespace
+fsfat & Samfelld breyta & Fjöldi spurninga svarað fram að þessari spurningu\\
+hsta & Flokkabreyta & Hef séð þetta rétta svar áður\\
+hluta & Samfelld breyta & Hlutfall rangra svara sem hafa sést áður\\
+timeDif & Samfelld breyta & Tímamunur séðan rétta svarið sást seinast\\
+nicc & Flokkabreyta & Fjöldi vitlausa svarmöguleika\\
+\addlinespace
+gpow & Samfelld breyta & Erfileika hraði fyrir uppkomandi spurningar\\
+hluta2 & Flokkabreyta & Discretized hlutfall rangra svara sem hafa sést áður\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{longtable}[]{@{}lll@{}}
 \toprule
@@ -455,19 +479,81 @@ Að sömu leiti getum við skoðað sömu mynd fyrir tilvikið þegar farið er 
 \caption{meðaltal fyrir hlutfall, upp að 100. Með meðaltal hjá fyrsta skiptið séð rétta svarið}\label{fig:meanbyhlutfallandhsta100}
 \end{figure}
 
+Það lítur út fyrir að vera einhverjar framfarir í gangi þar, hjá tilvikunum með 20\%-60\% þá er eitthvað að vaxa, spurning hvort þetta er að vaxa almennilega eða hvort þetta er að koma frá því tilviki að mjög fáar breytur eru að toga þeim upp.
+Sama með fallið hjá 60\%-80\%.
+
+Það sést að það eru einhverjar hækkun á fjölda réttra svara, en það er stór spurning hvort þetta eru framfarir eða bara að koma frá því að nemendur eru að setja hinar upplýsingar á minið. Skoðað er líkönn til að fá betri skilning hér.
+
 \hypertarget{luxedkanasmiuxf0}{%
 \subsection{líkanasmið}\label{luxedkanasmiuxf0}}
 
 \hypertarget{breytur-1}{%
 \subsubsection{breytur}\label{breytur-1}}
 
+Það voru gerð þrjú líkönn til að skoða, þar sem aðal munurinn er hvort notað er fsfat, hluta2 eða bæði
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{5cm}ll}
+\toprule
+Breyta & Tegund & Flokkar\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{Fixed effect fyrir öll líkön}}\\
+\hspace{1em}lectureId & Flokka & 3082, 3201 - 3204, 3208 - 3215\\
+\hspace{1em}hsta & Flokka & Sést í fyrsta skipti, Hef séð áður\\
+\hspace{1em}nicc & Flokka & 1, 2, 3, 4, 5, 6, 7\\
+\hspace{1em}gpow & Samfelld & \\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{Mixed effect fyrir öll líkön}}\\
+\hspace{1em}studentId & Flokka & VEIT EKKI HVAÐ ÉG SET HÉR\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{Fixed effect breytist eftir líkani}}\\
+\hspace{1em}fsfat & Samfelld & \\
+\hspace{1em}hluta2 & Flokka & [0-0.2], (0.2-0.4], (0.4-0.6], (0.6-0.8], (0.8-1]\\
+\bottomrule
+\end{longtable}
+
+Þar sem aðal munur líkananna þriggja er
+* Fyrsta: fsfat + fsfat:hsta + \ldots{}
+* Annað: hluta2 + \ldots{}
+* Þriðja: fsfat + hluta2 + \ldots{}
+
+KANNSKI HUGMYND AÐ TALA UM AFHVERJU ÞAÐ ER VERIÐ AÐ SKOÐA ÞRJÁR SITTHVOR LÍKÖNN HÉR, HUGMYND GÆTI VERIÐ AF ÞVÍ AÐ
+
 \hypertarget{val-uxe1-luxedkani}{%
 \subsubsection{val á líkani}\label{val-uxe1-luxedkani}}
+
+Líkanið var byggt ofaná líkani hans Þórarinns Jómundsson (SPURNING HVERNIG HÆGT SÉ AÐ BENDA TIL ÞESS), með nokkrum bættum breytum
+
+\textbf{Fyrsta líkanið}: Til að byrja með var skoðað hvernig væri að bæta við \emph{fsfat} og víxláhrif á milli \emph{fsfat} og \emph{hsta}. Til að sjá hvernig framfarir eru í gangi. Þar sem hugsað er að jákvæð áhrif hjá \emph{fsfat} gæti verið séð sem framfarir nemenda.
+
+Vandi kom upp frá hugsuninni hvort þetta voru framfarir, eða bara utanbókarlærdómur sem var fyrir aftan \emph{fsfat} svo því var prufað að skipta út \emph{hluta2} og \emph{fsfat} til að sjá hvor hefur meiri áhrif.
+
+\textbf{Annað líkanið:} Hér var notað \emph{hluta2} í stað \emph{fsfat} og víxláhrif \emph{hsta} og \emph{fsfat}. Það var svo skoðað muninn á milli þeirra í gegnum anova til að sjá hvort væri sterkari áhrifinn, frekar hvort að framfarir sem sást í \emph{fsfat} voru nokkuð bara áhrif \emph{hluta2}.
+
+Að lokum til að skoða saman, var sameinað og sett upp líkann sem innihélt báðar breyturnar
+
+\textbf{Þriðja líkanið:} Hér var notað \emph{hluta2} og \emph{fsfat} saman, til að sjá hvort enn er hægt að sjá framfarir með \emph{fsfat} þegar \emph{hluta2} er innifallið enn í líkaninu.
 
 \hypertarget{matsguxe6uxf0i-luxedkana}{%
 \subsubsection{Matsgæði líkana}\label{matsguxe6uxf0i-luxedkana}}
 
+ER EKKI ENNÞÁ KOMINN MEÐ ÞETTA
+
 \hypertarget{mat-stika-lokaluxedkana}{%
 \subsubsection{Mat stika lokalíkana}\label{mat-stika-lokaluxedkana}}
+
+ER EKKI ENNÞÁ KOMINN MEÐ ÞETTA
+
+\hypertarget{umruxe6uxf0a}{%
+\section{Umræða}\label{umruxe6uxf0a}}
+
+\hypertarget{fyrsta-luxedkaniuxf0}{%
+\subsection{fyrsta líkanið}\label{fyrsta-luxedkaniuxf0}}
+
+\hypertarget{annauxf0-luxedkaniuxf0}{%
+\subsection{Annað líkanið}\label{annauxf0-luxedkaniuxf0}}
+
+\hypertarget{uxferiuxf0ja-luxedkaniuxf0}{%
+\subsection{Þriðja líkanið}\label{uxferiuxf0ja-luxedkaniuxf0}}
 
 \end{document}

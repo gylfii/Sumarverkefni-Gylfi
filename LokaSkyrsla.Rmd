@@ -50,43 +50,49 @@ SKOÐA HVAÐ HÆGT SÉ AÐ BÆTA ÞEGAR SEINNA KEMUR.
 R v4.0.0 í viðmótinu RStudio v1.3.959
 
 ## Gögn
-Gögninn sem voru fenginn voru tekinn beint úr sql gagnagrunns eða fenginn sem .txt skrá. Þar var fengið gagnasett fyrir öll svör nemanda, gagnasett fyrir allar spurningar og svo gagnasett fyrir stillingu nemenda innan við hvers fyrirlesturs. Svo texta skrár með hash fyrir alla réttu svara og rangra svara innan við vormisserinu 2020. Af þeim breytum var svo ákveðið að halda í gagnasafninu eftirfarandi breytur:
+Gögninn sem voru fenginn voru tekinn beint úr sql gagnagrunns eða fenginn sem .txt skrá. Þar var fengið gagnasett fyrir öll svör nemanda, gagnasett fyrir allar spurningar og svo gagnasett fyrir stillingu nemenda innan við hvern fyrirlestur. Svo texta skrár með hash fyrir alla réttu svarmöguleikana og ranga svarmöguleikana. Eftir sameiningu, þá var haldið eftirfarandi breytum:
 
-| Breyta     | Tegund          | Skýring                                              |
-|------------|-----------------|------------------------------------------------------|
-| lectureId  | Merkibreyta     | Númer fyrirlesturs                                   |
-| studentId  | Merkibreyta     | Númer nemenda                                        |
-| questionId | Merkibreyta     | Númer spurningar                                     |
-| correct    | Flokkabreyta    | Hvort svarað var rétt eða rangt                      |
-| hash       | Flokkabreyta    | Hver svarmöguleikinn er                              |
-| fsfat      | Samfelld breyta | Fjöldi spurninga svarað fram að þessari spurningu    |
-| hsta       | Flokkabreyta    | Hef séð þetta rétta svar áður                        |
-| hluta      | Samfelld breyta | Hlutfall rangra svara sem hafa sést áður             |
-| timeDif    | Samfelld breyta | Tímamunur séðan rétta svarið sást seinast            |
-| nicc       | Flokkabreyta    | Fjöldi vitlausa svarmöguleika                        |
-| gpow       | Samfelld breyta | Erfileika hraði fyrir uppkomandi spurningar          |
-| hluta2     | Flokkabreyta    | Discretized hlutfall rangra svara sem hafa sést áður |
+```{r table1, echo=F}
+
+data.frame(Breyta = c("lectureId", "studentId", "questionId", "correct", "hash", "fsfat", "hsta", 
+                      "hluta", "timeDif", "nicc", "gpow", "hluta2"), 
+           Tegund = c("Merkibreyta", "Merkibreyta", "Merkibreyta", "Flokkabreyta", "Flokkabreyta", 
+                      "Samfelld breyta", "Flokkabreyta", "Samfelld breyta", "Samfelld breyta", 
+                      "Flokkabreyta", "Samfelld breyta", "Flokkabreyta"), 
+           Skýring = c("Númer fyrirlesturs", "Númer nemenda", "Númer spurningar", 
+                       "Hvort svarað var rétt eða rangt", "Hver svarmöguleikinn er", 
+                       "Fjöldi spurninga svarað fram að þessari spurningu", 
+                       "Hef séð þetta rétta svar áður", "Hlutfall rangra svara sem hafa sést áður", 
+                       "Tímamunur séðan rétta svarið sást seinast", "Fjöldi vitlausa svarmöguleika", 
+                       "Erfileika hraði fyrir uppkomandi spurningar", 
+                       "Discretized hlutfall rangra svara sem hafa sést áður")) %>% 
+  kable(digits = 4, booktabs = T) %>% 
+  kable_styling()
+```
+
+
 
 
 
 ## Gagnavinnsla
-Til að geta fengið gögninn sem eru hér að ofan. Þá þurfti að gera einhverjar vinnslur til að fá þær.
+Vinnslan til að fá gagnasettið yfir í það form sem var notað, gerði eftirfarandi aðgerðir.
 
-Til að hægt væri að setja öll gögninn saman, þá þurfti að tengja saman öll gagnasettin. Fyrst svörinn og spurningarnar, til að geta tengt við réttu svörinn. Eftir það var tengt við sillingu nemenda til að finna gpow hvers nemenda. Svo far tengt röngu svörinn og reiknað var hluta. Mínus þaðan er að þar var tapað u.þ.b. `r 108017-101994` línum. Svo í lokinn var tengt réttu svörinn og reiknað hvort nemandinn hafi séð svarið áður eða ekki fyrir hverja spurningu.
+Fyrsta skrefið var að tengja saman öll gagnasettin. Byrjandi með því að tengja svörinn og spurningarnar, svo hægt væri að tengja við réttu og röngu svörinn seinna. Eftir það var tengt við fyrirlestra stillingar nemenda til að finna *gpow* þeirra. Svo var tengt við röngu svörinn og reiknað var *hluta*, en þar var tapað u.þ.b. `r 108017-101994` línum. Svo í lokinn var tengt réttu svörinn og reiknað hvort nemandinn hafi séð svarið áður eða ekki fyrir hverja spurningu.
 
-Ákveðið var að taka minna en allt gagnasafnið, með því að skoða ekki spurningar sem koma eftir að nemandinn hefur svarað 100 sinnum. Þetta kemur frá þeirri hugsun að bara smár hluti af gögnunum eru þau seinu gildin sem eru að fara yfir 100 spurningum svarað.
+Ákveðið var að taka minna en allt gagnasafnið, með því að skoða ekki spurningar sem koma eftir að nemandinn hefur svarað 100 sinnum. Þetta kemur frá þeirri hugsun að eftir að hafa svarað svona margar spurningar, þá er nemandinn ekki að sjá mikið nýtt, svo ekki er hægt að sjá framfarir við sambærilegar spurningar þar.
 
 SÉ SEINNA HVAÐ GÆTI VERIÐ GOTT AÐ BÆTA VIÐ HÉRNA, ER EKKI ENN VISS
 
 
 
 ## Breytur
-Það voru nokkrar breytur sem var þurft að búa til, þeir voru fsfat, hsta og hluta. 
+Það voru nokkrar breytur sem var þurft að búa til, þær voru *fsfat*, *hsta* og *hluta*. 
 
 Fyrir fsfat, semsagt "Fjöldi spurninga fram að þessu", telur spurningarnar sem hafa verið svarað hingað til. Aðferðin til að búa til fsfat fór svona:
+
   1. Raða safninu eftir tíma sem spurninginn byrjaði
   2. fyrir hvern nemenda í hverjum fyrirlestri, telja upp frá 0 eftir röðinni.
-Þegar það var keyrt, þá var komið fsfat.
+
 
 Að næstu fyrir hsta, semsagt "hef séð þetta rétta svar áður". Fyrir hvern nemenda, þá var fundið fyrsta skiptið sem nemandinn sá svarið, svo var sett að ef nemandinn sá það í fyrsta skiptið, þá hafði hann ekki séð svarið áður, annars hefur nemandinn séð svarið áður. Nema í tilvikum þar sem NOTA+ spurning er að ræða, semsagt "None of the above" er rétta svarið. Þá var sett að ef hlutfall rangra svara sem nemandinn hafi séð áður væri 100%, þá er talið að nemandinn hafi séð rétta svarið áður.
 
@@ -269,8 +275,60 @@ Sama með fallið hjá 60%-80%.
 
 ### breytur
 
+Það voru gerð þrjú líkönn til að skoða, þar sem aðal munurinn er hvort notað er fsfat, hluta2 eða bæði
+
+```{r table of use, echo = F}
+
+data.frame(Breyta = c("lectureId", "hsta", "nicc", "gpow",  "studentId", "fsfat", "hluta2"),
+           Tegund = c("Flokka", "Flokka", "Flokka", "Samfelld", "Flokka", "Samfelld", "Flokka"), 
+           Flokkar = c("3082, 3201 - 3204, 3208 - 3215", "Sést í fyrsta skipti, Hef séð áður", 
+                       "1, 2, 3, 4, 5, 6, 7", "", "VEIT EKKI HVAÐ ÉG SET HÉR", "", 
+                       "[0-0.2], (0.2-0.4], (0.4-0.6], (0.6-0.8], (0.8-1]")) %>% 
+  kable(longtable = T, digits = 5, booktabs = T) %>%
+  kable_styling() %>%
+  pack_rows("Fixed effect fyrir öll líkön", 1, 4) %>%
+  pack_rows("Mixed effect fyrir öll líkön", 5, 5) %>%
+  pack_rows("Fixed effect breytist eftir líkani", 6, 7) %>%
+  column_spec(1, width = "5cm")
+
+```
+
+Þar sem aðal munur líkananna þriggja er
+  * Fyrsta: fsfat +  fsfat:hsta + ...
+  * Annað: hluta2 + ...
+  * Þriðja: fsfat + hluta2 + ...
+
+KANNSKI HUGMYND AÐ TALA UM AFHVERJU ÞAÐ ER VERIÐ AÐ SKOÐA ÞRJÁR SITTHVOR LÍKÖNN HÉR, HUGMYND GÆTI VERIÐ AF ÞVÍ AÐ 
+
 ### val á líkani
+
+Líkanið var byggt ofaná líkani hans Þórarinns Jómundsson (SPURNING HVERNIG HÆGT SÉ AÐ BENDA TIL ÞESS), með nokkrum bættum breytum
+
+\textbf{Fyrsta líkanið}: Til að byrja með var skoðað hvernig væri að bæta við *fsfat* og víxláhrif á milli *fsfat* og *hsta*. Til að sjá hvernig framfarir eru í gangi. Þar sem hugsað er að jákvæð áhrif hjá *fsfat* gæti verið séð sem framfarir nemenda. 
+
+Vandi kom upp frá hugsuninni hvort þetta voru framfarir, eða bara utanbókarlærdómur sem var fyrir aftan *fsfat* svo því var prufað að skipta út *hluta2* og *fsfat* til að sjá hvor hefur meiri áhrif.
+
+
+\textbf{Annað líkanið:} Hér var notað *hluta2* í stað *fsfat* og víxláhrif *hsta* og *fsfat*. Það var svo skoðað muninn á milli þeirra í gegnum anova til að sjá hvort væri sterkari áhrifinn, frekar hvort að framfarir sem sást í *fsfat* voru nokkuð bara áhrif *hluta2*. 
+
+Að lokum til að skoða saman, var sameinað og sett upp líkann sem innihélt báðar breyturnar
+
+
+\textbf{Þriðja líkanið:} Hér var notað *hluta2* og *fsfat* saman, til að sjá hvort enn er hægt að sjá framfarir með *fsfat* þegar *hluta2* er innifallið enn í líkaninu. 
 
 ### Matsgæði líkana
 
+ER EKKI ENNÞÁ KOMINN MEÐ ÞETTA
+
 ### Mat stika lokalíkana
+
+ER EKKI ENNÞÁ KOMINN MEÐ ÞETTA
+
+# Umræða
+
+## fyrsta líkanið
+
+## Annað líkanið
+
+## Þriðja líkanið
+
