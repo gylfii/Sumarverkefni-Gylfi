@@ -159,7 +159,7 @@ test1 <- data.frame(brier = BrierScore(ans42, hashTest2),
 Bootwork <- function(df, iteration){
   options(contrasts = c("contr.sum", "contr.poly"))
   #Byrjum fyrst að keyra það fyrir upprunalega gagnasafnið
-  ormodel <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+  ormodel <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
                    data = df, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
   original <- data.frame(brier = BrierScore(ormodel, df), 
                          StanBrier = SBrierScore(ormodel, df),
@@ -174,7 +174,7 @@ Bootwork <- function(df, iteration){
     Bdf <- bootcreate(df)
     #Bý til model fyrir þetta bootstrap
     #Bmodel <- Funmod(Bdf)
-    Bmodel <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
+    Bmodel <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
                     data = Bdf, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
     
     #Reiknað breyturnar sem það þarf að reikna

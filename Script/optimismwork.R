@@ -32,6 +32,9 @@ library(pryr)
 
 
 load("Data/Bootedfit1")
+load("Data/Bootedfit3")
+load("Data/Bootedfit7")
+
 
 optim.cal <- function(bdf) {
   # The original model on the original dataset
@@ -57,4 +60,88 @@ optim.cal <- function(bdf) {
 
 testcase <- optim.cal(testBoot)
 
+optimfit1 <- optim.cal(bootedfit1)
+optimfit3 <- optim.cal(bootedfit3)
+optimfit7 <- optim.cal(bootedfit7)
+
+?pivot_longer
+
+optim.draw.box <- function(B1, B2, B3) {
+  bo1 <- B1[[2]]
+  bo2 <- B2[[2]]
+  bo3 <- B3[[2]]
+  bot1 <- B1[[3]]
+  bot2 <- B2[[3]]
+  bot3 <- B3[[3]]
+  
+  AllAuc <- data.frame(Train.fit1 = bo1$AUC, Train.fit3 = bo2$AUC, Train.fit7 = bo3$AUC, 
+                       Test.fit1 = bot1$AUC, Test.fit3 = bot2$AUC, Test.fit7 = bot3$AUC) %>% 
+    pivot_longer(cols = c("Train.fit1", "Train.fit3", "Train.fit7", 
+                          "Test.fit1", "Test.fit3", "Test.fit7"), names_to = "Type")
+  
+  AllAuc <- AllAuc %>% separate(col = "Type", into = c("Type", "Model"), sep = "\\.")
+  AllAuc$Type <- AllAuc$Type %>% fct_rev()
+  p1 <- ggplot(AllAuc, aes(y = value, x = Type, color = Model)) +
+    #geom_point(position = position_jitterdodge(dodge.width = 0.5, jitter.width = 0.1), alpha = 0.05) +
+    geom_boxplot() +
+    labs(title = "AUC") +
+    theme(legend.position="top")
+  
+  AllBrier <- data.frame(Train.fit1 = bo1$brier, Train.fit3 = bo2$brier, Train.fit7 = bo3$brier, 
+                       Test.fit1 = bot1$brier, Test.fit3 = bot2$brier, Test.fit7 = bot3$brier) %>% 
+    pivot_longer(cols = c("Train.fit1", "Train.fit3", "Train.fit7", 
+                          "Test.fit1", "Test.fit3", "Test.fit7"), names_to = "Type")
+  
+  AllBrier <- AllBrier %>% separate(col = "Type", into = c("Type", "Model"), sep = "\\.")
+  AllBrier$Type <- AllBrier$Type %>% fct_rev()
+  p2 <- ggplot(AllBrier, aes(y = value, x = Type, color = Model)) +
+    #geom_point(position = position_jitterdodge(dodge.width = 0.5, jitter.width = 0.1), alpha = 0.05) +
+    geom_boxplot() +
+    labs(title = "Brier") +
+    theme(legend.position="top")
+  
+  
+  AllstBrier <- data.frame(Train.fit1 = bo1$StanBrier, Train.fit3 = bo2$StanBrier, Train.fit7 = bo3$StanBrier, 
+                       Test.fit1 = bot1$StanBrier, Test.fit3 = bot2$StanBrier, Test.fit7 = bot3$StanBrier) %>% 
+    pivot_longer(cols = c("Train.fit1", "Train.fit3", "Train.fit7", 
+                          "Test.fit1", "Test.fit3", "Test.fit7"), names_to = "Type")
+  
+  AllstBrier <- AllstBrier %>% separate(col = "Type", into = c("Type", "Model"), sep = "\\.")
+  AllstBrier$Type <- AllstBrier$Type %>% fct_rev()
+  
+  p3 <- ggplot(AllstBrier, aes(y = value, x = Type, color = Model)) +
+    #geom_point(position = position_jitterdodge(dodge.width = 0.5, jitter.width = 0.1), alpha = 0.05) +
+    geom_boxplot() +
+    labs(title = "Standardized Brier") +
+    theme(legend.position="top")
+  
+  return(grid.arrange(p1, p2, p3, nrow = 1))
+}
+
+?separate
+?pivot_longer
+p <- optim.draw.box(bootedfit1, bootedfit3, bootedfit7)
+
+ggsave('Img/optimism.png', p, width = 21, height = 7)
+
+
+bo1 <- bootedfit1[[2]]
+bo2 <- bootedfit3[[2]]
+bo3 <- bootedfit7[[2]]
+
+bot2 <- bootedfit3[[3]]
+
+data.frame(Train.Auc = bo2$AUC, Test.Auc = bot2$AUC) %>% 
+  as_tibble() %>% 
+  gather(type, val) %>% 
+  ggplot(aes(x = type, y = val)) + 
+  geom_point()
+AllAuc <- data.frame(fit1 = bo1$AUC, fit3 = bo2$AUC, fit7 = bo3$AUC) %>% 
+  pivot_longer(cols = c("fit1", "fit3", "fit7"), names_to = "model")
+
+
+
+
+
+#Test fyrir teikningar
 

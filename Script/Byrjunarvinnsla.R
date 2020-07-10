@@ -343,6 +343,11 @@ Anova(fit8, type = 3)
 Anova(fit3, type = 3)
 anova(fit3, fit7)
 
+fit10 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 + fsfat | studentId), family = binomial(link = "logit"), 
+               data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+anova(fit7, fit10)
+Anova(fit10, type = 3)
+
 fit13 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
               data = hashTest3, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 fit33 <- glmer(correct ~ hluta2+hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
@@ -361,10 +366,12 @@ fit1tidy <- broom::tidy(fit1)
 SBrierScore(fit1, hashTest2)
 SBrierScore(fit3, hashTest2)
 SBrierScore(fit7, hashTest2)
+SBrierScore(fit10, hashTest2)
 
 AUC(predict(fit1, type = "response"), hashTest2$correct)
 AUC(predict(fit3, type = "response"), hashTest2$correct)
 AUC(predict(fit7, type = "response"), hashTest2$correct)
+AUC(predict(fit10, type = "response"), hashTest2$correct)
 
 hashTest2 %>% filter(hsta == 0 & fsfat < 5) %>%
   group_by(hluta2) %>% summarise(n())
@@ -415,3 +422,12 @@ broom::tidy(rfit2)
 
 yus2 <- ranef(rfit1)
 yus2 <- yus2$studentId
+
+
+rfit12 <- glmer(correct ~ hluta2 + fsfat + nicc + gpow + lectureId + log(timeDif + 61652) + (1 | studentId), family = binomial(link = "logit"), 
+               data = realTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+min(realTest2$timeDif)
+max(realTest2$timeDif)
+
+Anova(rfit12, type = 3)
+
