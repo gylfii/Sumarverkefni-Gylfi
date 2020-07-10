@@ -96,7 +96,7 @@ Fyrir fsfat, semsagt "Fjöldi spurninga fram að þessu", telur spurningarnar se
 
 Að næstu fyrir hsta, semsagt "hef séð þetta rétta svar áður". Fyrir hvern nemenda, þá var fundið fyrsta skiptið sem nemandinn sá svarið, svo var sett að ef nemandinn sá það í fyrsta skiptið, þá hafði hann ekki séð svarið áður, annars hefur nemandinn séð svarið áður. Nema í tilvikum þar sem NOTA+ spurning er að ræða, semsagt "None of the above" er rétta svarið. Þá var sett að ef hlutfall rangra svara sem nemandinn hafi séð áður væri 100%, þá er talið að nemandinn hafi séð rétta svarið áður.
 
-Að lokum var sett upp hluta, semsagt "hlutfall rangra svara sem hafa sést áður". Þar var fyrst fundið fyrir hvern nemenda, hvort ranga svarið hafi sést áður og sett upp eins og hsta. Eftir það var tekið meðaltal rangra svara sem hafa sést áður. Frá því kom hlutfallið. Sér hugsun þurfti að koma tengt spurningu með "all of the above" sem rangur möguleiki og "None of the above" sem rangur möguleiki. Fyrir fyrra tilvikið var skoðað hvort eitthvað af hinum röngu valmöguleikunum hafa sést áður, ef svo þá var hugsað eins og "all of the above" ranga svarið hafi sést áður. Fyrir "NOTA-" þá var skoðað hvort rétta svarið hafi sést áður, ef svo þá var hugsað eins og "NOTA-" svarmöguleikinn hafi sést áður.
+Að lokum var sett upp hluta, semsagt "hlutfall rangra svara sem hafa sést áður". Þar var fyrst fundið fyrir hvern nemenda, hvort ranga svarið hafi sést áður og sett upp eins og hsta. Eftir það var tekið meðaltal rangra svara sem hafa sést áður til að fá hlutfallið. Sér hugsun þurfti að koma tengt spurningu með "all of the above" sem rangur möguleiki og "None of the above" sem rangur möguleiki. Fyrir fyrra tilvikið var skoðað hvort eitthvað af hinum röngu valmöguleikunum hafa sést áður, ef svo þá var hugsað eins og "all of the above" ranga svarið hafi sést áður. Fyrir "NOTA-" þá var skoðað hvort rétta svarið hafi sést áður, ef svo þá var hugsað eins og "NOTA-" svarmöguleikinn hafi sést áður.
 
 Fyrir hluta2, þá var "discretizised" hluta í 5 jafn langa parta
 
@@ -105,13 +105,13 @@ NÉ HVORT ÞETTA ÆTTI AÐ VERA Í GREININNI TIL AÐ BYRJA MEÐ, GETUR VEL VERI�
 
 ## Aðferðarfræði við líkanasmið
 
-Það voru gerðar þrjú "mixed effect logistic regression" líkön, þar sem aðalmunur þeirra er að:
+Það voru gerð þrjú "mixed effect logistic regression" líkön, þar sem aðalmunur þeirra er að:
 
-   * Fyrsta líkanið inniheldur víxláhrif milli fsfat og hsta, en inniheldur ekki hluta2.
-   * Annað líkanið inniheldur hluta2, en inniheldur ekki fsfat.
-   * Þriðja líkanið inniheldur fsfat og hluta2, en ekki víxláhrif milli fsfat og hsta.
+   * Fyrsta líkanið inniheldur víxláhrif milli *fsfat* og *hsta*, en inniheldur ekki *hluta2*.
+   * Annað líkanið inniheldur *hluta2*, en inniheldur ekki *fsfat*.
+   * Þriðja líkanið inniheldur *fsfat* og *hluta2*, en ekki víxláhrif milli *fsfat* og *hsta*.
 
-Með þessum líkönum, væri hægt að skoða hvort það koma framfarir. Þar sem hugsuninn byggist á því að ef fsfat er ennþá sterkt, þá eru framfarir að sjást. Því sem fleiri spurningar eru svarað, þá eru líkurnar á að næstu spurningu er svarað rétt að hækka. Hægt er að sjá það sem framfarir. Á móti kemur áhrif utanbókarlærdóms, sem kemur frá réttu og röngu svarmöguleikunum sem koma aftur.
+Með þessum líkönum, væri hægt að skoða hvort það koma framfarir. Þar sem hugsuninn byggist á því að ef fsfat er ennþá sterkt, þá eru framfarir að sjást. Því sem fleiri spurningar eru svarað, þá eru líkurnar á að næstu spurningu er svarað rétt að hækka. Hægt er að sjá það sem framfarir. Á móti kemur áhrif utanbókarlærdóms, sem kemur frá réttu og röngu svarmöguleikunum sem hafa komið áður
 
 KANNSKI HÆGT AÐ NEFNA MEIRA HÉR, EN VEIT EKKI. FINNST ÞETTA VERA MIKIÐ SVONA SKRÝTIÐ. ORÐA ÞETTA LÍKA AÐEINS ÖÐRUVÍSI, SÉ TIL SEINNA
 
@@ -122,7 +122,7 @@ KANNSKI HÆGT AÐ NEFNA MEIRA HÉR, EN VEIT EKKI. FINNST ÞETTA VERA MIKIÐ SVON
 
 ### öll gögn
 
-Góð byrjun er að skoða fyrst hlutföll gagnanna allra. Fyrir Aðal flokkabreyturnar, þá gæti verið gott að fylgjast með hlutfall gagnanna undir hverjum flokki
+Fyrir aðal flokkabreyturnar, þá er gott að geta séð hlutföll og fjölda þeirra.
 ```{r Table1, echo = FALSE}
 createUsable <- function(df){
   t <- table(df$hsta)
@@ -157,9 +157,9 @@ fullthing %>% kable(longtable = T, digits = 5, booktabs = T) %>%
 
 ```
 
-Mikið af gögnunum hér eru rétt svo, svör sem nemendur hafa séð áður og spurningar þar sem nemandinn hefur séð 80%-100% af röngu svarmöguleikunum áður. Svo mikið af gögnunum eru ekkert nýtt.
+Mikið af gögnunum hér eru rétt svo, svör sem nemendur hafa séð áður og spurningar þar sem nemandinn hefur séð 80%-100% af röngu svarmöguleikunum áður. Svo ef skoðað eru öll gögninn, þá sést að mikið af því er ekkert nýtt.
 
-Vandinn gæti verið frá því að einhverjir nemendur eru að svara miklu fleiri spurningum en aðrir. Skoðum aðeins hvernig hlutfall af svörunum fara yfir einhvern sérstakan punkt
+Vandinn gæti verið frá því að þegar það er búið að svara svo mörgum spurningum, þá er erfitt að sjá beinar framfarir yfir utanbókarlærdóm, þar sem flestir svarmöguleikar hafa sést áður. Skoðum aðeins hvernig hlutfall af svörunum fara yfir einhvern sérstakan punkt
 
 ```{r limit check, echo=F}
 a <- hashAnswer %>% summarise("FY50" = sum(fsfat >= 50), "FY100" = sum(fsfat >= 100), 
@@ -207,7 +207,9 @@ fullt100 %>% kable(longtable = T, digits = 5, booktabs = T) %>%
   pack_rows("lectureId", 10, 22) %>%
   column_spec(1, width = "4cm")
 ```
-Það sést að rangt hlutfallið hækkar aðeins, sama með sést í fyrsa skiptið. Hvað með næstu töflu
+
+Héðan sést að hlutfall rangra svara hækkar aðeins, sömuleiðis með rétt svör sem sést í fyrsta skiptið. Ef stytt er enn meira þá sést:
+
 ```{r shorter table 50,echo=F}
 fullt50 <- createUsable(hashLim50)
 
@@ -219,9 +221,10 @@ fullt50 %>% kable(longtable = T, digits = 5, booktabs = T) %>%
   pack_rows("lectureId", 10, 22) %>%
   column_spec(1, width = "4cm")
 ```
-Hérna er Rangt hlutfallið aftur aðeins stærra og hsta hlutfallið orðið miklu nær helmingi. Nemendur eru enn að sjá mikið af eindurtekningum, en það er orðið jafnara.
 
-Til að geta séð hvernig árangur kemur með tíma, þá var skoðað meðaltal fyrir hvert fsfat upp að 50 og svo upp að 100. Semsagt hvað er meðaltal réttra svara hjá spurningu nr. x, þetta er svo skipt fyrir bæði réttu svör sem eru að sjást í fyrsta sinn og þau sem hafa sést áður. Skoðað fyrst fyrir fyrstu 50:
+Hér er hlutfall rangra svara aftur aðeins stærra, svo er hvort rétta svarið hafi sést áður eða ekki er miklu nær helmingi en áður. Nemendur eru enn að sjá mikið af eindurtekningum, en það er orðið jafnara.
+
+Til að geta séð hvernig árangur kemur með tíma, þá var skoðað meðaltal fyrir hvert fsfat upp að 50 og svo upp að 100. Semsagt hvað er prósenta spurninga sem var rétt hjá spurningu nr. x, þetta er svo skipt fyrir bæði réttu svör sem eru að sjást í fyrsta sinn og þau sem hafa sést áður. Skoðað fyrst fyrir fyrstu 50:
 
 
 ```{r pltbymean50, echo=FALSE, fig.align='center', fig.cap="Upp að 50 meðaltal", fig.pos='H', out.width='100%'}
@@ -236,9 +239,9 @@ include_graphics('Imgsimplify/plotbymean50.png')
 include_graphics('Imgsimplify/plotbymean100.png')
 ```
 
-Það sést að þegar það er farið lengra, þá fer að sjá þetta í fyrsta skiptið að beinast út og fer svo aðeins niður. Hugmynd að hver vandinn er, það gæti verið að nemendur eru farinn að setja á minnið röngu svarmöguleikana, svo það eru minni svarmöguleikar sem nemandinn er að sjá.
+Það sést að þegar það er farið lengra, þá fer tilvikin þar sem rétta svarið sést í fyrsta skiptið fer að jafnast út og fer svo aðeins niður. Hvað er þar að baki, er að þessum tímapunkti hafa nemendur séð mikið af svarmöguleikunum áður, svo ekki er mikil hækkun af dæmum með stórum hlutföllum? (ÞETTA ER EKKI NÓGU GOTT, LAGA TIL FYRIR SEINNA!)
 
-Hugmynd er að skoða líka meðaltals mynd, nema bara fyrir tilvik þegar þetta eru ný svör og skipt upp eftir hlutfall rangra svara sem hafa sést áður. Skoðum fyrst fyrir fyrstu 50 tilvikinn
+Hugmynd er að skoða líka sambærilega mynd, nema bara fyrir tilvikið þegar þetta eru ný svör og skipt upp eftir hlutfall rangra svara sem hafa sést áður. Skoðum fyrst fyrir fyrstu 50 tilvikinn
 
 ```{r meanbyhlutfall50, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50", fig.pos='H', out.width='100%'}
 include_graphics('Img/meanbyhlutfall.png')
@@ -250,9 +253,9 @@ Línurnar eru miklu beinari hér, það er samt mikið stökk hjá endanum, svo 
 include_graphics('Img/meanbyhlutfallLim.png')
 ```
 
-Þá er það aðeins jafnara komið.
+Þá er þetta orðið aðeins stöðugra
 
-Til að geta skoðað svo aðeins áhrifinn hlið við hlið hjá Þá er hægt að setja línurnar fyrir hlutföllin ofaná línuna sem kemur þegar skoðað er allt saman, eins og var í Mynd x.
+Til að geta skoðað svo aðeins áhrifinn hlið við hlið miðað við Mynd x, Þá er hægt að setja línurnar fyrir hlutföllin ofaná línuna sem kemur þegar skoðað er allt saman, eins og var í Mynd x.
 
 ```{r meanbyhlutfallandhsta, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50. Með meðaltal hjá fyrsta skiptið séð rétta svarið", fig.pos='H', out.width='100%'}
 include_graphics('Img/meabwhsbyhlutfall.png')
@@ -269,7 +272,7 @@ include_graphics('Img/meabwhsbyhlutfall100.png')
 Það lítur út fyrir að vera einhverjar framfarir í gangi þar, hjá tilvikunum með 20%-60% þá er eitthvað að vaxa, spurning hvort þetta er að vaxa almennilega eða hvort þetta er að koma frá því tilviki að mjög fáar breytur eru að toga þeim upp.
 Sama með fallið hjá 60%-80%.
 
-Það sést að það eru einhverjar hækkun á fjölda réttra svara, en það er stór spurning hvort þetta eru framfarir eða bara að koma frá því að nemendur eru að setja hinar upplýsingar á minið. Skoðað er líkönn til að fá betri skilning hér.
+Það sast að það voru einhverjar hækkanir á fjölda réttra svara, en það er stór spurning hvort þetta eru framfarir eða bara að koma frá því að nemendur eru að setja röngu svarmöguleikana á minnið. Skoðað er líkönn til að fá betri skilning hér.
 
 ## líkanasmið
 
@@ -302,7 +305,7 @@ KANNSKI HUGMYND AÐ TALA UM AFHVERJU ÞAÐ ER VERIÐ AÐ SKOÐA ÞRJÁR SITTHVOR
 
 ### val á líkani
 
-Líkanið var byggt ofaná líkani hans Þórarinns Jómundsson (SPURNING HVERNIG HÆGT SÉ AÐ BENDA TIL ÞESS), með nokkrum bættum breytum
+Líkanið var byggt ofaná líkani hans Þórarinns Jómundsson (SPURNING HVERNIG HÆGT SÉ AÐ BENDA TIL ÞESS), með bættari breytu með röngu svarmöguleikanna og tímaröðina fyrir aftan *fsfat*
 
 \textbf{Fyrsta líkanið}: Til að byrja með var skoðað hvernig væri að bæta við *fsfat* og víxláhrif á milli *fsfat* og *hsta*. Til að sjá hvernig framfarir eru í gangi. Þar sem hugsað er að jákvæð áhrif hjá *fsfat* gæti verið séð sem framfarir nemenda. 
 
@@ -318,7 +321,15 @@ Að lokum til að skoða saman, var sameinað og sett upp líkann sem innihélt 
 
 ### Matsgæði líkana
 
-ER EKKI ENNÞÁ KOMINN MEÐ ÞETTA
+Til að sýna hvert optimism fyrir líkanið er, þá er hér tafla með breytunum (HEF EKKI ENN GERT ÞESSA TÖFLU!!!)
+
+
+
+Svo er mynd til að skoða dreifinguna:
+```{r optimismpicture, echo=FALSE, fig.align='center', fig.cap="Sitthvort skor líkanna", fig.pos='H', out.width='100%'}
+include_graphics('Img/optimism.png')
+```
+
 
 ### Mat stika lokalíkana
 
