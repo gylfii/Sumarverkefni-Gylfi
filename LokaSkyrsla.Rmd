@@ -62,10 +62,10 @@ data.frame(Breyta = c("lectureId", "studentId", "questionId", "correct", "hash",
            Skýring = c("Númer fyrirlesturs", "Númer nemenda", "Númer spurningar", 
                        "Hvort svarað var rétt eða rangt", "Hver svarmöguleikinn er", 
                        "Fjöldi spurninga svarað fram að þessari spurningu", 
-                       "Hef séð þetta rétta svar áður", "Hlutfall rangra svara sem hafa sést áður", 
+                       "Hef séð þetta rétta svar áður", "hlutfall rangra svarmöguleika sem hafa sést áður", 
                        "Tímamunur séðan rétta svarið sást seinast", "Fjöldi vitlausa svarmöguleika", 
                        "Erfileika hraði fyrir uppkomandi spurningar", 
-                       "Discretized hlutfall rangra svara sem hafa sést áður")) %>% 
+                       "Discretized hlutfall rangra svarmöguleika sem hafa sést áður")) %>% 
   kable(digits = 4, booktabs = T) %>% 
   kable_styling()
 ```
@@ -94,9 +94,9 @@ Fyrir fsfat, semsagt "Fjöldi spurninga fram að þessu", telur spurningarnar se
   2. fyrir hvern nemenda í hverjum fyrirlestri, telja upp frá 0 eftir röðinni.
 
 
-Að næstu fyrir hsta, semsagt "hef séð þetta rétta svar áður". Fyrir hvern nemenda, þá var fundið fyrsta skiptið sem nemandinn sá svarið, svo var sett að ef nemandinn sá það í fyrsta skiptið, þá hafði hann ekki séð svarið áður, annars hefur nemandinn séð svarið áður. Nema í tilvikum þar sem NOTA+ spurning er að ræða, semsagt "None of the above" er rétta svarið. Þá var sett að ef hlutfall rangra svara sem nemandinn hafi séð áður væri 100%, þá er talið að nemandinn hafi séð rétta svarið áður.
+Að næstu fyrir hsta, semsagt "hef séð þetta rétta svar áður". Fyrir hvern nemenda, þá var fundið fyrsta skiptið sem nemandinn sá svarið, svo var sett að ef nemandinn sá það í fyrsta skiptið, þá hafði hann ekki séð svarið áður, annars hefur nemandinn séð svarið áður. Nema í tilvikum þar sem NOTA+ spurning er að ræða, semsagt "None of the above" er rétta svarið. Þá var sett að ef hlutfall rangra svarmöguleika sem nemandinn hafi séð áður væri 100%, þá er talið að nemandinn hafi séð rétta svarið áður.
 
-Að lokum var sett upp hluta, semsagt "hlutfall rangra svara sem hafa sést áður". Þar var fyrst fundið fyrir hvern nemenda, hvort ranga svarið hafi sést áður og sett upp eins og hsta. Eftir það var tekið meðaltal rangra svara sem hafa sést áður til að fá hlutfallið. Sér hugsun þurfti að koma tengt spurningu með "all of the above" sem rangur möguleiki og "None of the above" sem rangur möguleiki. Fyrir fyrra tilvikið var skoðað hvort eitthvað af hinum röngu valmöguleikunum hafa sést áður, ef svo þá var hugsað eins og "all of the above" ranga svarið hafi sést áður. Fyrir "NOTA-" þá var skoðað hvort rétta svarið hafi sést áður, ef svo þá var hugsað eins og "NOTA-" svarmöguleikinn hafi sést áður.
+Að lokum var sett upp hluta, semsagt "hlutfall rangra svarmöguleika sem hafa sést áður". Þar var fyrst fundið fyrir hvern nemenda, hvort ranga svarið hafi sést áður og sett upp eins og hsta. Eftir það var tekið meðaltal rangra svara sem hafa sést áður til að fá hlutfallið. Sér hugsun þurfti að koma tengt spurningu með "all of the above" sem rangur möguleiki og "None of the above" sem rangur möguleiki. Fyrir fyrra tilvikið var skoðað hvort eitthvað af hinum röngu valmöguleikunum hafa sést áður, ef svo þá var hugsað eins og "all of the above" ranga svarið hafi sést áður. Fyrir "NOTA-" þá var skoðað hvort rétta svarið hafi sést áður, ef svo þá var hugsað eins og "NOTA-" svarmöguleikinn hafi sést áður.
 
 Fyrir hluta2, þá var "discretizised" hluta í 5 jafn langa parta
 
@@ -208,7 +208,7 @@ fullt100 %>% kable(longtable = T, digits = 5, booktabs = T) %>%
   column_spec(1, width = "4cm")
 ```
 
-Héðan sést að hlutfall rangra svara hækkar aðeins, sömuleiðis með rétt svör sem sést í fyrsta skiptið. Ef stytt er enn meira þá sést:
+Héðan sést að hlutfall rangra svarmöguleika hækkar aðeins, sömuleiðis með rétt svör sem sést í fyrsta skiptið. Ef stytt er enn meira þá sést:
 
 ```{r shorter table 50,echo=F}
 fullt50 <- createUsable(hashLim50)
@@ -222,7 +222,7 @@ fullt50 %>% kable(longtable = T, digits = 5, booktabs = T) %>%
   column_spec(1, width = "4cm")
 ```
 
-Hér er hlutfall rangra svara aftur aðeins stærra, svo er hvort rétta svarið hafi sést áður eða ekki er miklu nær helmingi en áður. Nemendur eru enn að sjá mikið af eindurtekningum, en það er orðið jafnara.
+Hér er hlutfall rangra svarmöguleika aftur aðeins stærra, svo er hvort rétta svarið hafi sést áður eða ekki er miklu nær helmingi en áður. Nemendur eru enn að sjá mikið af eindurtekningum, en það er orðið jafnara.
 
 Til að geta séð hvernig árangur kemur með tíma, þá var skoðað meðaltal fyrir hvert fsfat upp að 50 og svo upp að 100. Semsagt hvað er prósenta spurninga sem var rétt hjá spurningu nr. x, þetta er svo skipt fyrir bæði réttu svör sem eru að sjást í fyrsta sinn og þau sem hafa sést áður. Skoðað fyrst fyrir fyrstu 50:
 
@@ -241,7 +241,7 @@ include_graphics('Imgsimplify/plotbymean100.png')
 
 Það sést að þegar það er farið lengra, þá fer tilvikin þar sem rétta svarið sést í fyrsta skiptið fer að jafnast út og fer svo aðeins niður. Hvað er þar að baki, er að þessum tímapunkti hafa nemendur séð mikið af svarmöguleikunum áður, svo ekki er mikil hækkun af dæmum með stórum hlutföllum? (ÞETTA ER EKKI NÓGU GOTT, LAGA TIL FYRIR SEINNA!)
 
-Hugmynd er að skoða líka sambærilega mynd, nema bara fyrir tilvikið þegar þetta eru ný svör og skipt upp eftir hlutfall rangra svara sem hafa sést áður. Skoðum fyrst fyrir fyrstu 50 tilvikinn
+Hugmynd er að skoða líka sambærilega mynd, nema bara fyrir tilvikið þegar þetta eru ný svör og skipt upp eftir hlutfall rangra svarmöguleika sem hafa sést áður. Skoðum fyrst fyrir fyrstu 50 tilvikinn
 
 ```{r meanbyhlutfall50, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50", fig.pos='H', out.width='100%'}
 include_graphics('Img/meanbyhlutfall.png')
@@ -280,7 +280,7 @@ Sama með fallið hjá 60%-80%.
 
 Það voru gerð þrjú líkönn til að skoða, þar sem aðal munurinn er hvort notað er fsfat, hluta2 eða bæði
 
-```{r table of use, echo = F}
+```{r table of use, echo = F, cache=TRUE}
 
 data.frame(Breyta = c("lectureId", "hsta", "nicc", "gpow",  "studentId", "fsfat", "hluta2"),
            Tegund = c("Flokka", "Flokka", "Flokka", "Samfelld", "Flokka", "Samfelld", "Flokka"), 
@@ -330,16 +330,74 @@ Svo er mynd til að skoða dreifinguna:
 include_graphics('Img/optimism.png')
 ```
 
+```{r model creation, echo=F, }
+fit1 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), 
+              family = binomial(link = "logit"), data = hashLim100, nAGQ = 0, control =
+                glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e5)))
+fit3 <- glmer(correct ~ hluta2+hsta + nicc + gpow + lectureId + (1 | studentId), 
+              family = binomial(link = "logit"), data = hashLim100, nAGQ = 0, control = 
+                glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+fit7 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), 
+              family = binomial(link = "logit"), data = hashLim100, nAGQ = 0, control = 
+                glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+```
+
+```{r booteddata prep, echo=F}
+load("Data/Bootedfit1")
+load("Data/Bootedfit3")
+load("Data/Bootedfit7")
+
+optim.cal <- function(bdf) {
+  # The original model on the original dataset
+  B.app <- bdf[[1]]
+  # The booted model on the booted dataset
+  B.boot <- bdf[[2]]
+  # The booted model on the original dataset
+  B.or <- bdf[[3]]
+  
+  auc.app <- B.app$AUC
+  Brier.app <- B.app$brier
+  stBrier.app <- B.app$StanBrier
+  
+  auc.phi <- mean(B.boot$AUC - B.or$AUC)
+  Brier.phi <- mean(B.boot$brier - B.or$brier)
+  stBrier.phi <- mean(B.boot$StanBrier - B.or$StanBrier)
+  
+  optimism <- data.frame(AUC = auc.phi, brier = Brier.phi, stBrier = stBrier.phi)
+  optimismcorrected <- data.frame(AUC = auc.app - auc.phi, brier = Brier.app - Brier.phi, stBrier = stBrier.app - stBrier.phi)
+  
+  return(list(optimism, optimismcorrected))
+}
+
+fit1.cal <- optim.cal(bootedfit1)
+fit3.cal <- optim.cal(bootedfit3)
+fit7.cal <- optim.cal(bootedfit7)
+
+fit1.opt.cor <- fit1.cal[[2]]
+fit3.opt.cor <- fit3.cal[[2]]
+fit7.opt.cor <- fit7.cal[[2]]
+```
 
 ### Mat stika lokalíkana
 
 ER EKKI ENNÞÁ KOMINN MEÐ ÞETTA
 
 # Umræða
+Markmið verkefnisins er að sjá hvort hægt sé að mæla framfarir, en ekki bara utanbókarlærdóm. Til að gera það var byrjað að sjá hvort hægt væri að finna jákvæðar breytingar þegar svarað eru fleiri og fleiri spurningar. Ef sú áhrif eru marktæk þá myndi það benda til þess að hægt sé að mæla framfarir. Til að sjá um hvort þessar framfarir eru ekki örruglega utanbókarlærdómur var fyrst tekið að hvort rétta svarið hafi sést áður eða ekki, það gerði fyrsta líkanið. Til að svo gá hvort framfarir fyrsta líkansins var örruglega ekki áhrif utanbókarlærdóm rangra svara, þá var bætt við tvö ný líkönn, fyrst skoðað þegar skipt er út fjöldi spurninga svarað fyrir hlutfall rangra svarmöguleika séð áður flokkinn (SPURNING HVORT ÞAÐ ER EINHVER ÁSTÆÐA TIL AÐ HALDA ÞESSU???), svo er það líkann sem notar bæði til að sjá hvort það sjást ennþá framfarir í gegnum fjölda spurninga svarað þegar öll utanbókar áhrifin eru til staðar.
 
 ## fyrsta líkanið
+Til að byrja með, þá var gert fyrsta líkanið til að sjá hvort það var hægt að sjá framfarir eftir því hve margar spurningar nemandinn hafði svarað hingað til innan í fyrirlestrinum. Þar var breyta yfir því hvort rétta svarið hafi sést áður og víxláhrif á milli þess og fjölda spurninga svarað. Þar sást að fjöldi spurninga svarað var marktæk og framfarir sást þar. 
+
+Vandi kemur upp að þegar svarað hefur mikið, þá er stærri og stærri hlutfall af röngu svörunum sem hafa sést áður, því getur vel verið að framfarirnar sem eru að sjást hér, eru í raun bara utanbókarlærdómur rangra svara sem er að toga svörinn upp. Því var bætt við hlutfall rangra svarmöguleika. Fyrst var skoðað hlutfall rangra svarmöguleika án fjölda spurninga fram að þessu
 
 ## Annað líkanið
+Þegar skoðað var annað líkanið, þá var séð að hluta2 er marktæk breyta miðað við Anova III. Til að sjá muninn milli fyrra líkansins og þessara þá var gert anova á milli þeim til að sjá hvort af líkönunum voru marktækari, skv. anova þá er annað líkanið sterkara en fyrra líkanið. Svo var skoðað aðeins standardized brier score og AUC þeirra tveggja, þar leit út fyrir að annað líkanið er aðeins sterkara en það fyrra, með muninn milli þeirra sem `r round(fit3.opt.cor$AUC - fit1.opt.cor$AUC, digits = 4)` hjá AUC og `r round(fit3.opt.cor$stBrier - fit1.opt.cor$stBrier, digits = 4)` hjá standardized brier skorinu. Svo á meðan annað líkara er sterkara miðað við anova, þá er munurinn ekki endilega það mikill. (ÓVISS UM EFTIRFARANDI:) Þetta bendir til þess að fjöldi spurninga svarað fram að þessu er jafn sterkt og að skoða hlutföllin þeirra, eru þá framfarirnar sem sáust áður bara útaf hlutfall röngru svara, eða voru framfarir þar?
+
+Til að skoða það, þá er skoðað þriðja líkanið, þá er innihaldið bæði fjöldi spurninga fram að þessu og hlutfall rangra svarmöguleika fram að þessu, en víxláhrifin á milli fjölda spurninga fram að þessu og hvort rétta svarið hafi sést áður er horfið.
 
 ## Þriðja líkanið
+Að lokum var sett saman þriðja líkanið, í líkaninu er bæði fjöldi spurninga fram að þessu og hlutfall rangra svarmöguleika sem hafa sést áður. Þar var bæði fjöldi spurninga og hlutfall rangra svarmöguleika bæði marktækt, svo var þriðja líkanið sterkara en annað og fyrsta líkönin, ef skoðað er til "optimism correct" standardized brier og AUC þá lítur út fyrir að munurinn milli þriðja og annars er líka mjög lítill munur milli þeirra, þar sem munurinn milli þriðja og Annars líkansins er `r round(fit7.opt.cor$AUC - fit3.opt.cor$AUC, digits = 4)` hjá AUC og `r round(fit7.opt.cor$stBrier - fit3.opt.cor$stBrier, digits = 4)` hjá standardized brier skorinu. Þetta bendir til að öll þrjú líköninn eru lík í styrkleika miðað við standardized brier og AUC á meðan þriðja líkanið er sterkast af þeim miðað við anova.
 
+Hvað þýðir þetta? Frá þessu sjáum við að fjöldi spurninga fram að þessu er ennþá marktækt, þótt það sé bætt við utanbókaráhrifum hjá því hvort rétti svarmöguleikinn hafi sést áður og hlutfall rangra svarmöguleika sem hafa sést áður, þar bendir til þess að hægt sé að mæla áhrif nemenda. Þar sem stikinn fyrir fsfat er séð sem framfarir. 
+
+(SMÁ UPPHÁT HUGSANIR:) Spurning kemur samt að því hvernig hægt væri að skoða framfarir hvers nemenda fyrir sig, hugmynd að því væri að bæta við fjöldi spurninga fram að þessu í mixed effect í líkaninu, semsagt hafa (1 + fsfat | studentId) í líkaninu í staðinn fyrir (1 | studentId). Þá myndi fást framfarir hvers nemanda, ef þetta er rétt hugsun

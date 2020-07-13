@@ -347,6 +347,11 @@ fit10 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 + 
                data = hashTest2, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 anova(fit7, fit10)
 Anova(fit10, type = 3)
+fit11 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 + fsfat + hluta2 + hsta | studentId), 
+               family = binomial(link = "logit"), data = hashTest2, nAGQ = 0, 
+               control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+anova(fit10, fit11)
+Anova(fit11, type = 3)
 
 fit13 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), family = binomial(link = "logit"), 
               data = hashTest3, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))

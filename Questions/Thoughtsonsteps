@@ -5,3 +5,34 @@ This is a to do list of things I am thinking of and need to find a solution for
 2. Second, How to read from the bootstrap, this is something I can get help from Þórarinn for. Since if I have that, then I can use that to talk about the rest of the results
 
 3. Third, what would be the next steps after this project. As in how would you test the next points?
+
+
+For 1.
+
+So right now the question of which it is, is difficult. Now the model with both of them is marktæktara then the others and fsfat is still relevant. When checked by Anova at least.
+
+The counter point of that fsfat isn't relevant, is that the brier improvement isn't really to great with the jump from fsfat to hluta2 and then from either of those to fsfat+hluta2. Could it mean that fsfat isn't an important factor and that knowing how much of the wrong answers the students know is the main determinaned.
+
+Then comes the question of is that even the right determinant, might be due to the natural following between the fact that the more answers you answer, the greater amount of wrong answers you memorize. Though the correlation between the two isn't at a point where it creates an incredible problem yet though.
+
+I think the following of greater amount of wrong answers the further you go is what Gunnar was mostly thinking about on wether it would still be a viable thing. Though what I had stuck in my head is that if it Does have a strong correlation, as in the further you go the more of the wrong answer you know. How can we say that the direct increase in fsfat is actually progress and not utanbókarlærdómur.
+
+Though when I thin about it, since I could put them together, in a model with all of the other factors along with it, then I can find the amount of progress for everyone as they go by.
+
+An idea would be to try another model, in which both fsfat and hluta2 are student by student effect. If it is more relevant, then there is a question if that can be used to hold onto both the amount of memorization said student is using and then also the self improvement for that student as well.
+That is a good question
+Tried said model, new problem came up. It seems that this model would take far to long to every become usable, therefore not a thing I can even try
+
+Question if the second model is any use at the end of the day, depends on how you see it. But U think for my current results it isn't usable at all, or at least it doesn't give any better insight then the other 2 give
+
+
+
+
+What's next after 13th of july:
+1. Add some optimism talk to the optimism chapter, as in talk a bit about the optimism corrected statistics and the optimism for the different models
+
+2. Go over the umræða chapter I wrote today and work out things I mentioned there that I had yet to do talk about in previous chapters, feel like some of the stuff there hadn't been mentioned yet, like the anova results and etc.
+
+3. Read over everything again and try to word things better
+
+4. If and only if all of the 3 steps above are completed tomorrow, then send the current thing over to Þórarinn so he can read over it and give me shit ton of comments to fix.
