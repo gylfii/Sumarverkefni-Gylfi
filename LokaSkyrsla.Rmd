@@ -14,6 +14,7 @@ graphics: yes
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(knitr.kable.NA = '')
 
 source('Script/Settings.R')
 
@@ -320,17 +321,7 @@ Að lokum til að skoða saman, var sameinað og sett upp líkann sem innihélt 
 \textbf{Þriðja líkanið:} Hér var notað *hluta2* og *fsfat* saman, til að sjá hvort enn er hægt að sjá framfarir með *fsfat* þegar *hluta2* er innifallið enn í líkaninu. 
 
 ### Matsgæði líkana
-
-Til að sýna hvert optimism fyrir líkanið er, þá er hér tafla með breytunum (HEF EKKI ENN GERT ÞESSA TÖFLU!!!)
-
-
-
-Svo er mynd til að skoða dreifinguna:
-```{r optimismpicture, echo=FALSE, fig.align='center', fig.cap="Sitthvort skor líkanna", fig.pos='H', out.width='100%'}
-include_graphics('Img/optimism.png')
-```
-
-```{r model creation, echo=F, }
+```{r model creation, echo=F, cache=TRUE}
 fit1 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), 
               family = binomial(link = "logit"), data = hashLim100, nAGQ = 0, control =
                 glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e5)))
@@ -374,11 +365,112 @@ fit3.cal <- optim.cal(bootedfit3)
 fit7.cal <- optim.cal(bootedfit7)
 
 fit1.opt.cor <- fit1.cal[[2]]
+fit1.opt.op <- fit1.cal[[1]]
 fit3.opt.cor <- fit3.cal[[2]]
+fit3.opt.op <- fit3.cal[[1]]
 fit7.opt.cor <- fit7.cal[[2]]
+fit7.opt.op <- fit7.cal[[1]]
+
 ```
 
+Tafla X sýnir hér frammistöðu líkannana þriggja eftir AUC og standardized brier skorinu, eftir "optimism correction" eftir 2500 bootstrap ítranir. Það sést hér að munurinn á milli líkannana er ekki það mikill, þar sem stærsti munurinn er hjá fyrsta og þriðja líkaninu og það er ekki meira en `r round(fit7.opt.cor$AUC - fit1.opt.cor$AUC, digits = 4)` hjá AUC og `r round(fit7.opt.cor$stBrier - fit1.opt.cor$stBrier, digits = 4)`. Þá lítur út fyrir að það er ekki mikill munur þar með tilliti til AUC og standardized Brier. Til að bæta þá inniheldur tafla X "optimism" fyrir líkönin 3, þar sést að "optimism" er rosalega líkt hjá þeim öllum þremur. 
+
+Á mynd X sést svo hvernig AUC og standardized brier skorið dreifðist fyrir hverja ítrun. Þar sést að hvert líkann er aðeins hærra en það fyrra og að fyrir AUC þá er dreifingin á "Train" gildunum miklu meiri en hjá "Test" gildunum, en það er svo öfugt fyrir standardized brier, því þar er dreifingin hjá "Test" meiri en hjá "Train" gildunum.
+
+```{r optimism table 2, echo = FALSE}
+rbind(fit1 = fit1.opt.cor, fit3 = fit3.opt.cor, fit7 = fit7.opt.cor) %>% dplyr::select(-c(brier)) %>% kable(digits = 4, booktabs = T) %>%
+  kable_styling()
+```
+
+```{r optimism table, echo = FALSE}
+rbind(fit1 = fit1.opt.op, fit3 = fit3.opt.op, fit7 = fit7.opt.op) %>% dplyr::select(-c(brier)) %>% kable(digits = 4, booktabs = T) %>%
+  kable_styling()
+```
+
+
+
+
+
+
+```{r optimismpicture, echo=FALSE, fig.align='center', fig.cap="Dreifing AUC og Standardized brier fyrir hvert líkann, hjá ``Train`` og ``Test`` bootstrap gildunum", fig.pos='H', out.width='100%'}
+include_graphics('Img/optimism.png')
+```
+
+
+
 ### Mat stika lokalíkana
+
+```{r fit1 table, echo = F}
+fit1.coef <- summary(fit1)$coefficients %>% as.data.frame() %>% 
+  add_column(odds = exp(summary(fit1)$coefficients[,1]), .after = 0)
+colnames(fit1.coef) <- c("Gagnalíkindahlutfall", "Hallastuðull", "SE", "z-próf", "p")
+
+fit1.coef <- fit1.coef %>% add_row(.after = 2) %>% add_row(.after = 4) %>% add_row(.after = 12)
+row.names(fit1.coef) <- c("Skurðpunktur", "fjöldi spurninga fram að þessu", 
+                          "hef ekki séð rétta svarmöguleikann áður (Viðmið)",
+                          "Hef séð rétta svarimöguleikann áður", "1 rangur svarmöguleiki (Viðmið)", 
+                          "2 rangir svarmöguleikar", "3 rangir svarmöguleikar", "4 rangir svarmöguleikar", 
+                          "5 rangir svarmöguleikar", "6 rangir svarmöguleikar", "7 rangir svarmöguleikar",
+                          "gpow","Fyrirlestur a (Viðmið)", "Fyrirlestur b", "Fyrirlestur c",
+                          "Fyrirlestur d", "Fyrirlestur e", "Fyrirlestur f", "Fyrirlestur g", 
+                          "Fyrirlestur h", "Fyrirlestur i", "Fyrirlestur j", "Fyrirlestur k", 
+                          "Fyrirlestur l", "Fyrirlestur m", "víxláhrif fjöldi spurninga og hafa séð rétta svarmöguleikann")
+fit1.coef %>% kable(digits = 4, booktabs = T) %>% kable_styling(full_width = T, font = 7) %>% 
+  pack_rows("Hef séð rétta svarmöguleikann áður", 3, 4, hline_after = T) %>%
+  pack_rows("Fjöldi rangra svarmöguleika", 5, 11, hline_after = T) %>%
+  pack_rows("", 12, 12, hline_after = T) %>%
+  pack_rows("hvaða fyrirlestur", 13, 25, hline_after = T) %>%
+  pack_rows("", 26, 26, hline_after = T)
+```
+
+```{r fit3 table, echo = F}
+fit3.coef <- summary(fit3)$coefficients %>% as.data.frame() %>% 
+  add_column(odds = exp(summary(fit3)$coefficients[,1]), .after = 0)
+colnames(fit3.coef) <- c("Gagnalíkindahlutfall", "Hallastuðull", "SE", "z-próf", "p")
+
+fit3.coef <- fit3.coef %>% add_row(.after = 1) %>% add_row(.after = 6) %>% add_row(.after = 8) %>% 
+  add_row(.after = 16)
+row.names(fit3.coef) <- c("Skurðpunktur", "0%-20% (viðmið)", "20%-40%", "40%-60%", 
+                          "60%-80%", "80%-100%", "hef ekki séð rétta svarmöguleikann áður (Viðmið)",
+                          "Hef séð rétta svarimöguleikann áður", "1 rangur svarmöguleikar (Viðmið)", 
+                          "2 rangir svarmöguleikar", "3 rangir svarmöguleikar", "4 rangir svarmöguleikar", 
+                          "5 rangir svarmöguleikar", "6 rangir svarmöguleikar", "7 rangur svarmöguleikar",
+                          "gpow","Fyrirlestur a (Viðmið)", "Fyrirlestur b", "Fyrirlestur c",
+                          "Fyrirlestur d", "Fyrirlestur e", "Fyrirlestur f", "Fyrirlestur g", 
+                          "Fyrirlestur h", "Fyrirlestur i", "Fyrirlestur j", "Fyrirlestur k", 
+                          "Fyrirlestur l", "Fyrirlestur m")
+fit3.coef %>% kable(digits = 4, booktabs = T) %>% kable_styling(full_width = T, font = 7) %>%
+  pack_rows("Hlutfall rangra svarmöguleika sem hafa sést áður", 2, 6, hline_after = T) %>%
+  pack_rows("Hef séð rétta svarmöguleikann áður", 7, 8, hline_after = T) %>%
+  pack_rows("Fjöldi rangra svarmöguleika", 9, 15, hline_after = T) %>%
+  pack_rows("", 16, 16, hline_after = T) %>%
+  pack_rows("hvaða fyrirlestur", 17, 29, hline_after = T)
+```
+```{r fit7 table, echo = F}
+fit7.coef <- summary(fit7)$coefficients %>% as.data.frame() %>% 
+  add_column(odds = exp(summary(fit7)$coefficients[,1]), .after = 0)
+colnames(fit7.coef) <- c("Gagnalíkindahlutfall", "Hallastuðull", "SE", "z-próf", "p")
+
+fit7.coef <- fit7.coef %>% add_row(.after = 1) %>% add_row(.after = 7) %>% add_row(.after = 9) %>%
+  add_row(.after = 17)
+row.names(fit7.coef) <- c("Skurðpunktur", "0%-20% (viðmið)", "20%-40%", "40%-60%", 
+                          "60%-80%", "80%-100%", "fjöldi spurninga fram að þessu", 
+                          "hef ekki séð rétta svarmöguleikann áður (Viðmið)",
+                          "Hef séð rétta svarimöguleikann áður", "1 rangur svarmöguleikar (Viðmið)", 
+                          "2 rangir svarmöguleikar", "3 rangir svarmöguleikar", "4 rangir svarmöguleikar", 
+                          "5 rangir svarmöguleikar", "6 rangir svarmöguleikar", "7 rangur svarmöguleikar",
+                          "gpow","Fyrirlestur a (Viðmið)", "Fyrirlestur b", "Fyrirlestur c",
+                          "Fyrirlestur d", "Fyrirlestur e", "Fyrirlestur f", "Fyrirlestur g", 
+                          "Fyrirlestur h", "Fyrirlestur i", "Fyrirlestur j", "Fyrirlestur k", 
+                          "Fyrirlestur l", "Fyrirlestur m")
+fit7.coef %>% kable(digits = 4, booktabs = T) %>% kable_styling(full_width = T, font = 7) %>%
+  pack_rows("Hlutfall rangra svarmöguleika sem hafa sést áður", 2, 6, hline_after = T) %>%
+  pack_rows("", 7, 7, hline_after = T) %>%
+  pack_rows("Hef séð rétta svarmöguleikann áður", 8, 9, hline_after = T) %>%
+  pack_rows("Fjöldi rangra svarmöguleika", 10, 16, hline_after = T) %>%
+  pack_rows("", 17, 17, hline_after = T) %>%
+  pack_rows("hvaða fyrirlestur", 18, 30, hline_after = T)
+```
 
 ER EKKI ENNÞÁ KOMINN MEÐ ÞETTA
 
