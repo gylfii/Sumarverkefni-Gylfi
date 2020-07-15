@@ -436,3 +436,10 @@ max(realTest2$timeDif)
 
 Anova(rfit12, type = 3)
 
+
+start_time <- Sys.time()
+tFit <- fit7 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 + fsfat | studentId), family = binomial(link = "logit"), 
+                      data = hashLim100, nAGQ = 0, control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+end_time <- Sys.time()
+
+end_time - start_time
