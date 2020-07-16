@@ -2,7 +2,8 @@
 output: 
   bookdown::pdf_document2:
     fig_caption: yes
-    toc: no
+    toc: true
+    toc_depth: 3
     includes:
       before_body: template/fp.sty # Forsíða
       in_header: template/header.tex # TeX haus
@@ -27,6 +28,7 @@ hashAnswer$nicc <- hashAnswer$nicc %>% as.factor()
 hashAnswer$hluta2 <- cut_interval(hashAnswer$hluta, n = 5)
 ```
 
+\newpage
 # Inngangur
 Tutor-web er... Gott að spyrja um góða leið til að útskýra það í byrjunn
 
@@ -67,7 +69,8 @@ data.frame(Breyta = c("lectureId", "studentId", "questionId", "correct", "hash",
                        "Tímamunur séðan rétta svarið sást seinast", "Fjöldi vitlausa svarmöguleika", 
                        "Erfileika hraði fyrir uppkomandi spurningar", 
                        "Discretized hlutfall rangra svarmöguleika sem hafa sést áður")) %>% 
-  kable(digits = 4, booktabs = T) %>% 
+  kable(digits = 4, booktabs = T, 
+     caption = "Breytur sem voru eftir í gögnunum") %>% 
   kable_styling()
 ```
 
@@ -143,7 +146,8 @@ createUsable <- function(df){
 }
 fullthing <- createUsable(hashAnswer)
 
-fullthing %>% kable(longtable = T, digits = 5, booktabs = T) %>%
+fullthing %>% kable(longtable = T, digits = 5, booktabs = T, 
+                    caption = "Hlutföll flokkabreytanna") %>%
    kable_styling() %>%
   pack_rows("correct", 1, 2) %>%
   pack_rows("hsta", 3, 4) %>%
@@ -170,7 +174,8 @@ FHbylim <- ab %>% pivot_longer(c('FY50', 'HY50', 'FY100', 'HY100', 'FY150', 'HY1
   separate(typewLim, into = c("type", "limit"), sep = 2) %>% pivot_wider(names_from = type, values_from = values)
 
 FHbylim$HY <- paste0(round(FHbylim$HY * 100, digits = 1), "%")
-FHbylim %>% kable(digits = 4, booktabs = T) %>% 
+FHbylim %>% kable(digits = 4, booktabs = T, 
+                  caption = "hlutfall gagnanna eftir x spurningar svaraðar") %>% 
   kable_styling()
 ```
 
@@ -195,7 +200,8 @@ hashLim100 <- hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
 ```{r shorter table 100, echo=F}
 fullt100 <- createUsable(hashLim100)
 
-fullt100 %>% kable(longtable = T, digits = 5, booktabs = T) %>%
+fullt100 %>% kable(longtable = T, digits = 5, booktabs = T, 
+                   caption = "Hlutfall flokkabreytana fyrir fyrstu 100 svör") %>%
    kable_styling() %>%
   pack_rows("correct", 1, 2) %>%
   pack_rows("hsta", 3, 4) %>%
@@ -209,7 +215,8 @@ Héðan sést að hlutfall rangra svarmöguleika hækkar aðeins, sömuleiðis m
 ```{r shorter table 50,echo=F}
 fullt50 <- createUsable(hashLim50)
 
-fullt50 %>% kable(longtable = T, digits = 5, booktabs = T) %>%
+fullt50 %>% kable(longtable = T, digits = 5, booktabs = T, 
+                  caption = "Hlutfall flokkabreytana fyrir fyrstu 50 svör") %>%
    kable_styling() %>%
   pack_rows("correct", 1, 2) %>%
   pack_rows("hsta", 3, 4) %>%
@@ -251,7 +258,7 @@ include_graphics('Img/meanbyhlutfallLim.png')
 
 Stóra stökkið hjá 0%-20% tilvikinu er aðeins stöðugra, en fyrir utan það, þá er ekki nein breyting hér.
 
-Til að fá betri sjónarhorn á hlutföllin, þá gæti verið gott að bæta við línurnar hjá hlutföllunum við mynd X, semsagt hafa línuna fyrir tilvikið þegar nemandinn hefur ekki séð rétta svarið áður með línurnar hjá hlutfall röngu svarmöguleikana fram að þessu hliðiná. Dökkbláa línan er upprunalega línan frá mynd X, á meðan hinar línurnar eru fyrir sitthvora hlutfalls hópana.
+Til að fá betri sjónarhorn á hlutföllin, þá gæti verið gott að bæta við línurnar hjá hlutföllunum við mynd \@ref(fig:meanbyhlutfall50), semsagt hafa línuna fyrir tilvikið þegar nemandinn hefur ekki séð rétta svarið áður með línurnar hjá hlutfall röngu svarmöguleikana fram að þessu hliðiná. Dökkbláa línan er upprunalega línan frá mynd \@ref(fig:meanbyhlutfall50), á meðan hinar línurnar eru fyrir sitthvora hlutfalls hópana.
 
 ```{r meanbyhlutfallandhsta, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50. Með meðaltal hjá fyrsta skiptið séð rétta svarið", fig.pos='H', out.width='100%'}
 include_graphics('Img/meabwhsbyhlutfall.png')
@@ -274,16 +281,17 @@ include_graphics('Img/meabwhsbyhlutfall100.png')
 
 ### breytur
 
-Það voru gerð þrjú líkönn til að skoða, þar sem aðal munurinn er hvort notað er *fsfat*, *hluta2* eða bæði. Hér sýnir tafla X allar breyturnar sem eru í líkönunum, frá þeim sem eru í öllum líkönunum og þeim sem er skipt út á milli þeirra.
+Það voru gerð þrjú líkönn til að skoða, þar sem aðal munurinn er hvort notað er *fsfat*, *hluta2* eða bæði. Hér sýnir tafla \@ref(tab:table-of-use) allar breyturnar sem eru í líkönunum, frá þeim sem eru í öllum líkönunum og þeim sem er skipt út á milli þeirra.
 
-```{r table of use, echo = F, cache=TRUE}
+```{r table-of-use, echo = F, cache=TRUE}
 
 data.frame(Breyta = c("lectureId", "hsta", "nicc", "gpow",  "studentId", "fsfat", "hluta2"),
            Tegund = c("Flokka", "Flokka", "Flokka", "Samfelld", "Flokka", "Samfelld", "Flokka"), 
            Flokkar = c("3082, 3201 - 3204, 3208 - 3215", "Sést í fyrsta skipti, Hef séð áður", 
                        "1, 2, 3, 4, 5, 6, 7", "", "VEIT EKKI HVAÐ ÉG SET HÉR", "", 
                        "[0-0.2], (0.2-0.4], (0.4-0.6], (0.6-0.8], (0.8-1]")) %>% 
-  kable(longtable = T, digits = 5, booktabs = T) %>%
+  kable(longtable = T, digits = 5, booktabs = T, 
+        caption = "Breytur notað í líkonunum") %>%
   kable_styling() %>%
   pack_rows("Fixed effect fyrir öll líkön", 1, 4) %>%
   pack_rows("Mixed effect fyrir öll líkön", 5, 5) %>%
@@ -369,17 +377,21 @@ fit7.opt.op <- fit7.cal[[1]]
 
 ```
 
-Tafla X sýnir hér frammistöðu líkannana þriggja eftir AUC og standardized brier skorinu, eftir "optimism correction" eftir 2500 bootstrap ítranir. Það sést hér að munurinn á milli líkannana er ekki það mikill, þar sem stærsti munurinn er hjá fyrsta og þriðja líkaninu og það er ekki meira en `r round(fit7.opt.cor$AUC - fit1.opt.cor$AUC, digits = 4)` hjá AUC og `r round(fit7.opt.cor$stBrier - fit1.opt.cor$stBrier, digits = 4)` hjá standardized brier skorinu. Þá lítur út fyrir að það er ekki mikill munur þar með tilliti til AUC og standardized Brier. Til að bæta þá inniheldur tafla X "optimism" fyrir líkönin 3, þar sést að "optimism" er rosalega líkt hjá þeim öllum þremur. 
+Tafla \@ref(tab:optimism-table-2) sýnir hér frammistöðu líkannana þriggja eftir AUC og standardized brier skorinu, eftir "optimism correction" eftir 2500 bootstrap ítranir. Það sést hér að munurinn á milli líkannana er ekki það mikill, þar sem stærsti munurinn er hjá fyrsta og þriðja líkaninu og það er ekki meira en `r round(fit7.opt.cor$AUC - fit1.opt.cor$AUC, digits = 4)` hjá AUC og `r round(fit7.opt.cor$stBrier - fit1.opt.cor$stBrier, digits = 4)` hjá standardized brier skorinu. Þá lítur út fyrir að það er ekki mikill munur þar með tilliti til AUC og standardized Brier. Til að bæta þá inniheldur tafla \@ref(tab:optimism-table) "optimism" fyrir líkönin 3, þar sést að "optimism" er rosalega líkt hjá þeim öllum þremur. 
 
-Á mynd X sést svo hvernig AUC og standardized brier skorið dreifðist fyrir hverja ítrun. Þar sést að hvert líkann er aðeins hærra en það fyrra og að fyrir AUC þá er dreifingin á "Train" gildunum miklu meiri en hjá "Test" gildunum, en það er svo öfugt fyrir standardized brier, því þar er dreifingin hjá "Test" meiri en hjá "Train" gildunum.
+Á mynd \@ref(fig:optimismpicture) sést svo hvernig AUC og standardized brier skorið dreifðist fyrir hverja ítrun. Þar sést að hvert líkann er aðeins hærra en það fyrra og að fyrir AUC þá er dreifingin á "Train" gildunum miklu meiri en hjá "Test" gildunum, en það er svo öfugt fyrir standardized brier, því þar er dreifingin hjá "Test" meiri en hjá "Train" gildunum.
 
-```{r optimism table 2, echo = FALSE}
-rbind(fit1 = fit1.opt.cor, fit3 = fit3.opt.cor, fit7 = fit7.opt.cor) %>% dplyr::select(-c(brier)) %>% kable(digits = 4, booktabs = T) %>%
+```{r optimism-table-2, echo = FALSE}
+rbind(fit1 = fit1.opt.cor, fit3 = fit3.opt.cor, fit7 = fit7.opt.cor) %>% dplyr::select(-c(brier)) %>% 
+  kable(digits = 4, booktabs = T, 
+        caption = "Optimism corrected AUC og Standardized brier skorið hjá líkonunum þremur") %>%
   kable_styling()
 ```
 
-```{r optimism table, echo = FALSE}
-rbind(fit1 = fit1.opt.op, fit3 = fit3.opt.op, fit7 = fit7.opt.op) %>% dplyr::select(-c(brier)) %>% kable(digits = 4, booktabs = T) %>%
+```{r optimism-table, echo = FALSE}
+rbind(fit1 = fit1.opt.op, fit3 = fit3.opt.op, fit7 = fit7.opt.op) %>% dplyr::select(-c(brier)) %>% 
+  kable(digits = 4, booktabs = T, 
+        caption = "optimism-ið fyrir AUC og standardized brier skorið hjá líkönunum þremur") %>%
   kable_styling()
 ```
 
@@ -411,7 +423,9 @@ row.names(fit1.coef) <- c("Skurðpunktur", "fjöldi spurninga fram að þessu",
                           "Fyrirlestur d", "Fyrirlestur e", "Fyrirlestur f", "Fyrirlestur g", 
                           "Fyrirlestur h", "Fyrirlestur i", "Fyrirlestur j", "Fyrirlestur k", 
                           "Fyrirlestur l", "Fyrirlestur m", "víxláhrif fjöldi spurninga og hafa séð rétta svarmöguleikann")
-fit1.coef %>% kable(digits = 4, booktabs = T) %>% kable_styling(full_width = T, font = 7) %>% 
+fit1.coef %>% kable(digits = 4, booktabs = T, 
+                    caption = "Stuðlatafla lokalíkans fyrir fyrsta líkanið") %>% 
+  kable_styling(full_width = T, font = 7) %>% 
   pack_rows("Hef séð rétta svarmöguleikann áður", 3, 4, hline_after = T) %>%
   pack_rows("Fjöldi rangra svarmöguleika", 5, 11, hline_after = T) %>%
   pack_rows("", 12, 12, hline_after = T) %>%
@@ -435,7 +449,9 @@ row.names(fit3.coef) <- c("Skurðpunktur", "0%-20% (viðmið)", "20%-40%", "40%-
                           "Fyrirlestur d", "Fyrirlestur e", "Fyrirlestur f", "Fyrirlestur g", 
                           "Fyrirlestur h", "Fyrirlestur i", "Fyrirlestur j", "Fyrirlestur k", 
                           "Fyrirlestur l", "Fyrirlestur m")
-fit3.coef %>% kable(digits = 4, booktabs = T) %>% kable_styling(full_width = T, font = 7) %>%
+fit3.coef %>% kable(digits = 4, booktabs = T, 
+                    caption = "Stuðlatafla lokalíkans fyrir annað líkanið") %>% 
+  kable_styling(full_width = T, font = 7) %>%
   pack_rows("Hlutfall rangra svarmöguleika sem hafa sést áður", 2, 6, hline_after = T) %>%
   pack_rows("Hef séð rétta svarmöguleikann áður", 7, 8, hline_after = T) %>%
   pack_rows("Fjöldi rangra svarmöguleika", 9, 15, hline_after = T) %>%
@@ -459,7 +475,9 @@ row.names(fit7.coef) <- c("Skurðpunktur", "0%-20% (viðmið)", "20%-40%", "40%-
                           "Fyrirlestur d", "Fyrirlestur e", "Fyrirlestur f", "Fyrirlestur g", 
                           "Fyrirlestur h", "Fyrirlestur i", "Fyrirlestur j", "Fyrirlestur k", 
                           "Fyrirlestur l", "Fyrirlestur m")
-fit7.coef %>% kable(digits = 4, booktabs = T) %>% kable_styling(full_width = T, font = 7) %>%
+fit7.coef %>% kable(digits = 4, booktabs = T, 
+                    caption = "Stuðlatafla lokalíkans fyrir þriðja líkanið") %>% 
+  kable_styling(full_width = T, font = 7) %>%
   pack_rows("Hlutfall rangra svarmöguleika sem hafa sést áður", 2, 6, hline_after = T) %>%
   pack_rows("", 7, 7, hline_after = T) %>%
   pack_rows("Hef séð rétta svarmöguleikann áður", 8, 9, hline_after = T) %>%
