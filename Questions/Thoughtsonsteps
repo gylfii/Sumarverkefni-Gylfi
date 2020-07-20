@@ -71,3 +71,23 @@ What's next for the 16th of july:
 2. Figure out how to have a chapters page that updates automatically and can point directly to the chapter it's referencing in the pdf
 
 3. name all of the tables, try to figure out how to automatically number them and also how to automatically point to them.
+
+
+
+What was done on the 20th of july:
+1. Managed to get a response with recommendation on how to make pictures better and more readable along with adding the models themselves
+
+2. Fixed the table problem, where the problem was needing the r thing to be 1 word
+
+3. Added Anova, along with a calibration plot and histogram for predictions.
+
+What needs to be done after the 20th of july:
+0,5. Consider fixing up the new subchapter, if I can think of wording then that would be gold
+
+1. Read Anna's phd to get a greater understanding of tutor-web and use that understanding in the introduction
+
+2. Add an "ágrip" chapter with a summary of everything
+
+3. Read over everything and fix spelling, wording and more to make sure the report is coherent
+
+Hopefully finish this all by friday, we will see
