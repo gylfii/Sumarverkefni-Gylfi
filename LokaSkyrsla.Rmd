@@ -1,6 +1,7 @@
 ---
 output: 
   bookdown::pdf_document2:
+    pandoc_args: --listings
     fig_caption: yes
     toc: true
     toc_depth: 3
@@ -28,6 +29,25 @@ hashAnswer$nicc <- hashAnswer$nicc %>% as.factor()
 hashAnswer$hluta2 <- cut_interval(hashAnswer$hluta, n = 5)
 ```
 
+```{r shorter table, echo = F}
+hashLim50 <- hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
+  filter(count > 7 & fsfat < 50)
+hashLim100 <- hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
+  filter(count > 7 & fsfat < 100)
+```
+
+
+```{r model creation, echo=F, cache=TRUE}
+fit1 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), 
+              family = binomial(link = "logit"), data = hashLim100, nAGQ = 0, control =
+                glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e5)))
+fit3 <- glmer(correct ~ hluta2+hsta + nicc + gpow + lectureId + (1 | studentId), 
+              family = binomial(link = "logit"), data = hashLim100, nAGQ = 0, control = 
+                glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+fit7 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), 
+              family = binomial(link = "logit"), data = hashLim100, nAGQ = 0, control = 
+                glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+```
 \newpage
 # Inngangur
 Tutor-web er... Gott að spyrja um góða leið til að útskýra það í byrjunn
@@ -39,9 +59,6 @@ Spurningar í tutor-web eru stundum búnar til þannig að kennari semur fyrst e
 VEIT EKKI HVAÐ MEIRA ÉG ÆTTI AÐ BÆTA VIÐ Á ÞESSUM PUNKTI
 
 # Aðferð
-
-## framkvæmd 
-EKKI ALVEG VISS HVAÐ ÉG ÆTTI AÐ SETJA HÉR, HMMMMMMMMM...
 
 ## Þáttakendur
 Úrtak rannsóknarinnar voru nemendur í líkindareikningur og tölfræði á vormisserinu 2020. Þar voru `r hashAnswer$studentId %>% unique() %>% length()` nemendur sem svöruðu samtals 108.017 spurningum í heild.
@@ -113,6 +130,12 @@ Að lokum fyrir *hluta2* þá var skipt *hluta* upp í 5 jafn langa parta, semsa
 
 Með þessum líkönum, væri hægt að skoða hvort það koma framfarir. Þar sem hugsuninn byggist á því að ef *fsfat* er ennþá marktækt, þá eru framfarir að sjást. Því sem fleiri spurningar eru svarað, þá eru líkurnar á að næstu spurningu er svarað rétt að hækka. Hægt er að sjá það sem framfarir. Á móti kemur áhrif utanbókarlærdóms, sem kemur frá réttu og röngu svarmöguleikunum sem hafa komið áður
 
+Líkönin þrjú að heild eru hér að neðan, þar sem $y$ stendur fyrir líkurnar á því að fá rétt svar og $\text{studentId}_n$ er "mixed logistic effect" í þessu tilviki.
+
+   * Fyrsta líkanið: $\text{logit}(y) = \beta_0 + \text{fsfat} + \text{hsta}_k + \text{fsfat:hsta} + \text{nicc}_l + \text{gpow} + \text{lectureId}_m + \text{studentId}_n$
+   * Annað líkanið: $\text{logit}(y) = \beta_0 + \text{hluta2}_s + \text{hsta}_k + \text{nicc}_l + \text{gpow} + \text{lectureId}_m + \text{studentId}_n$
+   * Þriðja líkanið: $\text{logit}(y) = \beta_0 + \text{fsfat} + \text{hsta}_k + \text{hluta2}_s + \text{nicc}_l + \text{gpow} + \text{lectureId}_m + \text{studentId}_n$
+
 
 
 # Niðurstöður
@@ -161,7 +184,7 @@ Mikið af gögnunum hér eru spurningar svarað rétt, spurningar með rétta sv
 
 Vandinn gæti verið frá því að þegar það er búið að svara svo mörgum spurningum, þá er erfitt að sjá beinar framfarir yfir utanbókarlærdóm, þar sem flestir svarmöguleikar hafa sést áður. Skoðum aðeins hvernig hlutfall af svörunum fara yfir einhvern sérstakan punkt
 
-```{r limit check, echo=F}
+```{r limit-check, echo=F}
 a <- hashAnswer %>% summarise("FY50" = sum(fsfat >= 50), "FY100" = sum(fsfat >= 100), 
                               "FY150" = sum(fsfat >= 150), "FY200" = sum(fsfat >= 200), 
                               "FY250" = sum(fsfat >= 250), "FY300" = sum(fsfat >= 300))
@@ -185,23 +208,19 @@ FHbylim %>% kable(digits = 4, booktabs = T,
 
 ### Stytt gögninn
 
-```{r shorter table, echo = F}
-hashLim50 <- hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
-  filter(count > 7 & fsfat < 50)
-hashLim100 <- hashAnswer %>% group_by(studentId) %>% mutate("count" = n()) %>%
-  filter(count > 7 & fsfat < 100)
-```
 
-Það getur verið sterkur áhugi að stilla upp sömu töflu aftur, nema í tilviki með bara upp að 100 spurningum svarað í einu og svo 50 spurningum svarað í einu.
+
+Það getur verið sterkur áhugi að stilla upp sömu töflu aftur, nema í tilviki með bara upp að 100 spurningum svarað í einu og svo 50 spurningum svarað í einu. \@ref(tab:shorter-table-100)
 
 
 
 
-```{r shorter table 100, echo=F}
+```{r shorter-table-100, echo=F}
 fullt100 <- createUsable(hashLim100)
 
 fullt100 %>% kable(longtable = T, digits = 5, booktabs = T, 
-                   caption = "Hlutfall flokkabreytana fyrir fyrstu 100 svör") %>%
+                   caption = "(\\#tab:shorter-table-100)
+ Hlutfall flokkabreytana fyrir fyrstu 100 svör") %>%
    kable_styling() %>%
   pack_rows("correct", 1, 2) %>%
   pack_rows("hsta", 3, 4) %>%
@@ -212,7 +231,7 @@ fullt100 %>% kable(longtable = T, digits = 5, booktabs = T,
 
 Héðan sést að hlutfall rangra svarmöguleika hækkar aðeins, sömuleiðis með rétt svör sem sést í fyrsta skiptið. Ef stytt er enn meira þá sést:
 
-```{r shorter table 50,echo=F}
+```{r shorter-table-50,echo=F}
 fullt50 <- createUsable(hashLim50)
 
 fullt50 %>% kable(longtable = T, digits = 5, booktabs = T, 
@@ -325,17 +344,7 @@ Að lokum til að skoða saman, var sameinað og sett upp líkann sem innihélt 
 \textbf{Þriðja líkanið:} Hér var notað *hluta2* og *fsfat* saman, til að sjá hvort enn er hægt að sjá framfarir með *fsfat* þegar *hluta2* er innifallið enn í líkaninu. 
 
 ### Matsgæði líkana
-```{r model creation, echo=F, cache=TRUE}
-fit1 <- glmer(correct ~ fsfat*hsta + nicc + gpow + lectureId + (1 | studentId), 
-              family = binomial(link = "logit"), data = hashLim100, nAGQ = 0, control =
-                glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e5)))
-fit3 <- glmer(correct ~ hluta2+hsta + nicc + gpow + lectureId + (1 | studentId), 
-              family = binomial(link = "logit"), data = hashLim100, nAGQ = 0, control = 
-                glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
-fit7 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | studentId), 
-              family = binomial(link = "logit"), data = hashLim100, nAGQ = 0, control = 
-                glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
-```
+
 
 ```{r booteddata prep, echo=F}
 load("Data/Bootedfit1")
@@ -404,11 +413,38 @@ rbind(fit1 = fit1.opt.op, fit3 = fit3.opt.op, fit7 = fit7.opt.op) %>% dplyr::sel
 include_graphics('Img/optimism.png')
 ```
 
+#### hér er nokkuð sem þarf að fínpússa
 
+Gott er að skoða calibration plot fyrir gögninn með:
+
+```{r calibration, echo=FALSE, fig.align='center', fig.cap="Calibration plot fyrir líköninn þrjú", fig.pos='H', out.width='100%'}
+include_graphics('Img/calibration.png')
+```
+
+Svo er líka gott að skoða dreifingu hjá "prediction" líkananna með histogrammi:
+
+```{r optimismpicture, echo=FALSE, fig.align='center', fig.cap="Histogram fyrir predictionin fyrir líköninn þrjú", fig.pos='H', out.width='100%'}
+include_graphics('Img/histogrammulti.png')
+```
+
+
+Að bættu þá eru allir stikarnir marktækir miðað við Anova III, semsagt frá:
+```{r Anova-fit1, echo=F}
+Anova(fit1, type = 3) %>% broom::tidy() %>% kable(digits = 4, booktabs = T, 
+                caption = "Anova fyrir fyrsta líkanið") %>% kable_styling()
+```
+```{r Anova-fit3, echo=F}
+Anova(fit3, type = 3) %>% broom::tidy() %>% kable(digits = 4, booktabs = T, 
+                caption = "Anova fyrir annað líkanið") %>% kable_styling()
+```
+```{r Anova-fit7, echo=F}
+Anova(fit7, type = 3) %>% broom::tidy() %>% kable(digits = 4, booktabs = T, 
+                caption = "Anova fyrir þriðja líkanið") %>% kable_styling()
+```
 
 ### Mat stika lokalíkana
 
-```{r fit1 table, echo = F}
+```{r fit1-table, echo = F}
 fit1.coef <- summary(fit1)$coefficients %>% as.data.frame() %>% 
   add_column(odds = exp(summary(fit1)$coefficients[,1]), .after = 0)
 colnames(fit1.coef) <- c("Gagnalíkindahlutfall", "Hallastuðull", "SE", "z-próf", "p")
@@ -433,7 +469,7 @@ fit1.coef %>% kable(digits = 4, booktabs = T,
   pack_rows("", 26, 26, hline_after = T)
 ```
 
-```{r fit3 table, echo = F}
+```{r fit3-table, echo = F}
 fit3.coef <- summary(fit3)$coefficients %>% as.data.frame() %>% 
   add_column(odds = exp(summary(fit3)$coefficients[,1]), .after = 0)
 colnames(fit3.coef) <- c("Gagnalíkindahlutfall", "Hallastuðull", "SE", "z-próf", "p")
@@ -458,7 +494,8 @@ fit3.coef %>% kable(digits = 4, booktabs = T,
   pack_rows("", 16, 16, hline_after = T) %>%
   pack_rows("hvaða fyrirlestur", 17, 29, hline_after = T)
 ```
-```{r fit7 table, echo = F}
+
+```{r fit7-table, echo = F}
 fit7.coef <- summary(fit7)$coefficients %>% as.data.frame() %>% 
   add_column(odds = exp(summary(fit7)$coefficients[,1]), .after = 0)
 colnames(fit7.coef) <- c("Gagnalíkindahlutfall", "Hallastuðull", "SE", "z-próf", "p")
@@ -485,6 +522,10 @@ fit7.coef %>% kable(digits = 4, booktabs = T,
   pack_rows("", 17, 17, hline_after = T) %>%
   pack_rows("hvaða fyrirlestur", 18, 30, hline_after = T)
 ```
+
+
+
+
 
 
 

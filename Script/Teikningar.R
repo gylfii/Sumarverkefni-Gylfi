@@ -9,8 +9,19 @@ library(tidyverse)
 library(modelr)
 library(rlang)
 library(lme4)
+library(ggthemes)
+library(ggpubr)
 
-?glmer
+theme_set(theme_tufte() +
+            theme(panel.border = element_rect('black', fill = NA),
+                  text = element_text(size = 14),
+                  legend.text=element_text(size=14),
+                  axis.text=element_text(size=14),
+                  axis.title = element_text(size = 14),
+                  plot.title = element_text(hjust = 0.5)))
+
+
+#?glmer
 #lesum inn gögninn okkar
 hashAnswer <- read.csv('Data/hashAnswer4.csv')
 hashAnswer <- hashAnswer %>% subset(select=-c(X))
@@ -233,7 +244,9 @@ save_by_limit <- function(hashA, limit) {
     ggplot(aes(x=fsfat,y=med,color=hsta))+
     geom_point()+
     geom_smooth() +
-    ggtitle(paste0("Undir ", limit))
+    ggtitle(paste0("Undir ", limit)) + 
+    scale_colour_brewer(type = "qual", palette = "Set1")+
+    theme(legend.position = 'bottom')
   tpath <- paste0('Imgsimplify/plotbymean', limit, '.png')
   ggsave(tpath, p5, width = 10, height = 10)
 }
@@ -378,7 +391,9 @@ p2 <- dfmean3 %>% filter(hsta == 0) %>% ggplot(aes(x = fsfat, y = med)) +
   geom_point() +
   geom_smooth() +
   geom_smooth(data = dfmean2 %>% filter(fjoldi > 1), aes(color = hluta2), se = F) +
-  coord_cartesian(ylim = c(yminim, ymaxim))
+  coord_cartesian(ylim = c(yminim, ymaxim)) + 
+  scale_colour_brewer(type = "qual", palette = "Set1")+
+  theme(legend.position = 'bottom')
 
 p2
 p1 <- dfmean2 %>% ggplot(aes(x = fsfat, y = fjoldi, color = hluta2)) +
@@ -391,11 +406,15 @@ grid.arrange(p1, p2, nrow = 1)
 
 p1 <- dfmean2 %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) + 
   geom_point() +
-  geom_smooth(se = F)  
+  geom_smooth(se = F) +
+  scale_colour_brewer(type = "qual", palette = "Set1")+
+  theme(legend.position = 'bottom')
 
 p3 <- dfmean2 %>% filter(fjoldi > 1) %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
-  geom_point(aes(size = fjoldi)) +
-  geom_smooth(se = F)
+  geom_point(aes()) +
+  geom_smooth(se = F) +
+  scale_colour_brewer(type = "qual", palette = "Set1")+
+  theme(legend.position = 'bottom')
 p3
 dfmean4 %>% filter(fjoldi > 5) %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
   geom_point() +
@@ -410,7 +429,9 @@ p4 <- dfmean5 %>% filter(hsta == 0) %>% ggplot(aes(x = fsfat, y = med)) +
   geom_point() +
   geom_smooth() +
   geom_smooth(data = dfmean4 %>% filter(fjoldi > 1), aes(color = hluta2), se = F) +
-  coord_cartesian(ylim = c(yminim2, ymaxim2))
+  coord_cartesian(ylim = c(yminim2, ymaxim2)) +
+  scale_colour_brewer(type = "qual", palette = "Set1")+
+  theme(legend.position = 'bottom')
 p4
 
 ggsave('Img/meanbyhlutfall.png', p1, width = 10, height = 10)

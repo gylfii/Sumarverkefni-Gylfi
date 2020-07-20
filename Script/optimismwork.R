@@ -29,6 +29,7 @@ library(boot)
 library(cvAUC)
 #Annaðhvort þeirra gefur mem_used() til að skoða hve mikið af mininnu er notað
 library(pryr)
+library(cowplot)
 
 
 load("Data/Bootedfit1")
@@ -85,7 +86,9 @@ optim.draw.box <- function(B1, B2, B3) {
     #geom_point(position = position_jitterdodge(dodge.width = 0.5, jitter.width = 0.1), alpha = 0.05) +
     geom_boxplot() +
     labs(title = "AUC") +
-    theme(legend.position="top")
+    theme(legend.position="top") +
+    scale_colour_brewer(type = "qual", palette = "Set1")+
+    theme(legend.position = 'bottom')
   
   AllBrier <- data.frame(Train.fit1 = bo1$brier, Train.fit3 = bo2$brier, Train.fit7 = bo3$brier, 
                        Test.fit1 = bot1$brier, Test.fit3 = bot2$brier, Test.fit7 = bot3$brier) %>% 
@@ -98,7 +101,9 @@ optim.draw.box <- function(B1, B2, B3) {
     #geom_point(position = position_jitterdodge(dodge.width = 0.5, jitter.width = 0.1), alpha = 0.05) +
     geom_boxplot() +
     labs(title = "Brier") +
-    theme(legend.position="top")
+    theme(legend.position="top") +
+    scale_colour_brewer(type = "qual", palette = "Set1")+
+    theme(legend.position = 'bottom')
   
   
   AllstBrier <- data.frame(Train.fit1 = bo1$StanBrier, Train.fit3 = bo2$StanBrier, Train.fit7 = bo3$StanBrier, 
@@ -113,16 +118,20 @@ optim.draw.box <- function(B1, B2, B3) {
     #geom_point(position = position_jitterdodge(dodge.width = 0.5, jitter.width = 0.1), alpha = 0.05) +
     geom_boxplot() +
     labs(title = "Standardized Brier") +
-    theme(legend.position="top")
+    theme(legend.position="top") +
+    scale_colour_brewer(type = "qual", palette = "Set1")+
+    theme(legend.position = 'bottom')
   
-  return(grid.arrange(p1, p2, p3, nrow = 1))
+  return(plot_grid(p1, p2, p3))
 }
 
+?plot_grid
 ?separate
 ?pivot_longer
 p <- optim.draw.box(bootedfit1, bootedfit3, bootedfit7)
+p
 
-ggsave('Img/optimism.png', p, width = 21, height = 7)
+ggsave('Img/optimism.png', p, width = 12, height = 12)
 
 
 bo1 <- bootedfit1[[2]]
