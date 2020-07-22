@@ -1,7 +1,6 @@
 ---
 output: 
   bookdown::pdf_document2:
-    pandoc_args: --listings
     fig_caption: yes
     toc: true
     toc_depth: 3
@@ -49,14 +48,20 @@ fit7 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | s
                 glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 ```
 \newpage
+
+# Útdráttur {-}
+\textbf{Inngangur:} Spurningar í tutor-web eru stundum búnar til þannig að kennari semur fyrst einn haus og svo tvo hauga af fullyrðingum, einn með réttum svörum og einn með röngum svörum. Svo eru spurningarnar búnar til með því að velja slembið rétt svar og slurk af röngum svörum (kannski með allt/ekkert ofangreint er rétt). Ef nemandi lærir ekki bara utanað, heldur er að auka skilning á verkefnið, þá ættu að sjást smátt og smátt framfarir í einkunn líka fyrir nýjar fullyrðingar. Svo í þessari rannsókn er skoðað hvort hægt er að skoða framfarir nemenda en ekki bara utanbókarlærdóm. \textbf{Aðferð:} Í þessari rannsókn var stillt upp meðaltals myndir til að fá sjónarhorn á vöxt nemenda eftir fjölda spurninga svaraða. Eftir það voru stillt upp þrjú logistík líkön til að skoða marktækni fjölda spurninga svaraðra eftir að bæta við áhrif utanbókarlærdóms innan við líkönin. Það var gert með því að hafa eitt líkann byggt í kringum fjölda spurninga svarað, annað byggt í kringum hlutfall rangra svarmöguleika sem hafa sést áður og í lokinn líkann sem er byggt á þeim báðum. \textbf{Niðurstöður:} Eftir að skoða meðaltals myndirnar þá var bent til þess að það gæti verið hægt að skoða framfarir eða það gæti verið aðallega utanbókarlærdómur þar að aftan. Þá sýndu líköninn að fjöldi spurninga svarað fram að þessu verður ennþá marktækt eftir því hvort allur utanbókarlærdóms áhrif eru innihaldinn, sem gæti bent til þess að hægt sé að skoða þá framfarir í gegnum breytu tengt fjölda spurninga svarað. \textbf{Umræða:} Það var set up bootstrap fyrir gögninn til að fá gott áhorf á AUC og standardized brier skorin fyrir líkönin þrjú, þar var ekki mikill munur milli þeirra. Sem gæti bent á það að skoða bara utanbókarlærdóms áhrifin gæti verið jafn sterkt og að skoða með fjölda spurninga svarað, sem bentir til stóru áhrif utanbókarlærdóms á líkur nemandans.
+
+MUNA AÐ STILLA UPP ÞANNIG AÐ ÚTDRÁTTURINN KEMUR FYRIR KAFLANNA!
+
+\newpage
+
 # Inngangur
-Tutor-web er... Gott að spyrja um góða leið til að útskýra það í byrjunn
+Hugsað upp í kringum 2000 af honum Gunnari Stefánssyni, tutor-web er lærdóms umhverfi á netinu með fyrirlestrum, dæmi og krossaspurningar. Með einbeitingu á stærðfræði og tölfræði. Spurningar sem eru svaraðar eru svo geymdar til rannsóknar sem gæti komið fram seinna. (Þetta er góð byrjun, veit ekki hvort þörf er á meira fyrir þennan hóp)
 
 Spurningar í tutor-web eru stundum búnar til þannig að kennari semur fyrst einn haus og svo tvo hauga af fullyrðingum, einn með réttum svörum og einn með röngum svörum. Svo eru spurningarnar búnar til með því að velja slembið rétt svar og slurk af röngum svörum (kannski með allt/ekkert ofangreint er rétt). Ef nemandi lærir ekki bara utanað, heldur er að auka skilning á verkefnið, þá ættu að sjást smátt og smátt framfarir í einkunn líka fyrir nýjar fullyrðingar. (Frá Gunnari þegar kynnt var verkefnið. Þarf að endur orða)
 
 Þar eftir kemur hugsunin hvort hægt sé að sjá framfarir nemanda en ekki bara utanbókarlærdóm? Til að fara djúpar í það, þá er skoðað fyrst hvernig gögninn líta út og hvort það sést framfarir eftir því hve margar spurningar nemandinn hefur svarað fram að þessu með tilliti til hvort réttu svarmöguleikarnir hafi sést áður og hlutfall rangra svarmöguleika sem hafa sést áður.
-
-VEIT EKKI HVAÐ MEIRA ÉG ÆTTI AÐ BÆTA VIÐ Á ÞESSUM PUNKTI
 
 # Aðferð
 
@@ -70,7 +75,7 @@ VEIT EKKI HVAÐ MEIRA ÉG ÆTTI AÐ BÆTA VIÐ Á ÞESSUM PUNKTI
 R v4.0.0 í viðmótinu RStudio v1.3.959
 
 ### Gögn
-Gögninn sem voru fenginn voru tekinn beint úr sql gagnagrunns eða fenginn sem .txt skrá. Frá SQL gagnagrunninum var fengið gagnasett fyrir öll svör nemanda, gagnasett fyrir allar spurningar og svo gagnasett fyrir stillingu nemenda innan við hvern fyrirlestur. Svo texta skrár með hash fyrir alla réttu svarmöguleikana og ranga svarmöguleikana. Eftir sameiningu, þá var haldið eftirfarandi breytum:
+Gögninn sem notast var við, voru annaðhvort tekin beint úr SQL gragnagrunni eða afhent sem .txt skrá. Frá SQL gagnagrunninum var fengið gagnasett fyrir öll svör nemanda, gagnasett fyrir allar spurningar og svo gagnasett fyrir stillingu nemenda innan við hvern fyrirlestur. Svo texta skrár með hash fyrir alla réttu svarmöguleikana og ranga svarmöguleikana. Eftir sameiningu, þá var haldið eftirfarandi breytum:
 
 ```{r table1, echo=F}
 
@@ -96,24 +101,26 @@ data.frame(Breyta = c("lectureId", "studentId", "questionId", "correct", "hash",
 
 
 ### Gagnavinnsla
-Vinnslan til að fá gagnasettið yfir í það form sem var notað, gerði eftirfarandi aðgerðir.
+Til að fá gagnasettið yfir í loka formið, þá var framkvæmt eftirfarandi aðgerðir.
 
 Fyrsta skrefið var að tengja saman öll gagnasettin. Byrjandi með því að tengja svörinn og spurningarnar, svo hægt væri að tengja við réttu og röngu svörinn seinna. Eftir það var tengt við fyrirlestra stillingar nemenda til að finna *gpow* þeirra. Svo var tengt við röngu svörinn og reiknað var *hluta*, en þar var tapað u.þ.b. `r 108017-101994` línum. Svo í lokinn var tengt réttu svörinn og reiknað hvort nemandinn hafi séð svarið áður eða ekki fyrir hverja spurningu.
 
-Ákveðið var að taka minna en allt gagnasafnið, með því að skoða ekki spurningar sem koma eftir að nemandinn hefur svarað 100 sinnum. Þetta kemur frá þeirri hugsun að eftir að hafa svarað svona margar spurningar, þá er nemandinn ekki að sjá mikið nýtt, svo ekki er hægt að sjá framfarir við sambærilegar spurningar þar.
+Ákveðið var að taka minna en allt gagnasafnið, með því að skoða ekki spurningar sem koma eftir að nemandinn hefur svarað 100 sinnum. Þetta kemur frá þeirri hugsun að eftir að hafa svarað svona margar spurningar, þá er nemandinn ekki að sjá mikið nýtt, svo ekki er hægt að sjá framfarir við sambærilegar spurningar þar. (DJÚPARI RÖK FYRIR ÞETTA KEMUR SEINNA, SPURNING HVORT ÞAÐ ER EINHVER ÞÖRF FYRIR ÞETTA ÞÁ?)
 
 
 
 ### Breytur
 Það voru nokkrar breytur sem var þurft að búa til, þær voru *fsfat*, *hsta*, *hluta* og *hluta2*. 
 
-Fyrir fsfat, semsagt "Fjöldi spurninga fram að þessu", telur spurningarnar sem hafa verið svarað hingað til. Aðferðin til að búa til fsfat fór svona:
+Fyrir fsfat, semsagt "Fjöldi spurninga fram að þessu", sem telur spurningarnar sem hafa verið svarað hingað til. Aðferðin til að búa til *fsfat* fór svona:
 
   1. Raða safninu eftir tíma sem spurninginn byrjaði
   2. fyrir hvern nemenda í hverjum fyrirlestri, telja upp frá 0 eftir röðinni.
 
+Þar sem einhverjar detta út þegar set er hluta2 og það eru 3 línur sem koma þegar AOTA+ spurningu er að ræða, þá er búið til fsfat áður sameinað við .txt skránnar með réttu og röngu svörinn.
 
-Að næstu fyrir hsta, semsagt "hef séð þetta rétta svar áður". Fyrir hvern nemenda, þá var fundið fyrsta skiptið sem nemandinn sá svarið, svo var sett að ef nemandinn sá það í fyrsta skiptið, þá hafði hann ekki séð svarið áður, annars hefur nemandinn séð svarið áður. Nema í tilvikum þar sem NOTA+ spurning er að ræða, semsagt "None of the above" er rétta svarið. Þá var sett að ef hlutfall rangra svarmöguleika sem nemandinn hafi séð áður væri 100%, þá er talið að nemandinn hafi séð rétta svarið áður.
+
+Að næstu fyrir *hsta*, semsagt "hef séð þetta rétta svar áður". Fyrir hvern nemenda, þá var fundið fyrsta skiptið sem nemandinn sá rétta svarmöruleikann, svo var sett að ef nemandinn sá það í fyrsta skiptið, þá hafði hann ekki séð svarmöguleikann áður, annars hefur nemandinn séð svarmöguleikann áður. Nema í tilvikum þar sem NOTA+ spurning er að ræða, semsagt "None of the above" er rétta svarið. Þá var sett að ef hlutfall rangra svarmöguleika sem nemandinn hafi séð áður væri 100%, þá er talið að nemandinn hafi séð rétta svarið áður.
 
 Að lokum var sett upp hluta, semsagt "hlutfall rangra svarmöguleika sem hafa sést áður". Þar var fyrst fundið fyrir hvern nemenda, hvort ranga svarið hafi sést áður og sett upp eins og hsta. Eftir það var tekið meðaltal rangra svara sem hafa sést áður til að fá hlutfallið. Sér hugsun þurfti að koma tengt spurningu með "all of the above" sem rangur möguleiki og "None of the above" sem rangur möguleiki. Fyrir fyrra tilvikið var skoðað hvort eitthvað af hinum röngu valmöguleikunum hafa sést áður, ef svo þá var hugsað eins og "all of the above" ranga svarið hafi sést áður. Fyrir "NOTA-" þá var skoðað hvort rétta svarið hafi sést áður, ef svo þá var hugsað eins og "NOTA-" svarmöguleikinn hafi sést áður.
 
@@ -128,9 +135,9 @@ Að lokum fyrir *hluta2* þá var skipt *hluta* upp í 5 jafn langa parta, semsa
    * Annað líkanið inniheldur *hluta2*, en inniheldur ekki *fsfat*.
    * Þriðja líkanið inniheldur *fsfat* og *hluta2*, en ekki víxláhrif milli *fsfat* og *hsta*.
 
-Með þessum líkönum, væri hægt að skoða hvort það koma framfarir. Þar sem hugsuninn byggist á því að ef *fsfat* er ennþá marktækt, þá eru framfarir að sjást. Því sem fleiri spurningar eru svarað, þá eru líkurnar á að næstu spurningu er svarað rétt að hækka. Hægt er að sjá það sem framfarir. Á móti kemur áhrif utanbókarlærdóms, sem kemur frá réttu og röngu svarmöguleikunum sem hafa komið áður
+Með þessum líkönum, væri hægt að skoða hvort það koma framfarir. Þar sem hugsuninn byggist á því að ef *fsfat* er ennþá marktækt, þá eru framfarir að sjást. Því sem fleiri spurningar eru svarað, þá eru líkurnar á að næstu spurningu er svarað rétt að hækka. Hægt er að sjá það sem framfarir. Á móti kemur áhrif utanbókarlærdóms, sem kemur frá réttu og röngu svarmöguleikunum sem hafa komið áður, semsagt *hsta* og *hluta*. Svo hægt er að sjá hvort *fsfat* er ennþá marktækt ef tekið er með áhrif utanbókarlærdóms.
 
-Líkönin þrjú að heild eru hér að neðan, þar sem $y$ stendur fyrir líkurnar á því að fá rétt svar og $\text{studentId}_n$ er "mixed logistic effect" í þessu tilviki.
+Líkönin þrjú eru hér að neðan, þar sem $y$ stendur fyrir líkurnar á því að fá rétt svar og $\text{studentId}_n$ er "mixed logistic effect" í þessu tilviki.
 
    * Fyrsta líkanið: $\text{logit}(y) = \beta_0 + \text{fsfat} + \text{hsta}_k + \text{fsfat:hsta} + \text{nicc}_l + \text{gpow} + \text{lectureId}_m + \text{studentId}_n$
    * Annað líkanið: $\text{logit}(y) = \beta_0 + \text{hluta2}_s + \text{hsta}_k + \text{nicc}_l + \text{gpow} + \text{lectureId}_m + \text{studentId}_n$
@@ -144,7 +151,7 @@ Líkönin þrjú að heild eru hér að neðan, þar sem $y$ stendur fyrir líku
 
 ### öll gögn
 
-Fyrir aðal flokkabreyturnar, þá er gott að geta séð hlutföll og fjölda þeirra.
+Tafla \@ref(tab:Table1) inniheldur fjölda og hlutfall hverrar flokkabreytu fyrir öll gögninn.
 ```{r Table1, echo = FALSE}
 createUsable <- function(df){
   t <- table(df$hsta)
@@ -180,9 +187,9 @@ fullthing %>% kable(longtable = T, digits = 5, booktabs = T,
 
 ```
 
-Mikið af gögnunum hér eru spurningar svarað rétt, spurningar með rétta svarmöguleika sem nemendar hafa séð áður og spurningar þar sem nemandurnir hafa séð 80%-100% af röngu svarmöguleikunum áður. Semsagt ef skoðað eru öll gögninn, þá sést að mikið af því er ekkert nýtt.
+Stórt hlutfall gagnanna sýnist vera spurningar sem voru svaraðar rétt, spurningar með rétta svarmöguleika sem nemendar hafa séð áður og spurningar þar sem nemandurnir hafa séð 80%-100% af röngu svarmöguleikunum áður. Semsagt ef skoðað eru öll gögninn, þá sést að nemendur eru ekki að sjá mikið af nýju efni, heldur mikið af endurtekningum.
 
-Vandinn gæti verið frá því að þegar það er búið að svara svo mörgum spurningum, þá er erfitt að sjá beinar framfarir yfir utanbókarlærdóm, þar sem flestir svarmöguleikar hafa sést áður. Skoðum aðeins hvernig hlutfall af svörunum fara yfir einhvern sérstakan punkt
+Þar sem markmiðið er að skoða framfarir, þá er erfitt að sjá beinar framfarir yfir utanbókarlærdóm þegar nemendur hafa svarað mörgum spurningum, þar sem flestir svarmöguleikar hafa sést áður. Tafla \@ref(tab:limit-check) hlutfall gagnanna sem eru eftir að hafa svarað ákveðið mikið af spurningum, til að fá innsæi hve mikið af gögnunum er eftir x spurningar svaraðar.
 
 ```{r limit-check, echo=F}
 a <- hashAnswer %>% summarise("FY50" = sum(fsfat >= 50), "FY100" = sum(fsfat >= 100), 
@@ -202,24 +209,21 @@ FHbylim %>% kable(digits = 4, booktabs = T,
   kable_styling()
 ```
 
-Það sést að 29.4% af gögnunum eru svör eftir 50 spurningar svarað, en bara 9% gagnanna eftir 100 spurningum. Svo til að geta fengið betri skoðun á gögnunum, þá var ákveðið að skipta gögnunum upp í tvö gagnasöfn, í fyrri er ekki leift meiri 100 fsfat og í seinni er ekki leift meira en 50 fsfat. Þau gagnasöfn eru notuð héðan í frá.
+Það sést að `r FHbylim$HY[1]` af gögnunum eru svör eftir 50 spurningar svarað, en bara `r FHbylim$HY[2]` gagnanna eftir 100 spurningum. Svo til að geta fengið betri skoðun á gögnunum, þá var ákveðið að skipta gögnunum upp í tvö gagnasöfn, í fyrri er ekki leift meiri 100 fsfat og í seinni er ekki leift meira en 50 fsfat. Þau gagnasöfn eru notuð héðan í frá.
 
 
 
 ### Stytt gögninn
 
 
-
-Það getur verið sterkur áhugi að stilla upp sömu töflu aftur, nema í tilviki með bara upp að 100 spurningum svarað í einu og svo 50 spurningum svarað í einu. \@ref(tab:shorter-table-100)
-
-
+Tafla \@ref(tab:shorter-table-100) og \@ref(tab:shorter-table-50) eru alveg eins hlutfallstöflur og \@ref(tab:Table1), nema með styttri gögn. 
 
 
 ```{r shorter-table-100, echo=F}
 fullt100 <- createUsable(hashLim100)
 
 fullt100 %>% kable(longtable = T, digits = 5, booktabs = T, 
-                   caption = "(\\#tab:shorter-table-100)
+                   caption = "
  Hlutfall flokkabreytana fyrir fyrstu 100 svör") %>%
    kable_styling() %>%
   pack_rows("correct", 1, 2) %>%
@@ -244,9 +248,11 @@ fullt50 %>% kable(longtable = T, digits = 5, booktabs = T,
   column_spec(1, width = "4cm")
 ```
 
-Hér er hlutfall rangra svarmöguleika aftur aðeins stærra, svo er hvort rétta svarið hafi sést áður eða ekki er miklu nær helmingi en áður. Nemendur eru enn að sjá mikið af eindurtekningum, en það er orðið jafnara.
+Frá töflu \@ref(tab:shorter-table-100) þá séstað hlutfall rangra svarmöguleika hækkar aðeins, sömuleiðis með rétt svör sem sést í fyrsta skiptið. En ekki endilega það mikið.
 
-Til að geta séð hvernig árangur kemur með tíma, þá var skoðað meðaltal réttra svara fyrir hvert *fsfat* upp að 50 og svo upp að 100. Semsagt hvað er prósenta spurninga sem var svarað rétt hjá spurningu nr. x, þetta er svo skipt fyrir bæði réttu svör sem eru að sjást í fyrsta sinn og þau sem hafa sést áður. Skoðað fyrst fyrir fyrstu 50:
+Fyrir töflu \@ref(tab:shorter-table-50) þá er hlutfall rangra svarmöguleika aftur aðeins stærra, svo er hvort rétta svarið hafi sést áður eða ekki er miklu nær helmingi en áður. Nemendur eru enn að sjá mikið af eindurtekningum, en það er orðið jafnara.
+
+Til að geta séð hvernig árangur kemur með tíma, þá var skoðað meðaltal réttra svara fyrir hvert *fsfat* upp að 50 og svo upp að 100. Semsagt hvað er prósenta spurninga sem var svarað rétt hjá spurningu nr. x, þetta er svo skipt fyrir bæði réttu svör sem eru að sjást í fyrsta sinn og þau sem hafa sést áður. Mynd \@ref(fig:pltbymean50) sýnir tilvikið þegar skoðað er bara upp að 50 spurningum svarað, á meðan \@ref(fig:pltbymean100) skoðar tilvikið þegar upp að 100 spurningum er svarað.
 
 
 ```{r pltbymean50, echo=FALSE, fig.align='center', fig.cap="Upp að 50 meðaltal", fig.pos='H', out.width='100%'}
@@ -255,21 +261,20 @@ include_graphics('Imgsimplify/plotbymean50.png')
 ```
 
 
-Það lítur út fyrir að einhverjar framfarir gætu verið að gerast hér, þar sem nýju svörinn eru að vaxa með tíma, sem bendir sterklega til þess að það eru framfarir í gangi hjá nemendum, hvað með þegar skoðað er upp að hundrað:
-
 ```{r pltbymean100, echo=FALSE, fig.align='center', fig.cap="Upp að 100 meðaltal", fig.pos='H', out.width='100%'}
 include_graphics('Imgsimplify/plotbymean100.png')
 ```
 
-Það sést að þegar það er farið lengra, þá fer tilvikin þar sem rétta svarið sést í fyrsta skiptið fer að jafnast út og fer svo aðeins niður. Afhverju þetta jafnast svona út þegar lengra er farið gæti verið útaf því að dreifingin er óstöðugri þar sem lengra er farið, þar sem minni spurninga þar sem réttu svörinn hafa ekki sést áður koma upp. Annað sem gæti verið hér að baki er að það sem sást í fyrri myndinni var ekki endilega beinar framfarir, en frekar það að nemandirnir eru að setja röngu svarmöguleikana á minnið. Þá er línan í myndinni að jafnast því að nemandirnir eru ekki að sjá mikið af nýjum mögulegum röngum svarmöguleikum lengur, svo línan jafnast.
+Frá mynd \@ref(fig:pltbymean50) þá sést greinilega að einhverjar framfarir eru að koma fram þegar rétti svarmöguleikinn er að koma í fyrsta skiptið, þar sem meðaltölinn eru að hækka því lengra sem er farið.
+Fyrir mynd \@ref(fig:pltbymean100) þá sést að þegar það er farið lengra, þá fara tilvikin þar sem rétta svarið sést í fyrsta skiptið að jafnast út og byrjar að falla aðeins niður. Afhverju þetta jafnast svona út þegar lengra er farið gæti verið útaf því að dreifingin er óstöðugri þar sem lengra er farið, þar sem færri spurningar með réttu svörmöguleikana sem ekki hafa sést áður koma upp. Annað sem gæti verið hér að baki er að það sem sást á mynd \@ref(fig:pltbymean50) var ekki endilega beinar framfarir, en frekar það að nemandurnir eru að setja röngu svarmöguleikana á minnið. Þá er línan í myndinni að jafnast því að nemandirnir eru ekki að sjá mikið af nýjum mögulegum röngum svarmöguleikum lengur, svo línan jafnast út.
 
-Hugmynd er að skoða líka sambærilega mynd, nema bara fyrir tilvikið þegar þetta eru ný svör og skipt upp eftir hlutfall rangra svarmöguleika sem hafa sést áður, þetta er gert til að sjá hvort innan við hvers hlutfallshóp það eru framfarir eða eru aðall framfarirnar stökkin frá einum hlutfallshópi yfir á næsta. Skoðum fyrst fyrir fyrstu 50 tilvikinn
+Hugmynd er að skoða líka sambærilega mynd, nema bara fyrir tilvikið þegar þetta eru ný svör og skipt upp eftir hlutfall rangra svarmöguleika sem hafa sést áður, þetta er gert til að sjá hvort innan við hvers hlutfallshóp það eru framfarir eða eru aðall framfarirnar stökkin frá einum hlutfallshópi yfir á næsta. Mynd \@ref(fig:meanbyhlutfall50) sýnir tilvikið þegar skoðað er upp að 50 spurningum svarað.
 
 ```{r meanbyhlutfall50, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50", fig.pos='H', out.width='100%'}
 include_graphics('Img/meanbyhlutfall.png')
 ```
 
-Hér sést að þegar við skoðum eftir hlutföllum rangra svara, þá eru línunar orðnar jafnari en vöxturinn sem sást fyrst, það er smá vöxtur hjá 60%-80% og 80%-100%, eitthvað fall hjá 20%-40% og 40%-60% go svo rosalegt stökk hjá 0%-20%. óstöðugleikinn gæti verið að koma frá því að það eru mjög fáar breytur fyrir aftan sumt af punktunum, til að jafna það út þá endurgerði ég myndina með þeim mun að fjarlægja punkta sem eru bara með 1 "observation" fyrir aftan það.
+Hér sést að þegar við skoðum eftir hlutföllum rangra svara, þá eru línunar orðnar jafnari en vöxturinn sem sást fyrst, það er smá vöxtur hjá 60%-80% og 80%-100%, eitthvað fall hjá 20%-40% og 40%-60% og svo rosalegt stökk hjá 0%-20%. óstöðugleikinn gæti verið að koma frá því að það eru mjög fáar breytur fyrir aftan sumt af punktunum, til að jafna það út þá endurgerði ég myndina með þeim mun að fjarlægja punkta sem eru bara með 1 "observation" fyrir aftan þá. Mynd \@ref(fig:meanbyhlutfall50Lim) er því sama og mynd \@ref(fig:meanbyhlutfall50) nema með fjarlægða punkta með ekki meira en 1 "observation" fyrir aftan það.
 
 ```{r meanbyhlutfall50Lim, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50. Með minnsta kosti 2 svör á hverjum punkti", fig.pos='H', out.width='100%'}
 include_graphics('Img/meanbyhlutfallLim.png')
@@ -277,13 +282,13 @@ include_graphics('Img/meanbyhlutfallLim.png')
 
 Stóra stökkið hjá 0%-20% tilvikinu er aðeins stöðugra, en fyrir utan það, þá er ekki nein breyting hér.
 
-Til að fá betri sjónarhorn á hlutföllin, þá gæti verið gott að bæta við línurnar hjá hlutföllunum við mynd \@ref(fig:meanbyhlutfall50), semsagt hafa línuna fyrir tilvikið þegar nemandinn hefur ekki séð rétta svarið áður með línurnar hjá hlutfall röngu svarmöguleikana fram að þessu hliðiná. Dökkbláa línan er upprunalega línan frá mynd \@ref(fig:meanbyhlutfall50), á meðan hinar línurnar eru fyrir sitthvora hlutfalls hópana.
+Til að fá betri sjónarhorn á hlutföllin, þá gæti verið gott að bæta við línurnar hjá hlutföllunum við mynd \@ref(fig:pltbymean50), semsagt hafa línuna fyrir tilvikið þegar nemandinn hefur ekki séð rétta svarið áður úr mynd \@ref(fig:pltbymean50) með línurnar hjá hlutfall röngu svarmöguleikana fram að þessu úr mynd \@ref(fig:meanbyhlutfall50Lim) hliðiná. Dökkbláa línan er upprunalega línan frá mynd \@ref(fig:pltbymean50), á meðan hinar línurnar eru fyrir sitthvora hlutfalls hópana.
 
 ```{r meanbyhlutfallandhsta, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50. Með meðaltal hjá fyrsta skiptið séð rétta svarið", fig.pos='H', out.width='100%'}
 include_graphics('Img/meabwhsbyhlutfall.png')
 ```
 
-Hér sést að á meðan upprunalega línan er vaxandi, þá eru hin ekki að vaxa jafn mikið. Miklar sveiflur sjást hjá minni hlutföllunum, sem eru líklegast að koma frá því að ekki eru mikið af spurningum sem eru að koma upp með svona fáa ranga svarmöguleika. Það sést samt hjá 60%-80% að það er smá fall en svo byrja að koma framfarir í gang og hjá 80%-100% þá eru einhverjar framfarir í gangi en það jafnar sig svo aðeins út í lokinn.
+Hér sést að á meðan upprunalega línan úr mynd \@ref(fig:pltbymean50) er vaxandi, þá eru hinar línurnar ekki að vaxa jafn mikið. Miklar sveiflur sjást hjá minni hlutföllunum, sem eru líklegast að koma frá því að ekki eru mikið af spurningum sem eru að koma upp með svona fáa ranga svarmöguleika. Það sést samt hjá 60%-80% að það er smá fall en svo byrja að koma framfarir í gang og hjá 80%-100% þá eru einhverjar framfarir í gangi en það jafnar sig svo aðeins út í lokinn.
 
 Að sömu leiti getum við skoðað sömu mynd fyrir tilvikið þegar farið er upp að 100 spurningum svarað
 
@@ -291,10 +296,12 @@ Að sömu leiti getum við skoðað sömu mynd fyrir tilvikið þegar farið er 
 include_graphics('Img/meabwhsbyhlutfall100.png')
 ```
 
-Það lítur út fyrir að vera einhverjar framfarir í gangi þar, hjá tilvikunum með 20%-60% þá er eitthvað að vaxa, spurning hvort þetta er að vaxa almennilega eða hvort þetta er að koma frá því tilviki að mjög fáar breytur eru að toga þeim upp. Fyrir tilvikin þegar 60%-80% af röngu svarmöguleikunum hafi sést áður
+Það lítur út fyrir að vera einhverjar framfarir í gangi þar, hjá tilvikunum með 20%-60% þá er eitthvað að vaxa, spurning hvort þetta er að vaxa almennilega eða hvort þetta er að koma frá því tilviki að mjög fáar breytur eru að toga þeim upp. Fyrir tilvikin þegar 60%-80% af röngu svarmöguleikunum hafi sést áður þá er það að mesta lagi stöðugt með hægt fall niður og 80%-100% er mjög jafnt yfir allar línurnar.
 
 ### Smá samantekt fyrir myndirnar
-Þegar við skoðuðum fyrstu myndina, þá leit út fyrir að það var einhver jákvæður vöxtur voru að koma með fjölda spurninga svarað, þá kom spurningin hvort þessi vöxtur eru framfarir eða utanbókarlærdómur röngu svarana og að þar sem nemandarnir hafa séð fleiri ranga svarmöguleika því fleiri spurninga sem er svarað, þá er vöxturinn aðallega bara tengdur utanbókarlærdómi. Þar sást að línurnar voru jafnari en upprunalega línan, en með einhverjar framfarir þar ennþá, Til að sjá hvort framfarirnar eru ennþá marktækar þá eru skoðuð þrjú "logistic mixed effect" líkönn, þar sem nokkrar breytur eru alltaf til staðar hjá þeim öllum, en það er skipt upp þannig að fyrsta líkanið inniheldur fjölda spurninga svarað fram að þessu, næsta líkanið inniheldur hlutfall rangra svara fram að þessu flokkana og í lokinn er þriðja líkanið sem skoðar með bæði fjölda spurninga fram að þessu og hlutfall rangra svara fram að þessu. Hugmyndinn er að ef fjöldi spurninga fram að þessu er enn marktæk eftir að bæta við hlutfall rangra svarmöguleika, þá gæti það verið að benda til þess að hægt sé að sjá framfarir nemenda.
+Þegar við skoðuðum fyrstu myndina, þá leit út fyrir að einhverjir jákvæðir vextir voru að koma með fjölda spurninga svarað, þá kom spurningin hvort þessi vöxtur eru framfarir eða utanbókarlærdómur röngu svarana, þar sem fyrir því fleiri spurningum sem nemendarnir hafa svarað, því fleiri rangra svarmöguleika þeir hafa séð áður, það gæti bent til þess að vöxturinn er aðallega tengur utanbókdarlærdómi. Farið var því að skoða sambærilegt fyrir hlutföllin og þar sást að línurnar voru jafnari en upprunalega línan, en með einhverjum litlum framförum þar ennþá til staðar. 
+
+Til að sjá hvort framfarirnar eru ennþá marktækar þá eru skoðuð þrjú "logistic mixed effect" líkönn, þar sem nokkrar breytur eru alltaf til staðar hjá þeim öllum, en það er skipt upp þannig að fyrsta líkanið inniheldur fjölda spurninga svarað fram að þessu, næsta líkanið inniheldur hlutfall rangra svara fram að þessu flokkana og í lokinn er þriðja líkanið sem skoðar bæði fjölda spurninga fram að þessu og hlutfall rangra svara fram að þessu. Hugmyndinn er að ef fjöldi spurninga fram að þessu er enn marktæk eftir að bæta við hlutfall rangra svarmöguleika, þá gæti það verið að benda til þess að hægt sé að sjá framfarir nemenda.
 
 ## líkanasmið
 
@@ -329,19 +336,36 @@ data.frame(Breyta = c("lectureId", "hsta", "nicc", "gpow",  "studentId", "fsfat"
 
 ### val á líkani
 
-Líkanið var byggt ofaná líkani hans Þórarinns Jómundsson (SPURNING HVERNIG HÆGT SÉ AÐ BENDA TIL ÞESS), með bættari breytu með röngu svarmöguleikanna og tímaröðina fyrir aftan *fsfat*
+Líkanið var byggt ofaná líkani hans Þórarinns Jómundsson (SPURNING HVERNIG HÆGT SÉ AÐ BENDA TIL ÞESS), með auka breyturnar *hluta2* og tímaröðina *fsfat*
 
 \textbf{Fyrsta líkanið}: Til að byrja með var skoðað hvernig væri að bæta við *fsfat* og víxláhrif á milli *fsfat* og *hsta*. Til að sjá hvernig framfarir eru í gangi. Þar sem hugsað er að jákvæð áhrif hjá *fsfat* gæti verið séð sem framfarir nemenda. 
 
 Vandi kom upp frá hugsuninni hvort þetta voru framfarir, eða bara utanbókarlærdómur sem var fyrir aftan *fsfat* svo því var prufað að skipta út *hluta2* og *fsfat* til að sjá hvor hefur meiri áhrif.
 
 
-\textbf{Annað líkanið:} Hér var notað *hluta2* í stað *fsfat* og víxláhrif *hsta* og *fsfat*. Það var svo skoðað muninn á milli þeirra í gegnum anova til að sjá hvort væri sterkari áhrifinn, frekar hvort að framfarir sem sást í *fsfat* voru nokkuð bara áhrif *hluta2*. 
+\textbf{Annað líkanið:} Hér var notað *hluta2* í stað *fsfat* og víxláhrif *hsta* og *fsfat*. Það var svo skoðað muninn á milli þeirra í gegnum anova til að sjá hvort væri sterkari, þar sést í töflu \@ref(tab:anova13) að samkvæmt anova þá er annað líkanið sterkari en fyrri líkanið.
 
-Að lokum til að skoða saman, var sameinað og sett upp líkann sem innihélt báðar breyturnar
+```{r anova13, echo=F, warning=F}
+an13 <- anova(fit1, fit3) %>% broom::tidy()
+an13$term <- c("Fyrsta", "Annað")
 
+an13 %>% kable(digits = 4, booktab = T, 
+               caption = "anova milli fyrsta og annað líkanið") %>%
+  kable_styling()
 
-\textbf{Þriðja líkanið:} Hér var notað *hluta2* og *fsfat* saman, til að sjá hvort enn er hægt að sjá framfarir með *fsfat* þegar *hluta2* er innifallið enn í líkaninu. 
+```
+
+\textbf{Þriðja líkanið:} Hér var notað *hluta2* og *fsfat* saman, til að sjá hvort enn er hægt að sjá framfarir með *fsfat* þegar *hluta2* er innifallið enn í líkaninu. Að sömu leiti var gert anova milli þriðja og annars líkansins. Þá sést skv. töflu \@ref(tab:anova37) að þriðja líkanið er sterkari en annað líkanið.
+
+```{r anova37, echo=F, warning=F}
+an37 <- anova(fit3, fit7) %>% broom::tidy()
+an37$term <- c("Annað", "Þriðja")
+
+an37 %>% kable(digits = 4, booktab = T, 
+               caption = "anova milli annað og þriðja líkanið") %>%
+  kable_styling()
+
+```
 
 ### Matsgæði líkana
 
@@ -386,7 +410,7 @@ fit7.opt.op <- fit7.cal[[1]]
 
 ```
 
-Tafla \@ref(tab:optimism-table-2) sýnir hér frammistöðu líkannana þriggja eftir AUC og standardized brier skorinu, eftir "optimism correction" eftir 2500 bootstrap ítranir. Það sést hér að munurinn á milli líkannana er ekki það mikill, þar sem stærsti munurinn er hjá fyrsta og þriðja líkaninu og það er ekki meira en `r round(fit7.opt.cor$AUC - fit1.opt.cor$AUC, digits = 4)` hjá AUC og `r round(fit7.opt.cor$stBrier - fit1.opt.cor$stBrier, digits = 4)` hjá standardized brier skorinu. Þá lítur út fyrir að það er ekki mikill munur þar með tilliti til AUC og standardized Brier. Til að bæta þá inniheldur tafla \@ref(tab:optimism-table) "optimism" fyrir líkönin 3, þar sést að "optimism" er rosalega líkt hjá þeim öllum þremur. 
+Tafla \@ref(tab:optimism-table-2) sýnir hér frammistöðu líkannana þriggja eftir AUC og standardized brier skorinu, eftir að hafa gert "optimism correction" með bootstrappi um 2500 bootstrap ítranir. Það sést hér að munurinn á milli líkannana er ekki það mikill, þar sem stærsti munurinn er hjá fyrsta og þriðja líkaninu og það er ekki meira en `r round(fit7.opt.cor$AUC - fit1.opt.cor$AUC, digits = 4)` hjá AUC og `r round(fit7.opt.cor$stBrier - fit1.opt.cor$stBrier, digits = 4)` hjá standardized brier skorinu. Þá lítur út fyrir að það er ekki mikill munur þar með tilliti til AUC og standardized Brier. Til að bæta þá inniheldur tafla \@ref(tab:optimism-table) "optimism" fyrir líkönin 3, þar sést að "optimism" er rosalega líkt hjá þeim öllum þremur. 
 
 Á mynd \@ref(fig:optimismpicture) sést svo hvernig AUC og standardized brier skorið dreifðist fyrir hverja ítrun. Þar sést að hvert líkann er aðeins hærra en það fyrra og að fyrir AUC þá er dreifingin á "Train" gildunum miklu meiri en hjá "Test" gildunum, en það er svo öfugt fyrir standardized brier, því þar er dreifingin hjá "Test" meiri en hjá "Train" gildunum.
 
@@ -413,17 +437,15 @@ rbind(fit1 = fit1.opt.op, fit3 = fit3.opt.op, fit7 = fit7.opt.op) %>% dplyr::sel
 include_graphics('Img/optimism.png')
 ```
 
-#### hér er nokkuð sem þarf að fínpússa
-
-Gott er að skoða calibration plot fyrir gögninn með:
+Mynd \@ref(fig:calibration) er "calibration" mynd fyrir líköninn þrjú, þar sem sést að líkönin þrjú eru öll ágætlega bein þar og mjög lík.
 
 ```{r calibration, echo=FALSE, fig.align='center', fig.cap="Calibration plot fyrir líköninn þrjú", fig.pos='H', out.width='100%'}
 include_graphics('Img/calibration.png')
 ```
 
-Svo er líka gott að skoða dreifingu hjá "prediction" líkananna með histogrammi:
+Mynd \@ref(fig:histogrammulti) sýnir svo hvernig "prediction" lítur út fyrir líkönin þrjú.
 
-```{r optimismpicture, echo=FALSE, fig.align='center', fig.cap="Histogram fyrir predictionin fyrir líköninn þrjú", fig.pos='H', out.width='100%'}
+```{r histogrammulti, echo=FALSE, fig.align='center', fig.cap="Histogram fyrir predictionin fyrir líköninn þrjú", fig.pos='H', out.width='100%'}
 include_graphics('Img/histogrammulti.png')
 ```
 
@@ -530,13 +552,13 @@ fit7.coef %>% kable(digits = 4, booktabs = T,
 
 
 # Umræða
-Markmið verkefnisins er að sjá hvort hægt sé að mæla framfarir, en ekki bara utanbókarlærdóm. Til að gera það var byrjað að sjá hvort hægt væri að finna jákvæðar breytingar þegar svarað eru fleiri og fleiri spurningar með því að skoða myndir með meðaltali spurninga sem var svarað rétt eftir því hve margar spurningar nemandinn hafði svarað hingað til og skipt upp eftir því hvort nemandinn hafði séð rétta svarmöguleikann áður eða ekki. Þar sást einhverjar framfarir í gangi, en óvissa var hvort þetta voru beinar framfarir eða utanbókarlærdómur á röngu svarmöguleikunum. Þá var skoðað líka mynd með tilliti til hlutfall rangra svarmöguleika sem hafa sést áður. Þar leit úr fyrir að vera eitthverja framfarir, sumar jákvæðar og sumar neikvæðar. En annars miklu beinari línur en fyrri. Til að gá hvort þetta eru framfarir í gangi þar, þá voru skoðuð nokkur líkunn, með þá hugmynd að baki að ef fjöldi spurninga fram að þessu er enn marktæk með öllum utanbókarlærdómi með í líkaninu, þá gæti það verið að benda til þess að hægt er að mæla framfarir nemendans. Þessi þrjú líkönn voru lík að mörgu leiti nema það var smá breyting milli tveggja breyta. Fyrsta líkanið innhélt fjöldi spurninga fram að þessu, til að sjá framfarir nemenda, annað líkanið innihélt hlutfall rangra svarmöguleika sem hafa sést áður og að lokum þriðja líkanið sem innihélt bæði fjölda spurninga fram að þessu og hlutfall rangra svarmöguleika sem hafa sést áður. 
+Markmið verkefnisins er að sjá hvort hægt sé að mæla framfarir, en ekki bara utanbókarlærdóm. Til að gera það var byrjað að sjá hvort hægt væri að finna jákvæðar breytingar þegar svarað eru fleiri og fleiri spurningar með því að skoða myndir með meðaltali spurninga sem var svarað rétt eftir því hve margar spurningar nemandarnir hafði svarað hingað til og skipt upp eftir því hvort nemandarnir höfðu séð rétta svarmöguleikann áður eða ekki. Þar sást einhverjar framfarir í gangi, en óvissa var hvort þetta voru beinar framfarir eða utanbókarlærdómur á röngu svarmöguleikunum. Þá var skoðað líka mynd með tilliti til hlutfall rangra svarmöguleika sem hafa sést áður. Þar leit út fyrir að vera eitthverjar framfarir, sumar jákvæðar og sumar neikvæðar. En annars miklu beinari línur en fyrri. Til að gá hvort þetta voru framfarir í gangi þar, þá voru skoðuð nokkur líkunn, með þá hugmynd að baki að ef fjöldi spurninga fram að þessu er enn marktæk með öllum utanbókarlærdómi með í líkaninu, þá gæti það verið að benda til þess að hægt er að mæla framfarir nemendans. Þessi þrjú líkönn voru lík að mörgu leiti nema það var smá breyting milli tveggja breyta. Fyrsta líkanið innhélt fjöldi spurninga fram að þessu, til að sjá framfarir nemenda, annað líkanið innihélt hlutfall rangra svarmöguleika sem hafa sést áður og að lokum þriðja líkanið sem innihélt bæði fjölda spurninga fram að þessu og hlutfall rangra svarmöguleika sem hafa sést áður. 
 
 
 ## fyrsta líkanið
-Til að byrja með, þá var gert fyrsta líkanið til að sjá hvort það var hægt að sjá framfarir eftir því hve margar spurningar nemandinn hafði svarað hingað til innan í fyrirlestrinum. Þar var breyta yfir því hvort rétta svarið hafi sést áður og víxláhrif á milli þess og fjölda spurninga svarað. Þar sást að fjöldi spurninga svarað var marktæk og framfarir sást þar. 
+Til að byrja með, þá var gert fyrsta líkanið til að sjá hvort það væri hægt að sjá framfarir eftir því hve margar spurningar nemandinn hafði svarað hingað til innan í fyrirlestrinum. Þar var breyta yfir því hvort rétta svarið hafi sést áður og víxláhrif á milli þess og fjölda spurninga svarað. Þar sást að fjöldi spurninga svarað var marktæk og framfarir sást þar. 
 
-Vandi kemur upp að þegar svarað hefur mikið, þá er stærri og stærri hlutfall af röngu svörunum sem hafa sést áður, því getur vel verið að framfarirnar sem eru að sjást hér, eru í raun bara utanbókarlærdómur rangra svara sem er að toga líkur á að svara rétt upp. Því var skoðað hlutfall rangra svarmöguleika án fjölda spurninga fram að þessu.
+Vandi kemur upp að þegar svarað hefur mikið, þá er stærri og stærri hlutfall af röngu svarmöguleikunum sem hafa sést áður, því getur vel verið að framfarirnar sem eru að sjást hér, eru í raun bara utanbókarlærdómur rangra svara sem er að toga upp líkurnar á því að svara rétt. Því var skoðað hlutfall rangra svarmöguleika án fjölda spurninga fram að þessu.
 
 ## Annað líkanið
 Þegar skoðað var annað líkanið, þá var séð að hluta2 er marktæk breyta miðað við Anova III. Til að sjá muninn milli fyrra líkansins og þessara þá var gert anova á milli þeim til að sjá hvort af líkönunum voru marktækari, skv. anova þá er annað líkanið sterkara en fyrra líkanið. Svo var skoðað aðeins standardized brier score og AUC þeirra tveggja, þar leit út fyrir að annað líkanið er aðeins sterkara en það fyrra, með muninn milli þeirra sem `r round(fit3.opt.cor$AUC - fit1.opt.cor$AUC, digits = 4)` hjá AUC og `r round(fit3.opt.cor$stBrier - fit1.opt.cor$stBrier, digits = 4)` hjá standardized brier skorinu. Svo á meðan annað líkara er sterkara miðað við anova, þá er munurinn ekki endilega það mikill. (ÓVISS UM EFTIRFARANDI:) Þetta bendir til þess að fjöldi spurninga svarað fram að þessu er jafn sterkt og að skoða hlutföllin þeirra, eru þá framfarirnar sem sáust áður bara útaf hlutfall röngru svara, eða voru framfarir þar?
@@ -544,7 +566,7 @@ Vandi kemur upp að þegar svarað hefur mikið, þá er stærri og stærri hlut
 Til að skoða það, þá er skoðað þriðja líkanið, þá er innihaldið bæði fjöldi spurninga fram að þessu og hlutfall rangra svarmöguleika fram að þessu, en víxláhrifin á milli fjölda spurninga fram að þessu og hvort rétta svarið hafi sést áður er horfið.
 
 ## Þriðja líkanið
-Að lokum var sett saman þriðja líkanið, í líkaninu er bæði fjöldi spurninga fram að þessu og hlutfall rangra svarmöguleika sem hafa sést áður. Þar var bæði fjöldi spurninga og hlutfall rangra svarmöguleika bæði marktækt, svo var þriðja líkanið sterkara en annað og fyrsta líkönin, ef skoðað er til "optimism correct" standardized brier og AUC þá lítur út fyrir að munurinn milli þriðja og annars er líka mjög lítill, þar sem munurinn milli þriðja og Annars líkansins er `r round(fit7.opt.cor$AUC - fit3.opt.cor$AUC, digits = 4)` hjá AUC og `r round(fit7.opt.cor$stBrier - fit3.opt.cor$stBrier, digits = 4)` hjá standardized brier skorinu. Þetta bendir til að öll þrjú líköninn eru lík í styrkleika miðað við standardized brier og AUC á meðan þriðja líkanið er sterkast af þeim miðað við anova.
+Að lokum var sett saman þriðja líkanið, í líkaninu er bæði fjöldi spurninga fram að þessu og hlutfall rangra svarmöguleika sem hafa sést áður. Þar var bæði fjöldi spurninga og hlutfall rangra svarmöguleika marktækt, svo var þriðja líkanið sterkara en annað og fyrsta líkönin, ef skoðað er til "optimism correct" standardized brier og AUC þá lítur út fyrir að munurinn milli þriðja og annars er líka mjög lítill, þar sem munurinn milli þriðja og Annars líkansins er `r round(fit7.opt.cor$AUC - fit3.opt.cor$AUC, digits = 4)` hjá AUC og `r round(fit7.opt.cor$stBrier - fit3.opt.cor$stBrier, digits = 4)` hjá standardized brier skorinu. Þetta bendir til að öll þrjú líköninn eru lík í styrkleika miðað við standardized brier og AUC á meðan þriðja líkanið er sterkast af þeim miðað við anova.
 
 Hvað þýðir þetta? Frá þessu sjáum við að fjöldi spurninga fram að þessu er ennþá marktækt, þótt það sé bætt við utanbókaráhrifum hjá því hvort rétti svarmöguleikinn hafi sést áður og hlutfall rangra svarmöguleika sem hafa sést áður, þar bendir til þess að hægt sé að mæla áhrif nemenda. Þar sem stikinn fyrir fsfat er séð sem framfarir. 
 
