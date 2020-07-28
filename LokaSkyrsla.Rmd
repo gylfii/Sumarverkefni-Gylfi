@@ -2,7 +2,7 @@
 output: 
   bookdown::pdf_document2:
     fig_caption: yes
-    toc: true
+    toc: false
     toc_depth: 3
     includes:
       before_body: template/fp.sty # Forsíða
@@ -50,29 +50,138 @@ fit7 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | s
 \newpage
 
 # Útdráttur {-}
-\textbf{Inngangur:} Spurningar í tutor-web eru stundum búnar til þannig að kennari semur fyrst einn haus og svo tvo hauga af fullyrðingum, einn með réttum svörum og einn með röngum svörum. Svo eru spurningarnar búnar til með því að velja slembið rétt svar og slurk af röngum svörum (kannski með allt/ekkert ofangreint er rétt). Ef nemandi lærir ekki bara utanað, heldur er að auka skilning á verkefnið, þá ættu að sjást smátt og smátt framfarir í einkunn líka fyrir nýjar fullyrðingar. Svo í þessari rannsókn er skoðað hvort hægt er að skoða framfarir nemenda en ekki bara utanbókarlærdóm. \textbf{Aðferð:} Í þessari rannsókn var stillt upp meðaltals myndir til að fá sjónarhorn á vöxt nemenda eftir fjölda spurninga svaraða. Eftir það voru stillt upp þrjú logistík líkön til að skoða marktækni fjölda spurninga svaraðra eftir að bæta við áhrif utanbókarlærdóms innan við líkönin. Það var gert með því að hafa eitt líkann byggt í kringum fjölda spurninga svarað, annað byggt í kringum hlutfall rangra svarmöguleika sem hafa sést áður og í lokinn líkann sem er byggt á þeim báðum. \textbf{Niðurstöður:} Eftir að skoða meðaltals myndirnar þá var bent til þess að það gæti verið hægt að skoða framfarir eða það gæti verið aðallega utanbókarlærdómur þar að aftan. Þá sýndu líköninn að fjöldi spurninga svarað fram að þessu verður ennþá marktækt eftir því hvort allur utanbókarlærdóms áhrif eru innihaldinn, sem gæti bent til þess að hægt sé að skoða þá framfarir í gegnum breytu tengt fjölda spurninga svarað. \textbf{Umræða:} Það var set up bootstrap fyrir gögninn til að fá gott áhorf á AUC og standardized brier skorin fyrir líkönin þrjú, þar var ekki mikill munur milli þeirra. Sem gæti bent á það að skoða bara utanbókarlærdóms áhrifin gæti verið jafn sterkt og að skoða með fjölda spurninga svarað, sem bentir til stóru áhrif utanbókarlærdóms á líkur nemandans.
-
-MUNA AÐ STILLA UPP ÞANNIG AÐ ÚTDRÁTTURINN KEMUR FYRIR KAFLANNA!
+\textbf{Inngangur:} Spurningar í tutor-web eru stundum búnar til þannig að kennari semur fyrst einn haus og svo tvo hauga af fullyrðingum, einn með réttum svörum og einn með röngum svörum. Svo eru spurningarnar búnar til með því að velja slembið rétt svar og slurk af röngum svörum (kannski með allt/ekkert ofangreint er rétt). Ef nemandi lærir ekki bara utanað, heldur er að auka skilning á verkefnið, þá ættu að sjást smátt og smátt framfarir í einkunn líka fyrir nýjar fullyrðingar. Svo markmið rannsóknarinnar er að sjá hvort hægt er að skoða framfarir nemenda, en ekki bara utanbókarlærdóm. \textbf{Aðferð:} Í þessari rannsókn var byrjað á því að setja upp myndir tengt meðaltali réttra svara eftir fjölda spurninga svaraðra, til að sjá hvort það sæist framfarir eftir því sem fleiri spurningum er svarað. Eftir það voru stillt upp þrjú logistík líkön til að skoða hvort marktækni fjölda spurninga svaraðra er enn sterk með áhrif utanbókarlærdóms í sama líkani. Það var gert með því að hafa eitt líkann byggt í kringum fjölda spurninga svarað, annað byggt í kringum hlutfall rangra svarmöguleika sem hafa sést áður og í lokinn líkann sem er byggt á báðum breytunum. \textbf{Niðurstöður:} Frá meðaltals myndunum þá sást að það gæti verið hægt að skoða framfarir, en óvissa hvort framfarirnar sem sást voru aðallega áhrif utanbókarlærdómar. Þegar skoðað var líköninn, þá sást að fjöldi spurninga svarað fram að þessu var ennþá marktækt, með áhrifum utanbókarlærdóms innihaldinn í líkönunum, sem gæti verið að benda til þess að hægt sé að skoða þá framfarir í gegnum breytu tengt fjölda spurninga svarað.
+\textbf{Umræða:} Það var set up bootstrap fyrir gögninn til að fá gott áhorf á AUC og standardized brier skorinu fyrir líkönin þrjú, þar sást ekki mikill munur milli líkananna. Það gæti verið að segja að  utanbókarlærdóms áhrif hlutfall rangra svara sem hafa sést áður er líkt styrkleikanum á að skoða fjölda spurninga svarað, sem sýnir stóru áhrif utanbókarlærdóms á líkur nemanda að svara næstu spurningu.
 
 \newpage
 
-# Inngangur
-Hugsað upp í kringum 2000 af honum Gunnari Stefánssyni, tutor-web er lærdóms umhverfi á netinu með fyrirlestrum, dæmi og krossaspurningar. Með einbeitingu á stærðfræði og tölfræði. Spurningar sem eru svaraðar eru svo geymdar til rannsóknar sem gæti komið fram seinna. (Þetta er góð byrjun, veit ekki hvort þörf er á meira fyrir þennan hóp)
+\tableofcontents
 
+\newpage
+# Inngangur
 Spurningar í tutor-web eru stundum búnar til þannig að kennari semur fyrst einn haus og svo tvo hauga af fullyrðingum, einn með réttum svörum og einn með röngum svörum. Svo eru spurningarnar búnar til með því að velja slembið rétt svar og slurk af röngum svörum (kannski með allt/ekkert ofangreint er rétt). Ef nemandi lærir ekki bara utanað, heldur er að auka skilning á verkefnið, þá ættu að sjást smátt og smátt framfarir í einkunn líka fyrir nýjar fullyrðingar. (Frá Gunnari þegar kynnt var verkefnið. Þarf að endur orða)
 
-Þar eftir kemur hugsunin hvort hægt sé að sjá framfarir nemanda en ekki bara utanbókarlærdóm? Til að fara djúpar í það, þá er skoðað fyrst hvernig gögninn líta út og hvort það sést framfarir eftir því hve margar spurningar nemandinn hefur svarað fram að þessu með tilliti til hvort réttu svarmöguleikarnir hafi sést áður og hlutfall rangra svarmöguleika sem hafa sést áður.
+Markmið rannsóknarinnar fór því yfir hvort hægt væri að sjá framfarir nemenda, en ekki bara utanbókarlærdóm. Með því að skoða hvernig líkurnar á að svara spurningu breytist eftir því sem fleiri spurningum er svarað og skoðað fyrir sitthvor tilvik eftir því hvað af svarmöguleikunum hafa sést áður.
 
 # Aðferð
 
 ## Þáttakendur
 Úrtak rannsóknarinnar voru nemendur í líkindareikningur og tölfræði á vormisserinu 2020. Þar voru `r hashAnswer$studentId %>% unique() %>% length()` nemendur sem svöruðu samtals 108.017 spurningum í heild.
 `r #getur verið að það eru 294 nemendur, hmmm`
+
 ## Tölfræðileg úrvinnsla
 
 ### Hugbúnaður
-Öll tölfræðileg úrvinnsla, meðhöndlun gagna og líkanasmíð fór fram á forritunarmálinu `r #Textabútur sem var copy-paste aður frá hinni greininni. Laga til seinna`
-R v4.0.0 í viðmótinu RStudio v1.3.959
+Öll tölfræðileg úrvinnsla, meðhöndlun gagna og líkanasmíð fór fram á forritunarmálinu R, með R Development Core Team (2009). _R: A Language and Environment for Statistical Computing_. R
+Foundation for Statistical Computing, Vienna, Austria. ISBN 3-900051-07-0, <URL:
+http://www.R-project.org>.
+
+Með eftirfarandi pakka:
+
+Wickham H, Ruiz E (2020). _dbplyr: A 'dplyr' Back End for Databases_. R package version 1.4.3, <URL:
+https://CRAN.R-project.org/package=dbplyr>.
+
+Wickham H, François R, Henry L, Müller K (2020). _dplyr: A Grammar of Data Manipulation_. R package
+version 0.8.5, <URL: https://CRAN.R-project.org/package=dplyr>.
+
+Ooms J, James D, DebRoy S, Wickham H, Horner J (2020). _RMySQL: Database Interface and 'MySQL'
+Driver for R_. R package version 0.10.20, <URL: https://CRAN.R-project.org/package=RMySQL>.
+
+Wickham H, Henry L (2020). _tidyr: Tidy Messy Data_. R package version 1.0.3, <URL:
+https://CRAN.R-project.org/package=tidyr>.
+
+Venables WN, Ripley BD (2002). _Modern Applied Statistics with S_, Fourth edition. Springer, New
+York. ISBN 0-387-95457-0, <URL: http://www.stats.ox.ac.uk/pub/MASS4>.
+
+Wickham H (2016). _ggplot2: Elegant Graphics for Data Analysis_. Springer-Verlag New York. ISBN
+978-3-319-24277-4, <URL: https://ggplot2.tidyverse.org>.
+
+Auguie B (2017). _gridExtra: Miscellaneous Functions for "Grid" Graphics_. R package version 2.3,
+<URL: https://CRAN.R-project.org/package=gridExtra>.
+
+Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Hayes A, Henry L,
+Hester J, Kuhn M, Pedersen TL, Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V,
+Takahashi K, Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to the tidyverse.” _Journal of
+Open Source Software_, *4*(43), 1686. doi: 10.21105/joss.01686 (URL:
+https://doi.org/10.21105/joss.01686).
+
+Wickham H (2020). _modelr: Modelling Functions that Work with the Pipe_. R package version 0.1.7,
+<URL: https://CRAN.R-project.org/package=modelr>.
+
+Henry L, Wickham H (2020). _rlang: Functions for Base Types and Core R and 'Tidyverse' Features_. R
+package version 0.4.6, <URL: https://CRAN.R-project.org/package=rlang>.
+
+Bergsma T (2018). _latexpdf: Convert Tables to PDF or PNG_. R package version 0.1.6, <URL:
+https://CRAN.R-project.org/package=latexpdf>.
+
+Meschiari S (2015). _latex2exp: Use LaTeX Expressions in Plots_. R package version 0.4.0, <URL:
+https://CRAN.R-project.org/package=latex2exp>.
+
+Xie Y (2020). _knitr: A General-Purpose Package for Dynamic Report Generation in R_. R package
+version 1.28, <URL: https://yihui.org/knitr/>.
+
+Xie Y (2015). _Dynamic Documents with R and knitr_, 2nd edition. Chapman and Hall/CRC, Boca Raton,
+Florida. ISBN 978-1498716963, <URL: https://yihui.org/knitr/>.
+
+Xie Y (2014). “knitr: A Comprehensive Tool for Reproducible Research in R.” In Stodden V, Leisch F,
+Peng RD (eds.), _Implementing Reproducible Computational Research_. Chapman and Hall/CRC. ISBN
+978-1466561595, <URL: http://www.crcpress.com/product/isbn/9781466561595>.
+
+LeDell E, Petersen M, van der Laan M (2014). _cvAUC: Cross-Validated Area Under the ROC Curve
+Confidence Intervals_. R package version 1.1.0, <URL: https://CRAN.R-project.org/package=cvAUC>.
+
+Fox J, Weisberg S (2019). _An R Companion to Applied Regression_, Third edition. Sage, Thousand Oaks
+CA. <URL: https://socialsciences.mcmaster.ca/jfox/Books/Companion/>.
+
+Arnold JB (2019). _ggthemes: Extra Themes, Scales and Geoms for 'ggplot2'_. R package version 4.2.0,
+<URL: https://CRAN.R-project.org/package=ggthemes>.
+
+Kassambara A (2020). _ggpubr: 'ggplot2' Based Publication Ready Plots_. R package version 0.3.0,
+<URL: https://CRAN.R-project.org/package=ggpubr>.
+
+Zhu H (2019). _kableExtra: Construct Complex Table with 'kable' and Pipe Syntax_. R package version
+1.1.0, <URL: https://CRAN.R-project.org/package=kableExtra>.
+
+Xie Y (2020). _bookdown: Authoring Books and Technical Documents with R Markdown_. R package version
+0.19, <URL: https://github.com/rstudio/bookdown>.
+
+Xie Y (2016). _bookdown: Authoring Books and Technical Documents with R Markdown_. Chapman and
+Hall/CRC, Boca Raton, Florida. ISBN 978-1138700109, <URL: https://github.com/rstudio/bookdown>.
+
+Wickham H, Seidel D (2020). _scales: Scale Functions for Visualization_. R package version 1.1.1,
+<URL: https://CRAN.R-project.org/package=scales>.
+
+Xie Y (2020). _tinytex: Helper Functions to Install and Maintain 'TeX Live', and Compile 'LaTeX'
+Documents_. R package version 0.24, <URL: https://github.com/yihui/tinytex>.
+
+Xie Y (2019). “TinyTeX: A lightweight, cross-platform, and easy-to-maintain LaTeX distribution based
+on TeX Live.” _TUGboat_, 30-32. <URL: http://tug.org/TUGboat/Contents/contents40-1.html>.
+
+Bates D, Mächler M, Bolker B, Walker S (2015). “Fitting Linear Mixed-Effects Models Using lme4.”
+_Journal of Statistical Software_, *67*(1), 1-48. doi: 10.18637/jss.v067.i01 (URL:
+https://doi.org/10.18637/jss.v067.i01).
+
+Kuznetsova A, Brockhoff PB, Christensen RHB (2017). “lmerTest Package: Tests in Linear Mixed Effects
+Models.” _Journal of Statistical Software_, *82*(13), 1-26. doi: 10.18637/jss.v082.i13 (URL:
+https://doi.org/10.18637/jss.v082.i13).
+
+Saefken B, Ruegamer D, with contributions from Sonja Greven, Kneib T (2018). _cAIC4: Conditional
+Akaike information criterion for lme4_.
+
+Saefken B, Ruegamer D, Kneib T, Greven S (2018). “Conditional Model Selection in Mixed-Effects
+Models with cAIC4.” _ArXiv e-prints_. 1803.05664.
+
+Borchers HW (2019). _pracma: Practical Numerical Math Functions_. R package version 2.2.9, <URL:
+https://CRAN.R-project.org/package=pracma>.
+
+Casas P (2020). _funModeling: Exploratory Data Analysis and Data Preparation Tool-Box_. R package
+version 1.9.4, <URL: https://CRAN.R-project.org/package=funModeling>.
+
+Francois R (2020). _bibtex: Bibtex Parser_. R package version 0.4.2.2, <URL:
+https://CRAN.R-project.org/package=bibtex>.
+
+### Github Kóði
+Aðgangur að kóðanum færst í gegnum Github á https://github.com/gylfii/Sumarverkefni-Gylfi (EKKI ENN ORÐIÐ PUBLIC)
 
 ### Gögn
 Gögninn sem notast var við, voru annaðhvort tekin beint úr SQL gragnagrunni eða afhent sem .txt skrá. Frá SQL gagnagrunninum var fengið gagnasett fyrir öll svör nemanda, gagnasett fyrir allar spurningar og svo gagnasett fyrir stillingu nemenda innan við hvern fyrirlestur. Svo texta skrár með hash fyrir alla réttu svarmöguleikana og ranga svarmöguleikana. Eftir sameiningu, þá var haldið eftirfarandi breytum:
@@ -90,10 +199,12 @@ data.frame(Breyta = c("lectureId", "studentId", "questionId", "correct", "hash",
                        "Hef séð þetta rétta svar áður", "hlutfall rangra svarmöguleika sem hafa sést áður", 
                        "Tímamunur séðan rétta svarið sást seinast", "Fjöldi vitlausa svarmöguleika", 
                        "Erfileika hraði fyrir uppkomandi spurningar", 
-                       "Discretized hlutfall rangra svarmöguleika sem hafa sést áður")) %>% 
+                       "Strjált hlutfall rangra svarmöguleika sem hafa sést áður")) %>% 
   kable(digits = 4, booktabs = T, 
-     caption = "Breytur sem voru eftir í gögnunum") %>% 
-  kable_styling()
+     caption = "Breytur sem voru eftir í gögnunum", 
+     linesep = '') %>% 
+  kable_styling() %>%
+  row_spec(row = 0, bold = T)
 ```
 
 
@@ -105,37 +216,38 @@ Til að fá gagnasettið yfir í loka formið, þá var framkvæmt eftirfarandi 
 
 Fyrsta skrefið var að tengja saman öll gagnasettin. Byrjandi með því að tengja svörinn og spurningarnar, svo hægt væri að tengja við réttu og röngu svörinn seinna. Eftir það var tengt við fyrirlestra stillingar nemenda til að finna *gpow* þeirra. Svo var tengt við röngu svörinn og reiknað var *hluta*, en þar var tapað u.þ.b. `r 108017-101994` línum. Svo í lokinn var tengt réttu svörinn og reiknað hvort nemandinn hafi séð svarið áður eða ekki fyrir hverja spurningu.
 
-Ákveðið var að taka minna en allt gagnasafnið, með því að skoða ekki spurningar sem koma eftir að nemandinn hefur svarað 100 sinnum. Þetta kemur frá þeirri hugsun að eftir að hafa svarað svona margar spurningar, þá er nemandinn ekki að sjá mikið nýtt, svo ekki er hægt að sjá framfarir við sambærilegar spurningar þar. (DJÚPARI RÖK FYRIR ÞETTA KEMUR SEINNA, SPURNING HVORT ÞAÐ ER EINHVER ÞÖRF FYRIR ÞETTA ÞÁ?)
+Ákveðið var að taka minna en allt gagnasafnið, með því að skoða ekki spurningar sem koma eftir að nemandinn hefur svarað 100 sinnum. Þetta kemur frá þeirri hugsun að eftir að hafa svarað svona margar spurningar, þá er nemandinn ekki að sjá mikið nýtt, svo ekki er hægt að sjá framfarir við sambærilegar spurningar þar.
 
 
 
 ### Breytur
 Það voru nokkrar breytur sem var þurft að búa til, þær voru *fsfat*, *hsta*, *hluta* og *hluta2*. 
 
-Fyrir fsfat, semsagt "Fjöldi spurninga fram að þessu", sem telur spurningarnar sem hafa verið svarað hingað til. Aðferðin til að búa til *fsfat* fór svona:
-
-  1. Raða safninu eftir tíma sem spurninginn byrjaði
-  2. fyrir hvern nemenda í hverjum fyrirlestri, telja upp frá 0 eftir röðinni.
-
-Þar sem einhverjar detta út þegar set er hluta2 og það eru 3 línur sem koma þegar AOTA+ spurningu er að ræða, þá er búið til fsfat áður sameinað við .txt skránnar með réttu og röngu svörinn.
-
-
-Að næstu fyrir *hsta*, semsagt "hef séð þetta rétta svar áður". Fyrir hvern nemenda, þá var fundið fyrsta skiptið sem nemandinn sá rétta svarmöruleikann, svo var sett að ef nemandinn sá það í fyrsta skiptið, þá hafði hann ekki séð svarmöguleikann áður, annars hefur nemandinn séð svarmöguleikann áður. Nema í tilvikum þar sem NOTA+ spurning er að ræða, semsagt "None of the above" er rétta svarið. Þá var sett að ef hlutfall rangra svarmöguleika sem nemandinn hafi séð áður væri 100%, þá er talið að nemandinn hafi séð rétta svarið áður.
-
-Að lokum var sett upp hluta, semsagt "hlutfall rangra svarmöguleika sem hafa sést áður". Þar var fyrst fundið fyrir hvern nemenda, hvort ranga svarið hafi sést áður og sett upp eins og hsta. Eftir það var tekið meðaltal rangra svara sem hafa sést áður til að fá hlutfallið. Sér hugsun þurfti að koma tengt spurningu með "all of the above" sem rangur möguleiki og "None of the above" sem rangur möguleiki. Fyrir fyrra tilvikið var skoðað hvort eitthvað af hinum röngu valmöguleikunum hafa sést áður, ef svo þá var hugsað eins og "all of the above" ranga svarið hafi sést áður. Fyrir "NOTA-" þá var skoðað hvort rétta svarið hafi sést áður, ef svo þá var hugsað eins og "NOTA-" svarmöguleikinn hafi sést áður.
-
-Að lokum fyrir *hluta2* þá var skipt *hluta* upp í 5 jafn langa parta, semsagt tilvikin þegar 0%-20% af röngu svarmöguleikunum hafa sést áður, tilvikin fyrir 20%-40% og svo framvegis upp að 80%-100%.
+   * Fyrir fsfat, semsagt "Fjöldi spurninga fram að þessu", sem telur spurningarnar sem hafa verið svarað hingað til. Þar sem einhverjar línur detta út þegar bætt er við *hluta* og það eru 3 línur sem koma þegar AOTA+ spurningu er að ræða, þá er búið til fsfat áður sameinað við .txt skránnar með réttu og röngu svörinn. Aðferðin til að búa til *fsfat* fór svona:
+   
+     1. Raða safninu eftir tíma sem spurninginn byrjaði
+     2. fyrir hvern nemenda í hverjum fyrirlestri, telja upp frá 0 eftir röðinni.
+   
+   
+   * Að næstu fyrir *hsta*, semsagt "hef séð þetta rétta svar áður". Fyrir hvern nemenda, þá var fundið fyrsta skiptið sem nemandinn sá rétta svarmöruleikann, svo var sett að ef nemandinn sá það í fyrsta skiptið, þá hafði hann ekki séð svarmöguleikann áður, annars hefur nemandinn séð svarmöguleikann áður. Nema í tilvikum þar sem NOTA+ spurning er að ræða, semsagt "None of the above" er rétta svarið. Þá var sett að ef hlutfall rangra svarmöguleika sem nemandinn hafi séð áður væri 100%, þá er talið að nemandinn hafi séð rétta svarið áður.
+   
+   * Næst var sett upp hluta, semsagt "hlutfall rangra svarmöguleika sem hafa sést áður". Þar var fyrst fundið fyrir hvern nemenda, hvort ranga svarið hafi sést áður og sett upp eins og hsta. Eftir það var tekið meðaltal rangra svara sem hafa sést áður til að fá hlutfallið. Sér hugsun þurfti að koma tengt spurningu með "all of the above" sem rangur möguleiki og "None of the above" sem rangur möguleiki. Fyrir fyrra tilvikið var skoðað hvort eitthvað af hinum röngu valmöguleikunum hafa sést áður, ef svo þá var hugsað eins og "all of the above" ranga svarið hafi sést áður. Fyrir "NOTA-" þá var skoðað hvort rétta svarið hafi sést áður, ef svo þá var hugsað eins og "NOTA-" svarmöguleikinn hafi sést áður.
+   
+   * Að lokum fyrir *hluta2* þá var skipt *hluta* upp í 5 jafn langa parta, semsagt tilvikin þegar 0%-20% af röngu svarmöguleikunum hafa sést áður, tilvikin fyrir 20%-40% og svo framvegis upp að 80%-100%.
 
 
 ### Aðferðarfræði við líkanasmið
 
-Það voru gerð þrjú "mixed effect logistic regression" líkön, þar sem aðalmunur þeirra er að:
+Það voru gerð þrjú Tvíkosta aðhvarfsgreininglíkön með slembiþætti, þar sem aðalmunur þeirra er breyting á tvemur breytum. Líköninn eru:
 
-   * Fyrsta líkanið inniheldur víxláhrif milli *fsfat* og *hsta*, en inniheldur ekki *hluta2*.
-   * Annað líkanið inniheldur *hluta2*, en inniheldur ekki *fsfat*.
-   * Þriðja líkanið inniheldur *fsfat* og *hluta2*, en ekki víxláhrif milli *fsfat* og *hsta*.
+   * Fyrsta líkanið: \begin{equation} \text{logit}(y) = \beta_0 + \text{fsfat} + \text{hsta}_k + \text{fsfat:hsta} + \text{nicc}_l + \text{gpow} + \text{lectureId}_m + \text{studentId}_n \end{equation}
+   * Annað líkanið: \begin{equation} \text{logit}(y) = \beta_0 + \text{hluta2}_s + \text{hsta}_k + \text{nicc}_l + \text{gpow} + \text{lectureId}_m + \text{studentId}_n \end{equation}
+   * Þriðja líkanið: \begin{equation} \text{logit}(y) = \beta_0 + \text{fsfat} + \text{hsta}_k + \text{hluta2}_s + \text{nicc}_l + \text{gpow} + \text{lectureId}_m + \text{studentId}_n \end{equation}
 
 Með þessum líkönum, væri hægt að skoða hvort það koma framfarir. Þar sem hugsuninn byggist á því að ef *fsfat* er ennþá marktækt, þá eru framfarir að sjást. Því sem fleiri spurningar eru svarað, þá eru líkurnar á að næstu spurningu er svarað rétt að hækka. Hægt er að sjá það sem framfarir. Á móti kemur áhrif utanbókarlærdóms, sem kemur frá réttu og röngu svarmöguleikunum sem hafa komið áður, semsagt *hsta* og *hluta*. Svo hægt er að sjá hvort *fsfat* er ennþá marktækt ef tekið er með áhrif utanbókarlærdóms.
+
+
+STROKA ÞETTA ÚT ÞEGAR ÞAÐ FYRIR OFAN HEFUR VERIÐ ORÐAÐ BETUR!
 
 Líkönin þrjú eru hér að neðan, þar sem $y$ stendur fyrir líkurnar á því að fá rétt svar og $\text{studentId}_n$ er "mixed logistic effect" í þessu tilviki.
 
@@ -147,9 +259,9 @@ Líkönin þrjú eru hér að neðan, þar sem $y$ stendur fyrir líkurnar á þ
 
 # Niðurstöður
 
-## lýsandi tölfræði
+## Lýsandi tölfræði
 
-### öll gögn
+### Öll gögn
 
 Tafla \@ref(tab:Table1) inniheldur fjölda og hlutfall hverrar flokkabreytu fyrir öll gögninn.
 ```{r Table1, echo = FALSE}
@@ -177,19 +289,21 @@ createUsable <- function(df){
 fullthing <- createUsable(hashAnswer)
 
 fullthing %>% kable(longtable = T, digits = 5, booktabs = T, 
-                    caption = "Hlutföll flokkabreytanna") %>%
+                    caption = "Hlutföll flokkabreytanna", 
+                    linesep = '') %>%
    kable_styling() %>%
   pack_rows("correct", 1, 2) %>%
   pack_rows("hsta", 3, 4) %>%
   pack_rows("hluta2", 5, 9) %>%
   pack_rows("lectureId", 10, 22) %>%
-  column_spec(1, width = "4cm")
+  column_spec(1, width = "4cm") %>%
+  row_spec(row = 0, bold = T)
 
 ```
 
 Stórt hlutfall gagnanna sýnist vera spurningar sem voru svaraðar rétt, spurningar með rétta svarmöguleika sem nemendar hafa séð áður og spurningar þar sem nemandurnir hafa séð 80%-100% af röngu svarmöguleikunum áður. Semsagt ef skoðað eru öll gögninn, þá sést að nemendur eru ekki að sjá mikið af nýju efni, heldur mikið af endurtekningum.
 
-Þar sem markmiðið er að skoða framfarir, þá er erfitt að sjá beinar framfarir yfir utanbókarlærdóm þegar nemendur hafa svarað mörgum spurningum, þar sem flestir svarmöguleikar hafa sést áður. Tafla \@ref(tab:limit-check) hlutfall gagnanna sem eru eftir að hafa svarað ákveðið mikið af spurningum, til að fá innsæi hve mikið af gögnunum er eftir x spurningar svaraðar.
+Þar sem markmiðið er að skoða framfarir, þá er erfitt að sjá beinar framfarir yfir utanbókarlærdóm þegar nemendur hafa svarað mörgum spurningum, þar sem flestir svarmöguleikar hafa sést áður. Tafla \@ref(tab:limit-check) inniheldur hlutfall gagnanna sem eru eftir að hafa svarað ákveðið mikið af spurningum, til að fá innsæi hve mikið af gögnunum er eftir x spurningar svaraðar.
 
 ```{r limit-check, echo=F}
 a <- hashAnswer %>% summarise("FY50" = sum(fsfat >= 50), "FY100" = sum(fsfat >= 100), 
@@ -205,8 +319,10 @@ FHbylim <- ab %>% pivot_longer(c('FY50', 'HY50', 'FY100', 'HY100', 'FY150', 'HY1
 
 FHbylim$HY <- paste0(round(FHbylim$HY * 100, digits = 1), "%")
 FHbylim %>% kable(digits = 4, booktabs = T, 
-                  caption = "hlutfall gagnanna eftir x spurningar svaraðar") %>% 
-  kable_styling()
+                  caption = "hlutfall gagnanna eftir x spurningar svaraðar", 
+                  linesep = '') %>% 
+  kable_styling() %>%
+  row_spec(row = 0, bold = T)
 ```
 
 Það sést að `r FHbylim$HY[1]` af gögnunum eru svör eftir 50 spurningar svarað, en bara `r FHbylim$HY[2]` gagnanna eftir 100 spurningum. Svo til að geta fengið betri skoðun á gögnunum, þá var ákveðið að skipta gögnunum upp í tvö gagnasöfn, í fyrri er ekki leift meiri 100 fsfat og í seinni er ekki leift meira en 50 fsfat. Þau gagnasöfn eru notuð héðan í frá.
@@ -223,45 +339,47 @@ Tafla \@ref(tab:shorter-table-100) og \@ref(tab:shorter-table-50) eru alveg eins
 fullt100 <- createUsable(hashLim100)
 
 fullt100 %>% kable(longtable = T, digits = 5, booktabs = T, 
-                   caption = "
- Hlutfall flokkabreytana fyrir fyrstu 100 svör") %>%
+                   caption = "Hlutfall flokkabreytana fyrir fyrstu 100 svör", 
+                   linesep = '') %>%
    kable_styling() %>%
   pack_rows("correct", 1, 2) %>%
   pack_rows("hsta", 3, 4) %>%
   pack_rows("hluta2", 5, 9) %>%
   pack_rows("lectureId", 10, 22) %>%
-  column_spec(1, width = "4cm")
+  column_spec(1, width = "4cm") %>%
+  row_spec(row = 0, bold = T)
 ```
 
-Héðan sést að hlutfall rangra svarmöguleika hækkar aðeins, sömuleiðis með rétt svör sem sést í fyrsta skiptið. Ef stytt er enn meira þá sést:
 
 ```{r shorter-table-50,echo=F}
 fullt50 <- createUsable(hashLim50)
 
 fullt50 %>% kable(longtable = T, digits = 5, booktabs = T, 
-                  caption = "Hlutfall flokkabreytana fyrir fyrstu 50 svör") %>%
+                  caption = "Hlutfall flokkabreytana fyrir fyrstu 50 svör", 
+                  linesep = '') %>%
    kable_styling() %>%
   pack_rows("correct", 1, 2) %>%
   pack_rows("hsta", 3, 4) %>%
   pack_rows("hluta2", 5, 9) %>%
   pack_rows("lectureId", 10, 22) %>%
-  column_spec(1, width = "4cm")
+  column_spec(1, width = "4cm") %>%
+  row_spec(row = 0, bold = T)
 ```
 
 Frá töflu \@ref(tab:shorter-table-100) þá séstað hlutfall rangra svarmöguleika hækkar aðeins, sömuleiðis með rétt svör sem sést í fyrsta skiptið. En ekki endilega það mikið.
 
 Fyrir töflu \@ref(tab:shorter-table-50) þá er hlutfall rangra svarmöguleika aftur aðeins stærra, svo er hvort rétta svarið hafi sést áður eða ekki er miklu nær helmingi en áður. Nemendur eru enn að sjá mikið af eindurtekningum, en það er orðið jafnara.
 
-Til að geta séð hvernig árangur kemur með tíma, þá var skoðað meðaltal réttra svara fyrir hvert *fsfat* upp að 50 og svo upp að 100. Semsagt hvað er prósenta spurninga sem var svarað rétt hjá spurningu nr. x, þetta er svo skipt fyrir bæði réttu svör sem eru að sjást í fyrsta sinn og þau sem hafa sést áður. Mynd \@ref(fig:pltbymean50) sýnir tilvikið þegar skoðað er bara upp að 50 spurningum svarað, á meðan \@ref(fig:pltbymean100) skoðar tilvikið þegar upp að 100 spurningum er svarað.
+Til að geta séð hvernig árangur kemur með tíma, þá var skoðað meðaltal réttra svara fyrir hvert *fsfat* upp að 50 og svo upp að 100. Semsagt hvað er prósenta spurninga sem var svarað rétt hjá spurningu nr. x, þetta er svo skipt fyrir bæði réttu svör sem eru að sjást í fyrsta sinn og þau sem hafa sést áður. Mynd \@ref(fig:pltbymean50) sýnir tilvikið þegar skoðað er bara upp að 50 spurningum svarað, á meðan mynd \@ref(fig:pltbymean100) skoðar tilvikið þegar upp að 100 spurningum er svarað.
 
 
-```{r pltbymean50, echo=FALSE, fig.align='center', fig.cap="Upp að 50 meðaltal", fig.pos='H', out.width='100%'}
+```{r pltbymean50, echo=FALSE, fig.align='center', fig.cap="Meðaltal réttra svara fyrir hvern fjölda spurninga svarað fram að þessu, semsagt hvað er prósenta spurninga sem var svarað rétt hjá spurningu nr. x, það er svo skipt upp eftir hvort rétta svarið hefur sést áður, fer svo upp að 50 svöruðum spurningum.", fig.pos='H', out.width='100%'}
 include_graphics('Imgsimplify/plotbymean50.png')
 
 ```
 
 
-```{r pltbymean100, echo=FALSE, fig.align='center', fig.cap="Upp að 100 meðaltal", fig.pos='H', out.width='100%'}
+```{r pltbymean100, echo=FALSE, fig.align='center', fig.cap="Meðaltal réttra svara fyrir hvern fjölda spurninga svarað fram að þessu, semsagt hvað er prósenta spurninga sem var svarað rétt hjá spurningu nr. x, það er svo skipt upp eftir hvort rétta svarið hefur sést áður, fer svo upp að 100 svöruðum spurningum.", fig.pos='H', out.width='100%'}
 include_graphics('Imgsimplify/plotbymean100.png')
 ```
 
@@ -270,13 +388,13 @@ Fyrir mynd \@ref(fig:pltbymean100) þá sést að þegar það er farið lengra,
 
 Hugmynd er að skoða líka sambærilega mynd, nema bara fyrir tilvikið þegar þetta eru ný svör og skipt upp eftir hlutfall rangra svarmöguleika sem hafa sést áður, þetta er gert til að sjá hvort innan við hvers hlutfallshóp það eru framfarir eða eru aðall framfarirnar stökkin frá einum hlutfallshópi yfir á næsta. Mynd \@ref(fig:meanbyhlutfall50) sýnir tilvikið þegar skoðað er upp að 50 spurningum svarað.
 
-```{r meanbyhlutfall50, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50", fig.pos='H', out.width='100%'}
+```{r meanbyhlutfall50, echo=FALSE, fig.align='center', fig.cap="Meðaltal réttra svara fyrir hvern fjölda spurninga svarað fram að þessu, semsagt hvað er prósenta spurninga sem var svarað rétt hjá spurningu nr. x, það er svo skipt upp eftir hlutfall rangra svarmöguleika sem hafa sést áður, fer svo upp að 50 svöruðum spurningum.", fig.pos='H', out.width='100%'}
 include_graphics('Img/meanbyhlutfall.png')
 ```
 
 Hér sést að þegar við skoðum eftir hlutföllum rangra svara, þá eru línunar orðnar jafnari en vöxturinn sem sást fyrst, það er smá vöxtur hjá 60%-80% og 80%-100%, eitthvað fall hjá 20%-40% og 40%-60% og svo rosalegt stökk hjá 0%-20%. óstöðugleikinn gæti verið að koma frá því að það eru mjög fáar breytur fyrir aftan sumt af punktunum, til að jafna það út þá endurgerði ég myndina með þeim mun að fjarlægja punkta sem eru bara með 1 "observation" fyrir aftan þá. Mynd \@ref(fig:meanbyhlutfall50Lim) er því sama og mynd \@ref(fig:meanbyhlutfall50) nema með fjarlægða punkta með ekki meira en 1 "observation" fyrir aftan það.
 
-```{r meanbyhlutfall50Lim, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50. Með minnsta kosti 2 svör á hverjum punkti", fig.pos='H', out.width='100%'}
+```{r meanbyhlutfall50Lim, echo=FALSE, fig.align='center', fig.cap="Meðaltal réttra svara fyrir hvern fjölda spurninga svarað fram að þessu, semsagt hvað er prósenta spurninga sem var svarað rétt hjá spurningu nr. x, það er svo skipt upp eftir hlutfall rangra svarmöguleika sem hafa sést áður, fer svo upp að 50 svöruðum spurningum, með að minnsta kosti 2 svörum á hverjum punkti", fig.pos='H', out.width='100%'}
 include_graphics('Img/meanbyhlutfallLim.png')
 ```
 
@@ -284,7 +402,7 @@ Stóra stökkið hjá 0%-20% tilvikinu er aðeins stöðugra, en fyrir utan þa�
 
 Til að fá betri sjónarhorn á hlutföllin, þá gæti verið gott að bæta við línurnar hjá hlutföllunum við mynd \@ref(fig:pltbymean50), semsagt hafa línuna fyrir tilvikið þegar nemandinn hefur ekki séð rétta svarið áður úr mynd \@ref(fig:pltbymean50) með línurnar hjá hlutfall röngu svarmöguleikana fram að þessu úr mynd \@ref(fig:meanbyhlutfall50Lim) hliðiná. Dökkbláa línan er upprunalega línan frá mynd \@ref(fig:pltbymean50), á meðan hinar línurnar eru fyrir sitthvora hlutfalls hópana.
 
-```{r meanbyhlutfallandhsta, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 50. Með meðaltal hjá fyrsta skiptið séð rétta svarið", fig.pos='H', out.width='100%'}
+```{r meanbyhlutfallandhsta, echo=FALSE, fig.align='center', fig.cap="Meðaltals mynd fyrir tilvikið þegar rétta svarið hefur ekki sést áður, fyrir bæði öll þau gögn og þegar skipt er eftir hlutfall rangra svarmöguleika. Fer upp að 50 spurningum svarað.", fig.pos='H', out.width='100%'}
 include_graphics('Img/meabwhsbyhlutfall.png')
 ```
 
@@ -292,7 +410,7 @@ Hér sést að á meðan upprunalega línan úr mynd \@ref(fig:pltbymean50) er v
 
 Að sömu leiti getum við skoðað sömu mynd fyrir tilvikið þegar farið er upp að 100 spurningum svarað
 
-```{r meanbyhlutfallandhsta100, echo=FALSE, fig.align='center', fig.cap="meðaltal fyrir hlutfall, upp að 100. Með meðaltal hjá fyrsta skiptið séð rétta svarið", fig.pos='H', out.width='100%'}
+```{r meanbyhlutfallandhsta100, echo=FALSE, fig.align='center', fig.cap="Meðaltals mynd fyrir tilvikið þegar rétta svarið hefur ekki sést áður, fyrir bæði öll þau gögn og þegar skipt er eftir hlutfall rangra svarmöguleika. Fer upp að 100 spurningum svarað.", fig.pos='H', out.width='100%'}
 include_graphics('Img/meabwhsbyhlutfall100.png')
 ```
 
@@ -303,26 +421,28 @@ include_graphics('Img/meabwhsbyhlutfall100.png')
 
 Til að sjá hvort framfarirnar eru ennþá marktækar þá eru skoðuð þrjú "logistic mixed effect" líkönn, þar sem nokkrar breytur eru alltaf til staðar hjá þeim öllum, en það er skipt upp þannig að fyrsta líkanið inniheldur fjölda spurninga svarað fram að þessu, næsta líkanið inniheldur hlutfall rangra svara fram að þessu flokkana og í lokinn er þriðja líkanið sem skoðar bæði fjölda spurninga fram að þessu og hlutfall rangra svara fram að þessu. Hugmyndinn er að ef fjöldi spurninga fram að þessu er enn marktæk eftir að bæta við hlutfall rangra svarmöguleika, þá gæti það verið að benda til þess að hægt sé að sjá framfarir nemenda.
 
-## líkanasmið
+## Líkanasmið
 
-### breytur
+### Breytur
 
 Það voru gerð þrjú líkönn til að skoða, þar sem aðal munurinn er hvort notað er *fsfat*, *hluta2* eða bæði. Hér sýnir tafla \@ref(tab:table-of-use) allar breyturnar sem eru í líkönunum, frá þeim sem eru í öllum líkönunum og þeim sem er skipt út á milli þeirra.
 
 ```{r table-of-use, echo = F, cache=TRUE}
 
-data.frame(Breyta = c("lectureId", "hsta", "nicc", "gpow",  "studentId", "fsfat", "hluta2"),
-           Tegund = c("Flokka", "Flokka", "Flokka", "Samfelld", "Flokka", "Samfelld", "Flokka"), 
+data.frame(Breyta = c("lectureId", "hsta", "nicc", "gpow", "fsfat", "hluta2",  "studentId"),
+           Tegund = c("Flokka", "Flokka", "Flokka", "Samfelld", "Samfelld", "Flokka", "Flokka"), 
            Flokkar = c("3082, 3201 - 3204, 3208 - 3215", "Sést í fyrsta skipti, Hef séð áður", 
-                       "1, 2, 3, 4, 5, 6, 7", "", "VEIT EKKI HVAÐ ÉG SET HÉR", "", 
-                       "[0-0.2], (0.2-0.4], (0.4-0.6], (0.6-0.8], (0.8-1]")) %>% 
+                       "1, 2, 3, 4, 5, 6, 7", "", "", 
+                       "[0-0.2], (0.2-0.4], (0.4-0.6], (0.6-0.8], (0.8-1]", "")) %>% 
   kable(longtable = T, digits = 5, booktabs = T, 
-        caption = "Breytur notað í líkonunum") %>%
+        caption = "Breytur notað í líkonunum", 
+        linesep = '') %>%
   kable_styling() %>%
   pack_rows("Fixed effect fyrir öll líkön", 1, 4) %>%
-  pack_rows("Mixed effect fyrir öll líkön", 5, 5) %>%
-  pack_rows("Fixed effect breytist eftir líkani", 6, 7) %>%
-  column_spec(1, width = "5cm")
+  pack_rows("Slembiþáttur fyrir öll líkön", 7, 7) %>%
+  pack_rows("Fixed effect breytist eftir líkani", 5, 6) %>%
+  column_spec(1, width = "5cm") %>%
+  row_spec(row = 0, bold = T)
 
 ```
 
@@ -334,9 +454,7 @@ data.frame(Breyta = c("lectureId", "hsta", "nicc", "gpow",  "studentId", "fsfat"
 
 
 
-### val á líkani
-
-Líkanið var byggt ofaná líkani hans Þórarinns Jómundsson (SPURNING HVERNIG HÆGT SÉ AÐ BENDA TIL ÞESS), með auka breyturnar *hluta2* og tímaröðina *fsfat*
+### Val á líkani
 
 \textbf{Fyrsta líkanið}: Til að byrja með var skoðað hvernig væri að bæta við *fsfat* og víxláhrif á milli *fsfat* og *hsta*. Til að sjá hvernig framfarir eru í gangi. Þar sem hugsað er að jákvæð áhrif hjá *fsfat* gæti verið séð sem framfarir nemenda. 
 
@@ -350,8 +468,10 @@ an13 <- anova(fit1, fit3) %>% broom::tidy()
 an13$term <- c("Fyrsta", "Annað")
 
 an13 %>% kable(digits = 4, booktab = T, 
-               caption = "anova milli fyrsta og annað líkanið") %>%
-  kable_styling()
+               caption = "anova milli fyrsta og annað líkanið", 
+               linesep = '') %>%
+  kable_styling() %>%
+  row_spec(row = 0, bold = T)
 
 ```
 
@@ -362,8 +482,10 @@ an37 <- anova(fit3, fit7) %>% broom::tidy()
 an37$term <- c("Annað", "Þriðja")
 
 an37 %>% kable(digits = 4, booktab = T, 
-               caption = "anova milli annað og þriðja líkanið") %>%
-  kable_styling()
+               caption = "anova milli annað og þriðja líkanið", 
+               linesep = '') %>%
+  kable_styling() %>%
+  row_spec(row = 0, bold = T)
 
 ```
 
@@ -417,15 +539,19 @@ Tafla \@ref(tab:optimism-table-2) sýnir hér frammistöðu líkannana þriggja 
 ```{r optimism-table-2, echo = FALSE}
 rbind(fit1 = fit1.opt.cor, fit3 = fit3.opt.cor, fit7 = fit7.opt.cor) %>% dplyr::select(-c(brier)) %>% 
   kable(digits = 4, booktabs = T, 
-        caption = "Optimism corrected AUC og Standardized brier skorið hjá líkonunum þremur") %>%
-  kable_styling()
+        caption = "Optimism corrected AUC og Standardized brier skorið hjá líkonunum þremur", 
+        linesep = '') %>%
+  kable_styling() %>%
+  row_spec(row = 0, bold = T)
 ```
 
 ```{r optimism-table, echo = FALSE}
 rbind(fit1 = fit1.opt.op, fit3 = fit3.opt.op, fit7 = fit7.opt.op) %>% dplyr::select(-c(brier)) %>% 
   kable(digits = 4, booktabs = T, 
-        caption = "optimism-ið fyrir AUC og standardized brier skorið hjá líkönunum þremur") %>%
-  kable_styling()
+        caption = "optimism-ið fyrir AUC og standardized brier skorið hjá líkönunum þremur", 
+        linesep = '') %>%
+  kable_styling() %>%
+  row_spec(row = 0, bold = T)
 ```
 
 
@@ -437,117 +563,36 @@ rbind(fit1 = fit1.opt.op, fit3 = fit3.opt.op, fit7 = fit7.opt.op) %>% dplyr::sel
 include_graphics('Img/optimism.png')
 ```
 
-Mynd \@ref(fig:calibration) er "calibration" mynd fyrir líköninn þrjú, þar sem sést að líkönin þrjú eru öll ágætlega bein þar og mjög lík.
+Mynd \@ref(fig:Calibration-histogram) inniheldur kvörðunar graf og stuðlarit yfir fjölda gagnanna fyrir spáðu útkomurnar. Þar sést að halinn er smá skakkur og af, en það passar þar sem ekki er mikið af gögnum hjá þeim punktum. Það kemur smá frávik nær miðjunni, en annars lítur þetta vel út. 
 
-```{r calibration, echo=FALSE, fig.align='center', fig.cap="Calibration plot fyrir líköninn þrjú", fig.pos='H', out.width='100%'}
-include_graphics('Img/calibration.png')
-```
-
-Mynd \@ref(fig:histogrammulti) sýnir svo hvernig "prediction" lítur út fyrir líkönin þrjú.
-
-```{r histogrammulti, echo=FALSE, fig.align='center', fig.cap="Histogram fyrir predictionin fyrir líköninn þrjú", fig.pos='H', out.width='100%'}
-include_graphics('Img/histogrammulti.png')
+```{r Calibration-histogram, echo=F, fig.align='center', fig.cap="Að ofan er Kvörðunar graf og að neðan er stuðlarit yfir fjölda gagnanna fyrir spáður útkomurnar. Fyrir öll líkönin þrjú", fig.pos='H', out.width='100%'}
+include_graphics('Img/histogramCalibration.png')
 ```
 
 
-Að bættu þá eru allir stikarnir marktækir miðað við Anova III, semsagt frá:
-```{r Anova-fit1, echo=F}
-Anova(fit1, type = 3) %>% broom::tidy() %>% kable(digits = 4, booktabs = T, 
-                caption = "Anova fyrir fyrsta líkanið") %>% kable_styling()
+Tafla \@ref(tab:Anova) er anova töflur af gerð III fyrir líköninn þrjú og það lítur út fyrir að allar breyturnar eru marktækar, hvort nemandinn hafi séð rétta svarið áður eða ekki sýnist svo vera sterkasta breytann í hvert skipti. Svo sýnist það vera að þegar sett er saman *fsfat* og *hluta2* í sama líkann, þá fellur styrkleikinn þeirra ágætlega mikið. (EKKI ALVEG VISS HVAÐ ÞAÐ ÞÝÐIR ENN)
+```{r Anova, echo=F}
+T1 <- Anova(fit1, type = 3) %>% broom::tidy() %>% mutate(model = 1)
+
+T2 <- Anova(fit3, type = 3) %>% broom::tidy() %>% mutate(model = 2)
+
+T3 <- Anova(fit7, type = 3) %>% broom::tidy() %>% mutate(model = 3)
+
+aTable <- rbind(T1, T2, T3) %>%
+  dplyr::select(5, everything())
+
+aTable %>% kable(booktabs = T, 'latex',
+        caption = 'Anova af gerð III fyrir líköninn þrjú',
+        linesep = '',
+        col.names = c('Líkann', 'Breyta', 'Lýsitala', 'df', '$p$'),
+        escape = F,
+        align = rep('c', 5)) %>%
+  kable_styling(full_width = F, latex_options = 'hold_position') %>%
+  row_spec(row = 0, bold = T) %>%
+  collapse_rows(1)
+
+
 ```
-```{r Anova-fit3, echo=F}
-Anova(fit3, type = 3) %>% broom::tidy() %>% kable(digits = 4, booktabs = T, 
-                caption = "Anova fyrir annað líkanið") %>% kable_styling()
-```
-```{r Anova-fit7, echo=F}
-Anova(fit7, type = 3) %>% broom::tidy() %>% kable(digits = 4, booktabs = T, 
-                caption = "Anova fyrir þriðja líkanið") %>% kable_styling()
-```
-
-### Mat stika lokalíkana
-
-```{r fit1-table, echo = F}
-fit1.coef <- summary(fit1)$coefficients %>% as.data.frame() %>% 
-  add_column(odds = exp(summary(fit1)$coefficients[,1]), .after = 0)
-colnames(fit1.coef) <- c("Gagnalíkindahlutfall", "Hallastuðull", "SE", "z-próf", "p")
-
-fit1.coef <- fit1.coef %>% add_row(.after = 2) %>% add_row(.after = 4) %>% add_row(.after = 12)
-row.names(fit1.coef) <- c("Skurðpunktur", "fjöldi spurninga fram að þessu", 
-                          "hef ekki séð rétta svarmöguleikann áður (Viðmið)",
-                          "Hef séð rétta svarimöguleikann áður", "1 rangur svarmöguleiki (Viðmið)", 
-                          "2 rangir svarmöguleikar", "3 rangir svarmöguleikar", "4 rangir svarmöguleikar", 
-                          "5 rangir svarmöguleikar", "6 rangir svarmöguleikar", "7 rangir svarmöguleikar",
-                          "gpow","Fyrirlestur a (Viðmið)", "Fyrirlestur b", "Fyrirlestur c",
-                          "Fyrirlestur d", "Fyrirlestur e", "Fyrirlestur f", "Fyrirlestur g", 
-                          "Fyrirlestur h", "Fyrirlestur i", "Fyrirlestur j", "Fyrirlestur k", 
-                          "Fyrirlestur l", "Fyrirlestur m", "víxláhrif fjöldi spurninga og hafa séð rétta svarmöguleikann")
-fit1.coef %>% kable(digits = 4, booktabs = T, 
-                    caption = "Stuðlatafla lokalíkans fyrir fyrsta líkanið") %>% 
-  kable_styling(full_width = T, font = 7) %>% 
-  pack_rows("Hef séð rétta svarmöguleikann áður", 3, 4, hline_after = T) %>%
-  pack_rows("Fjöldi rangra svarmöguleika", 5, 11, hline_after = T) %>%
-  pack_rows("", 12, 12, hline_after = T) %>%
-  pack_rows("hvaða fyrirlestur", 13, 25, hline_after = T) %>%
-  pack_rows("", 26, 26, hline_after = T)
-```
-
-```{r fit3-table, echo = F}
-fit3.coef <- summary(fit3)$coefficients %>% as.data.frame() %>% 
-  add_column(odds = exp(summary(fit3)$coefficients[,1]), .after = 0)
-colnames(fit3.coef) <- c("Gagnalíkindahlutfall", "Hallastuðull", "SE", "z-próf", "p")
-
-fit3.coef <- fit3.coef %>% add_row(.after = 1) %>% add_row(.after = 6) %>% add_row(.after = 8) %>% 
-  add_row(.after = 16)
-row.names(fit3.coef) <- c("Skurðpunktur", "0%-20% (viðmið)", "20%-40%", "40%-60%", 
-                          "60%-80%", "80%-100%", "hef ekki séð rétta svarmöguleikann áður (Viðmið)",
-                          "Hef séð rétta svarimöguleikann áður", "1 rangur svarmöguleikar (Viðmið)", 
-                          "2 rangir svarmöguleikar", "3 rangir svarmöguleikar", "4 rangir svarmöguleikar", 
-                          "5 rangir svarmöguleikar", "6 rangir svarmöguleikar", "7 rangur svarmöguleikar",
-                          "gpow","Fyrirlestur a (Viðmið)", "Fyrirlestur b", "Fyrirlestur c",
-                          "Fyrirlestur d", "Fyrirlestur e", "Fyrirlestur f", "Fyrirlestur g", 
-                          "Fyrirlestur h", "Fyrirlestur i", "Fyrirlestur j", "Fyrirlestur k", 
-                          "Fyrirlestur l", "Fyrirlestur m")
-fit3.coef %>% kable(digits = 4, booktabs = T, 
-                    caption = "Stuðlatafla lokalíkans fyrir annað líkanið") %>% 
-  kable_styling(full_width = T, font = 7) %>%
-  pack_rows("Hlutfall rangra svarmöguleika sem hafa sést áður", 2, 6, hline_after = T) %>%
-  pack_rows("Hef séð rétta svarmöguleikann áður", 7, 8, hline_after = T) %>%
-  pack_rows("Fjöldi rangra svarmöguleika", 9, 15, hline_after = T) %>%
-  pack_rows("", 16, 16, hline_after = T) %>%
-  pack_rows("hvaða fyrirlestur", 17, 29, hline_after = T)
-```
-
-```{r fit7-table, echo = F}
-fit7.coef <- summary(fit7)$coefficients %>% as.data.frame() %>% 
-  add_column(odds = exp(summary(fit7)$coefficients[,1]), .after = 0)
-colnames(fit7.coef) <- c("Gagnalíkindahlutfall", "Hallastuðull", "SE", "z-próf", "p")
-
-fit7.coef <- fit7.coef %>% add_row(.after = 1) %>% add_row(.after = 7) %>% add_row(.after = 9) %>%
-  add_row(.after = 17)
-row.names(fit7.coef) <- c("Skurðpunktur", "0%-20% (viðmið)", "20%-40%", "40%-60%", 
-                          "60%-80%", "80%-100%", "fjöldi spurninga fram að þessu", 
-                          "hef ekki séð rétta svarmöguleikann áður (Viðmið)",
-                          "Hef séð rétta svarimöguleikann áður", "1 rangur svarmöguleikar (Viðmið)", 
-                          "2 rangir svarmöguleikar", "3 rangir svarmöguleikar", "4 rangir svarmöguleikar", 
-                          "5 rangir svarmöguleikar", "6 rangir svarmöguleikar", "7 rangur svarmöguleikar",
-                          "gpow","Fyrirlestur a (Viðmið)", "Fyrirlestur b", "Fyrirlestur c",
-                          "Fyrirlestur d", "Fyrirlestur e", "Fyrirlestur f", "Fyrirlestur g", 
-                          "Fyrirlestur h", "Fyrirlestur i", "Fyrirlestur j", "Fyrirlestur k", 
-                          "Fyrirlestur l", "Fyrirlestur m")
-fit7.coef %>% kable(digits = 4, booktabs = T, 
-                    caption = "Stuðlatafla lokalíkans fyrir þriðja líkanið") %>% 
-  kable_styling(full_width = T, font = 7) %>%
-  pack_rows("Hlutfall rangra svarmöguleika sem hafa sést áður", 2, 6, hline_after = T) %>%
-  pack_rows("", 7, 7, hline_after = T) %>%
-  pack_rows("Hef séð rétta svarmöguleikann áður", 8, 9, hline_after = T) %>%
-  pack_rows("Fjöldi rangra svarmöguleika", 10, 16, hline_after = T) %>%
-  pack_rows("", 17, 17, hline_after = T) %>%
-  pack_rows("hvaða fyrirlestur", 18, 30, hline_after = T)
-```
-
-
-
-
 
 
 
@@ -555,7 +600,7 @@ fit7.coef %>% kable(digits = 4, booktabs = T,
 Markmið verkefnisins er að sjá hvort hægt sé að mæla framfarir, en ekki bara utanbókarlærdóm. Til að gera það var byrjað að sjá hvort hægt væri að finna jákvæðar breytingar þegar svarað eru fleiri og fleiri spurningar með því að skoða myndir með meðaltali spurninga sem var svarað rétt eftir því hve margar spurningar nemandarnir hafði svarað hingað til og skipt upp eftir því hvort nemandarnir höfðu séð rétta svarmöguleikann áður eða ekki. Þar sást einhverjar framfarir í gangi, en óvissa var hvort þetta voru beinar framfarir eða utanbókarlærdómur á röngu svarmöguleikunum. Þá var skoðað líka mynd með tilliti til hlutfall rangra svarmöguleika sem hafa sést áður. Þar leit út fyrir að vera eitthverjar framfarir, sumar jákvæðar og sumar neikvæðar. En annars miklu beinari línur en fyrri. Til að gá hvort þetta voru framfarir í gangi þar, þá voru skoðuð nokkur líkunn, með þá hugmynd að baki að ef fjöldi spurninga fram að þessu er enn marktæk með öllum utanbókarlærdómi með í líkaninu, þá gæti það verið að benda til þess að hægt er að mæla framfarir nemendans. Þessi þrjú líkönn voru lík að mörgu leiti nema það var smá breyting milli tveggja breyta. Fyrsta líkanið innhélt fjöldi spurninga fram að þessu, til að sjá framfarir nemenda, annað líkanið innihélt hlutfall rangra svarmöguleika sem hafa sést áður og að lokum þriðja líkanið sem innihélt bæði fjölda spurninga fram að þessu og hlutfall rangra svarmöguleika sem hafa sést áður. 
 
 
-## fyrsta líkanið
+## Fyrsta líkanið
 Til að byrja með, þá var gert fyrsta líkanið til að sjá hvort það væri hægt að sjá framfarir eftir því hve margar spurningar nemandinn hafði svarað hingað til innan í fyrirlestrinum. Þar var breyta yfir því hvort rétta svarið hafi sést áður og víxláhrif á milli þess og fjölda spurninga svarað. Þar sást að fjöldi spurninga svarað var marktæk og framfarir sást þar. 
 
 Vandi kemur upp að þegar svarað hefur mikið, þá er stærri og stærri hlutfall af röngu svarmöguleikunum sem hafa sést áður, því getur vel verið að framfarirnar sem eru að sjást hér, eru í raun bara utanbókarlærdómur rangra svara sem er að toga upp líkurnar á því að svara rétt. Því var skoðað hlutfall rangra svarmöguleika án fjölda spurninga fram að þessu.
@@ -579,3 +624,91 @@ Svo frá líkönunum er hægt að finna rök fyrir bæði að nógu sterkt er a�
 Spurning kemur samt að því hvernig hægt væri að skoða framfarir hvers nemenda fyrir sig, hugmynd að því væri að bæta við fjöldi spurninga fram að þessu í mixed effect í líkaninu, semsagt hafa (1 + fsfat | studentId) í líkaninu í staðinn fyrir (1 | studentId). Þá myndi fást framfarir hvers nemanda, ef þetta er rétt hugsun. Vandinn við svona líkann er að það tekur miklu lengur að keyra miðað við upprunalega líkanið.
 
 Annað væri að skoða meiri sambærilegar spurningar, með því að hafa fjölda spurninga fram að þessu vera telja eftir spurningahaus, frekar enn að skoða innan við fyrirlesturs.
+
+
+# Appendix I {-}
+
+```{r fit1-table, echo = F}
+fit1.coef <- summary(fit1)$coefficients %>% as.data.frame() %>% 
+  add_column(odds = exp(summary(fit1)$coefficients[,1]), .after = 0)
+colnames(fit1.coef) <- c("Gagnalíkindahlutfall", "Hallastuðull", "SE", "z-próf", "p")
+
+fit1.coef <- fit1.coef %>% add_row(.after = 2) %>% add_row(.after = 4) %>% add_row(.after = 12)
+row.names(fit1.coef) <- c("Skurðpunktur", "fjöldi spurninga fram að þessu", 
+                          "hef ekki séð rétta svarmöguleikann áður (Viðmið)",
+                          "Hef séð rétta svarimöguleikann áður", "1 rangur svarmöguleiki (Viðmið)", 
+                          "2 rangir svarmöguleikar", "3 rangir svarmöguleikar", "4 rangir svarmöguleikar", 
+                          "5 rangir svarmöguleikar", "6 rangir svarmöguleikar", "7 rangir svarmöguleikar",
+                          "gpow","Fyrirlestur a (Viðmið)", "Fyrirlestur b", "Fyrirlestur c",
+                          "Fyrirlestur d", "Fyrirlestur e", "Fyrirlestur f", "Fyrirlestur g", 
+                          "Fyrirlestur h", "Fyrirlestur i", "Fyrirlestur j", "Fyrirlestur k", 
+                          "Fyrirlestur l", "Fyrirlestur m", "víxláhrif fjöldi spurninga og hafa séð rétta svarmöguleikann")
+fit1.coef %>% kable(digits = 4, booktabs = T, 
+                    caption = "Stuðlatafla lokalíkans fyrir fyrsta líkanið", 
+                    linesep = '') %>% 
+  kable_styling(full_width = T, font = 7) %>% 
+  pack_rows("Hef séð rétta svarmöguleikann áður", 3, 4, hline_after = T) %>%
+  pack_rows("Fjöldi rangra svarmöguleika", 5, 11, hline_after = T) %>%
+  pack_rows("", 12, 12, hline_after = T) %>%
+  pack_rows("hvaða fyrirlestur", 13, 25, hline_after = T) %>%
+  pack_rows("", 26, 26, hline_after = T) %>%
+  row_spec(row = 0, bold = T)
+```
+
+```{r fit3-table, echo = F}
+fit3.coef <- summary(fit3)$coefficients %>% as.data.frame() %>% 
+  add_column(odds = exp(summary(fit3)$coefficients[,1]), .after = 0)
+colnames(fit3.coef) <- c("Gagnalíkindahlutfall", "Hallastuðull", "SE", "z-próf", "p")
+
+fit3.coef <- fit3.coef %>% add_row(.after = 1) %>% add_row(.after = 6) %>% add_row(.after = 8) %>% 
+  add_row(.after = 16)
+row.names(fit3.coef) <- c("Skurðpunktur", "0%-20% (viðmið)", "20%-40%", "40%-60%", 
+                          "60%-80%", "80%-100%", "hef ekki séð rétta svarmöguleikann áður (Viðmið)",
+                          "Hef séð rétta svarimöguleikann áður", "1 rangur svarmöguleikar (Viðmið)", 
+                          "2 rangir svarmöguleikar", "3 rangir svarmöguleikar", "4 rangir svarmöguleikar", 
+                          "5 rangir svarmöguleikar", "6 rangir svarmöguleikar", "7 rangur svarmöguleikar",
+                          "gpow","Fyrirlestur a (Viðmið)", "Fyrirlestur b", "Fyrirlestur c",
+                          "Fyrirlestur d", "Fyrirlestur e", "Fyrirlestur f", "Fyrirlestur g", 
+                          "Fyrirlestur h", "Fyrirlestur i", "Fyrirlestur j", "Fyrirlestur k", 
+                          "Fyrirlestur l", "Fyrirlestur m")
+fit3.coef %>% kable(digits = 4, booktabs = T, 
+                    caption = "Stuðlatafla lokalíkans fyrir annað líkanið", 
+                    linesep = '') %>% 
+  kable_styling(full_width = T, font = 7) %>%
+  pack_rows("Hlutfall rangra svarmöguleika sem hafa sést áður", 2, 6, hline_after = T) %>%
+  pack_rows("Hef séð rétta svarmöguleikann áður", 7, 8, hline_after = T) %>%
+  pack_rows("Fjöldi rangra svarmöguleika", 9, 15, hline_after = T) %>%
+  pack_rows("", 16, 16, hline_after = T) %>%
+  pack_rows("hvaða fyrirlestur", 17, 29, hline_after = T) %>%
+  row_spec(row = 0, bold = T)
+```
+
+```{r fit7-table, echo = F}
+fit7.coef <- summary(fit7)$coefficients %>% as.data.frame() %>% 
+  add_column(odds = exp(summary(fit7)$coefficients[,1]), .after = 0)
+colnames(fit7.coef) <- c("Gagnalíkindahlutfall", "Hallastuðull", "SE", "z-próf", "p")
+
+fit7.coef <- fit7.coef %>% add_row(.after = 1) %>% add_row(.after = 7) %>% add_row(.after = 9) %>%
+  add_row(.after = 17)
+row.names(fit7.coef) <- c("Skurðpunktur", "0%-20% (viðmið)", "20%-40%", "40%-60%", 
+                          "60%-80%", "80%-100%", "fjöldi spurninga fram að þessu", 
+                          "hef ekki séð rétta svarmöguleikann áður (Viðmið)",
+                          "Hef séð rétta svarimöguleikann áður", "1 rangur svarmöguleikar (Viðmið)", 
+                          "2 rangir svarmöguleikar", "3 rangir svarmöguleikar", "4 rangir svarmöguleikar", 
+                          "5 rangir svarmöguleikar", "6 rangir svarmöguleikar", "7 rangur svarmöguleikar",
+                          "gpow","Fyrirlestur a (Viðmið)", "Fyrirlestur b", "Fyrirlestur c",
+                          "Fyrirlestur d", "Fyrirlestur e", "Fyrirlestur f", "Fyrirlestur g", 
+                          "Fyrirlestur h", "Fyrirlestur i", "Fyrirlestur j", "Fyrirlestur k", 
+                          "Fyrirlestur l", "Fyrirlestur m")
+fit7.coef %>% kable(digits = 4, booktabs = T, 
+                    caption = "Stuðlatafla lokalíkans fyrir þriðja líkanið", 
+                    linesep = '') %>% 
+  kable_styling(full_width = T, font = 7) %>%
+  pack_rows("Hlutfall rangra svarmöguleika sem hafa sést áður", 2, 6, hline_after = T) %>%
+  pack_rows("", 7, 7, hline_after = T) %>%
+  pack_rows("Hef séð rétta svarmöguleikann áður", 8, 9, hline_after = T) %>%
+  pack_rows("Fjöldi rangra svarmöguleika", 10, 16, hline_after = T) %>%
+  pack_rows("", 17, 17, hline_after = T) %>%
+  pack_rows("hvaða fyrirlestur", 18, 30, hline_after = T) %>%
+  row_spec(row = 0, bold = T)
+```

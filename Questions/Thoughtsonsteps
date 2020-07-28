@@ -125,3 +125,46 @@ What needs to be done after the 22nd of july:
 1. Setup so the útdráttur comes before the chapter numbers
 
 2. Read over the útdráttur and introduction chapter to make sure they are worded correctly.
+
+
+
+
+Tvíkosta aðhvarfsgreining með slembiþætti
+
+Mixed effect = slembiþáttur
+Standardized = staðlað
+Brier með stóru B
+Optimism correction = leiðrétting fyrir bjartsýni
+
+bootstrap - viðkvæmi við gagnavali
+
+calibration = kvörðun
+-spáð útkoma vs raunveruleg útkóma
+
+tengja myndr 8 og 9
+blanda seinustu tvemur köflunum yfir í:
+Lokaniðurstöður og horfur
+
+láta mynd 7 vera bara AUC og stBrier
+
+What was done on the 28th of july:
+1. fixed the text of all the pictures
+
+2. fixed some of the pictures and made them better
+
+3. Combined the anova tables and made text
+
+4. attended the meeting
+
+What needs to be done after the 28th of july:
+1. Add to the optimism chapter why we are looking at AUC and standardized brier, as well as explain why we used the bootstrap
+
+2. Fix the Inngangur to make it more readable
+
+3. link the mentioning of the models to the equations
+
+4. translate all of the english into icelandic
+
+5. Remove the ég and word so it works
+
+5. read over and correct stuff.

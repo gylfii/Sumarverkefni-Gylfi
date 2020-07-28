@@ -246,7 +246,8 @@ save_by_limit <- function(hashA, limit) {
     geom_smooth() +
     ggtitle(paste0("Undir ", limit)) + 
     scale_colour_brewer(type = "qual", palette = "Set1")+
-    theme(legend.position = 'bottom')
+    theme(legend.position = 'bottom') +
+    labs(x = "Fjöldi spurninga fram að þessu", y = "Meðaltal")
   tpath <- paste0('Imgsimplify/plotbymean', limit, '.png')
   ggsave(tpath, p5, width = 10, height = 10)
 }
@@ -393,7 +394,8 @@ p2 <- dfmean3 %>% filter(hsta == 0) %>% ggplot(aes(x = fsfat, y = med)) +
   geom_smooth(data = dfmean2 %>% filter(fjoldi > 1), aes(color = hluta2), se = F) +
   coord_cartesian(ylim = c(yminim, ymaxim)) + 
   scale_colour_brewer(type = "qual", palette = "Set1")+
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom') +
+  labs(x = "Fjöldi spurninga fram að þessu", y = "Meðaltal")
 
 p2
 p1 <- dfmean2 %>% ggplot(aes(x = fsfat, y = fjoldi, color = hluta2)) +
@@ -408,17 +410,20 @@ p1 <- dfmean2 %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
   geom_point() +
   geom_smooth(se = F) +
   scale_colour_brewer(type = "qual", palette = "Set1")+
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom') +
+  labs(x = "Fjöldi spurninga fram að þessu", y = "Meðaltal")
 
 p3 <- dfmean2 %>% filter(fjoldi > 1) %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
   geom_point(aes()) +
   geom_smooth(se = F) +
   scale_colour_brewer(type = "qual", palette = "Set1")+
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom') +
+  labs(x = "Fjöldi spurninga fram að þessu", y = "Meðaltal")
 p3
 dfmean4 %>% filter(fjoldi > 5) %>% ggplot(aes(x = fsfat, y = med, color = hluta2)) +
   geom_point() +
-  geom_smooth(se = F)
+  geom_smooth(se = F) +
+  labs(x = "Fjöldi spurninga fram að þessu", y = "Meðaltal")
 yminim <- min(dfmean3$med)
 ymaxim <- max(dfmean3$med)
 
@@ -431,7 +436,8 @@ p4 <- dfmean5 %>% filter(hsta == 0) %>% ggplot(aes(x = fsfat, y = med)) +
   geom_smooth(data = dfmean4 %>% filter(fjoldi > 1), aes(color = hluta2), se = F) +
   coord_cartesian(ylim = c(yminim2, ymaxim2)) +
   scale_colour_brewer(type = "qual", palette = "Set1")+
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom') +
+  labs(x = "Fjöldi spurninga fram að þessu", y = "Meðaltal")
 p4
 
 ggsave('Img/meanbyhlutfall.png', p1, width = 10, height = 10)

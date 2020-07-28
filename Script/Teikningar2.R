@@ -74,23 +74,26 @@ draw_calibration_curve <- function(fit1, fit3, fit7, df) {
     geom_smooth() +
     geom_abline(intercept = 0, slope = 1, lty = 2) +
     scale_colour_brewer(type = "qual", palette = "Set1") +
-    ggtitle("Fyrsta líkanið")
+    ggtitle("Fyrsta líkanið") +
+    labs(x = "Spáð útkoma", y = "Raunveruleg útkoma")
   
   p2 <- df %>% add_predictions(fit3, type = "response") %>%
     ggplot(aes(x = pred, y = correct)) + 
     geom_smooth() +
     geom_abline(intercept = 0, slope = 1, lty = 2) +
     scale_colour_brewer(type = "qual", palette = "Set1") +
-    ggtitle("Annað líkanið")
+    ggtitle("Annað líkanið") +
+    labs(x = "Spáð útkoma", y = "Raunveruleg útkoma")
   
   p3 <- df %>% add_predictions(fit7, type = "response") %>%
     ggplot(aes(x = pred, y = correct)) + 
     geom_smooth() +
     geom_abline(intercept = 0, slope = 1, lty = 2) +
     scale_colour_brewer(type = "qual", palette = "Set1") +
-    ggtitle("Þriðja líkanið")
+    ggtitle("Þriðja líkanið") +
+    labs(x = "Spáð útkoma", y = "Raunveruleg útkoma")
   
-  return(plot_grid(p1, p2, p3))
+  return(plot_grid(p1, p2, p3, nrow = 1))
 }
 
 p <- draw_calibration_curve(fit1, fit3, fit7, hashLim100)
@@ -104,24 +107,31 @@ draw_prediction_histogram <- function(fit1, fit3, fit7, df){
     ggplot(aes(x = pred)) +
     geom_histogram(binwidth = 2 * IQR(tdf1$pred) * nrow(tdf1)^(-1/3)) +
     scale_colour_brewer(type = "qual", palette = "Set1") +
-    ggtitle("Fyrsta líkanið")
+    ggtitle("Fyrsta líkanið") + 
+    labs(x = "Spáð útkoma", y = "Talið")
   tdf2 <- df %>% add_predictions(fit3, type = "response")
   p2 <- tdf2 %>%
     ggplot(aes(x = pred)) +
     geom_histogram(binwidth = 2 * IQR(tdf2$pred) * nrow(tdf2)^(-1/3)) +
     scale_colour_brewer(type = "qual", palette = "Set1") +
-    ggtitle("Annað líkanið")
+    ggtitle("Annað líkanið") + 
+    labs(x = "Spáð útkoma", y = "Talið")
   tdf3 <- df %>% add_predictions(fit7, type = "response")
   p3 <- tdf3 %>%
     ggplot(aes(x = pred)) +
     geom_histogram(binwidth = 2 * IQR(tdf3$pred) * nrow(tdf3)^(-1/3)) +
     scale_colour_brewer(type = "qual", palette = "Set1") +
-    ggtitle("Þriðja líkanið")
+    ggtitle("Þriðja líkanið") + 
+    labs(x = "Spáð útkoma", y = "Talið")
   
-  return(plot_grid(p1, p2, p3))
+  return(plot_grid(p1, p2, p3, nrow = 1))
 }
 
 p2 <- draw_prediction_histogram(fit1, fit3, fit7, hashLim100)
 p2
 
 ggsave("Img/histogrammulti.png", p2, height = 12, width = 12)
+
+p3 <- plot_grid(p, p2, nrow = 2)
+
+ggsave("Img/histogramCalibration.png", p3, height = 12, width = 18)

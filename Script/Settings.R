@@ -25,6 +25,7 @@ library(cAIC4)
 library(pracma)
 library(funModeling)
 library(equatiomatic)
+library(bibtex)
 theme_set(theme_tufte() +
             theme(panel.border = element_rect('black', fill = NA),
                   text = element_text(size = 14),

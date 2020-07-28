@@ -75,54 +75,56 @@ optim.draw.box <- function(B1, B2, B3) {
   bot2 <- B2[[3]]
   bot3 <- B3[[3]]
   
-  AllAuc <- data.frame(Train.fit1 = bo1$AUC, Train.fit3 = bo2$AUC, Train.fit7 = bo3$AUC, 
-                       Test.fit1 = bot1$AUC, Test.fit3 = bot2$AUC, Test.fit7 = bot3$AUC) %>% 
-    pivot_longer(cols = c("Train.fit1", "Train.fit3", "Train.fit7", 
-                          "Test.fit1", "Test.fit3", "Test.fit7"), names_to = "Type")
+  AllAuc <- data.frame(Þjálfa.1 = bo1$AUC, Þjálfa.2 = bo2$AUC, Þjálfa.3 = bo3$AUC, 
+                       Prufa.1 = bot1$AUC, Prufa.2 = bot2$AUC, Prufa.3 = bot3$AUC) %>% 
+    pivot_longer(cols = c("Þjálfa.1", "Þjálfa.2", "Þjálfa.3", 
+                          "Prufa.1", "Prufa.2", "Prufa.3"), names_to = "Tegund")
   
-  AllAuc <- AllAuc %>% separate(col = "Type", into = c("Type", "Model"), sep = "\\.")
-  AllAuc$Type <- AllAuc$Type %>% fct_rev()
-  p1 <- ggplot(AllAuc, aes(y = value, x = Type, color = Model)) +
+  AllAuc <- AllAuc %>% separate(col = "Tegund", into = c("Tegund", "Líkann"), sep = "\\.")
+  AllAuc$Tegund <- AllAuc$Tegund %>% fct_rev()
+  p1 <- ggplot(AllAuc, aes(y = value, x = Tegund, color = Líkann)) +
     #geom_point(position = position_jitterdodge(dodge.width = 0.5, jitter.width = 0.1), alpha = 0.05) +
     geom_boxplot() +
     labs(title = "AUC") +
     theme(legend.position="top") +
     scale_colour_brewer(type = "qual", palette = "Set1")+
-    theme(legend.position = 'bottom')
+    theme(legend.position = 'bottom') + 
+    labs(y = "Gildi")
   
-  AllBrier <- data.frame(Train.fit1 = bo1$brier, Train.fit3 = bo2$brier, Train.fit7 = bo3$brier, 
-                       Test.fit1 = bot1$brier, Test.fit3 = bot2$brier, Test.fit7 = bot3$brier) %>% 
-    pivot_longer(cols = c("Train.fit1", "Train.fit3", "Train.fit7", 
-                          "Test.fit1", "Test.fit3", "Test.fit7"), names_to = "Type")
+  # AllBrier <- data.frame(Þjálfa.1 = bo1$brier, Þjálfa.2 = bo2$brier, Þjálfa.3 = bo3$brier, 
+  #                      Prufa.1 = bot1$brier, Prufa.2 = bot2$brier, Prufa.3 = bot3$brier) %>% 
+  #   pivot_longer(cols = c("Þjálfa.1", "Þjálfa.2", "Þjálfa.3", 
+  #                         "Prufa.1", "Prufa.2", "Prufa.3"), names_to = "Tegund")
+  # 
+  # AllBrier <- AllBrier %>% separate(col = "Tegund", into = c("Tegund", "Model"), sep = "\\.")
+  # AllBrier$Tegund <- AllBrier$Tegund %>% fct_rev()
+  # p2 <- ggplot(AllBrier, aes(y = value, x = Tegund, color = Model)) +
+  #   #geom_point(position = position_jitterdodge(dodge.width = 0.5, jitter.width = 0.1), alpha = 0.05) +
+  #   geom_boxplot() +
+  #   labs(title = "Brier") +
+  #   theme(legend.position="top") +
+  #   scale_colour_brewer(Tegund = "qual", palette = "Set1")+
+  #   theme(legend.position = 'bottom')
+  print('komst hingad')
   
-  AllBrier <- AllBrier %>% separate(col = "Type", into = c("Type", "Model"), sep = "\\.")
-  AllBrier$Type <- AllBrier$Type %>% fct_rev()
-  p2 <- ggplot(AllBrier, aes(y = value, x = Type, color = Model)) +
+  AllstBrier <- data.frame(Þjálfa.1 = bo1$StanBrier, Þjálfa.2 = bo2$StanBrier, Þjálfa.3 = bo3$StanBrier, 
+                       Prufa.1 = bot1$StanBrier, Prufa.2 = bot2$StanBrier, Prufa.3 = bot3$StanBrier) %>% 
+    pivot_longer(cols = c("Þjálfa.1", "Þjálfa.2", "Þjálfa.3", 
+                          "Prufa.1", "Prufa.2", "Prufa.3"), names_to = "Tegund")
+  
+  AllstBrier <- AllstBrier %>% separate(col = "Tegund", into = c("Tegund", "Líkann"), sep = "\\.")
+  AllstBrier$Tegund <- AllstBrier$Tegund %>% fct_rev()
+  
+  p3 <- ggplot(AllstBrier, aes(y = value, x = Tegund, color = Líkann)) +
     #geom_point(position = position_jitterdodge(dodge.width = 0.5, jitter.width = 0.1), alpha = 0.05) +
     geom_boxplot() +
-    labs(title = "Brier") +
+    labs(title = "Staðlað Brier") +
     theme(legend.position="top") +
     scale_colour_brewer(type = "qual", palette = "Set1")+
-    theme(legend.position = 'bottom')
+    theme(legend.position = 'bottom') + 
+    labs(y = "Gildi")
   
-  
-  AllstBrier <- data.frame(Train.fit1 = bo1$StanBrier, Train.fit3 = bo2$StanBrier, Train.fit7 = bo3$StanBrier, 
-                       Test.fit1 = bot1$StanBrier, Test.fit3 = bot2$StanBrier, Test.fit7 = bot3$StanBrier) %>% 
-    pivot_longer(cols = c("Train.fit1", "Train.fit3", "Train.fit7", 
-                          "Test.fit1", "Test.fit3", "Test.fit7"), names_to = "Type")
-  
-  AllstBrier <- AllstBrier %>% separate(col = "Type", into = c("Type", "Model"), sep = "\\.")
-  AllstBrier$Type <- AllstBrier$Type %>% fct_rev()
-  
-  p3 <- ggplot(AllstBrier, aes(y = value, x = Type, color = Model)) +
-    #geom_point(position = position_jitterdodge(dodge.width = 0.5, jitter.width = 0.1), alpha = 0.05) +
-    geom_boxplot() +
-    labs(title = "Standardized Brier") +
-    theme(legend.position="top") +
-    scale_colour_brewer(type = "qual", palette = "Set1")+
-    theme(legend.position = 'bottom')
-  
-  return(plot_grid(p1, p2, p3))
+  return(plot_grid(p1, p3))
 }
 
 ?plot_grid
@@ -131,7 +133,7 @@ optim.draw.box <- function(B1, B2, B3) {
 p <- optim.draw.box(bootedfit1, bootedfit3, bootedfit7)
 p
 
-ggsave('Img/optimism.png', p, width = 12, height = 12)
+ggsave('Img/optimism.png', p, width = 16, height = 8)
 
 
 bo1 <- bootedfit1[[2]]

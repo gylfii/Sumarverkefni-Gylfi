@@ -1,0 +1,44 @@
+---
+title: "Untitled"
+author: "Þórarinn Jónmundsson"
+date: "7/27/2020"
+output: pdf_document
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+options(scipen = 999,
+        knitr.kable.NA = '')
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+```
+
+
+Collapse rows
+
+```{r message=FALSE, warning=FALSE}
+read_csv('anovatable.csv') %>%
+  kable(booktabs = T, 'latex',
+        caption = '(\\#tab:anova) Analysis of variance for the variables in the model.',
+        linesep = '',
+        col.names = c('Model', 'Source of variation', 'Sum squares', 'df', 'Statistic', '$p$'),
+        escape = F,
+        align = rep('c', 6)) %>%
+  kable_styling(full_width = F, latex_options = 'hold_position') %>%
+  row_spec(row = 0, bold = T) %>%
+  collapse_rows(1)
+```
+
+\begin{equation}
+f(x) = \sin (x)
+\end{equation}
+
+\begin{align}
+f(x) &= \sin (x) \\
+g(x) &= \cos (x)
+\end{align}
+
+
