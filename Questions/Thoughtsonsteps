@@ -157,14 +157,20 @@ What was done on the 28th of july:
 4. attended the meeting
 
 What needs to be done after the 28th of july:
-1. Add to the optimism chapter why we are looking at AUC and standardized brier, as well as explain why we used the bootstrap
 
-2. Fix the Inngangur to make it more readable
+1. Add to the optimism chapter why we are looking at AUC and standardized brier, as well as explain why we used the bootstrap KINDOF CHECK
 
-3. link the mentioning of the models to the equations
+2. Fix the Inngangur to make it more readable CHECK
+
+3. link the mentioning of the models to the equations (this might be good to do first) CHECK
 
 4. translate all of the english into icelandic
 
 5. Remove the ég and word so it works
 
 5. read over and correct stuff.
+
+
+\begin{itemize}
+ \item[] Þar sem einhverjar línur detta út þegar bætt er við *hluta* og það eru 3 línur sem koma þegar AOTA+ spurningu er að ræða, þá er búið til fsfat áður sameinað við .txt skránnar með réttu og röngu svörinn.
+\end{itemize}
