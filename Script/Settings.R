@@ -1,35 +1,3 @@
-library(dbplyr)
-library(dplyr)
-library(RMySQL)
-library(tidyr)
-library(MASS)
-library(ggplot2)
-library(gridExtra)
-library(tidyverse)
-library(modelr)
-library(rlang)
-library(latexpdf)
-library(latex2exp)
-library(knitr)
-library(cvAUC)
-library(car)
-library(ggthemes)
-library(ggpubr)
-library(kableExtra)
-library(bookdown)
-library(scales)
-library(tinytex)
-library(lme4)
-library(lmerTest)
-library(cAIC4)
-library(pracma)
-library(funModeling)
-library(equatiomatic)
-library(bibtex)
-theme_set(theme_tufte() +
-            theme(panel.border = element_rect('black', fill = NA),
-                  text = element_text(size = 14),
-                  legend.text=element_text(size=14),
-                  axis.text=element_text(size=14),
-                  axis.title = element_text(size = 14),
-                  plot.title = element_text(hjust = 0.5)))
+version https://git-lfs.github.com/spec/v1
+oid sha256:9223c4abbade5593c7efb7e2391ca2f1b5f6c296dc6694c7e58ba1ce083472e9
+size 824
