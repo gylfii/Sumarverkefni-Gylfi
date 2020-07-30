@@ -49,8 +49,8 @@ fit7 <- glmer(correct ~ hluta2 + fsfat + hsta + nicc + gpow + lectureId + (1 | s
 ```
 \newpage
 
-# Útdráttur {-}
-\textbf{Inngangur:} Sumar spurningar í tutor-web eru búnar til þannig að kennarinn semur fyrst haus spurningar, næst eru tvö söfn búinn til, það fyrsta inniheldur rétt svör og sá næsti inniheldur röng svör. Svo eru spurningarnar búnar til með því að velja slembið rétt svar og slurk af röngum svörum (kannski með allt/ekkert ofangreint er rétt). Ef nemandi lærir ekki bara utanað, heldur er að auka skilning á verkefnið, þá ættu að sjást smátt og smátt framfarir í einkunn líka fyrir nýjar fullyrðingar. Svo markmið rannsóknarinnar er að sjá hvort hægt er að skoða framfarir nemenda, en ekki bara utanbókarlærdóm. \textbf{Aðferð:} Í þessari rannsókn var byrjað á því að setja upp myndir tengt meðaltali réttra svara eftir fjölda spurninga svaraðra, til að sjá hvort það sæist framfarir eftir því sem fleiri spurningum er svarað. Eftir það voru stillt upp þrjú Tvíkosta aðhvarfsgreininglíkön með slembiþætti til að skoða hvort marktækni fjölda spurninga svaraðra er enn sterk með áhrif utanbókarlærdóms í sama líkani. Það var gert með því að hafa eitt líkann byggt í kringum fjölda spurninga svarað, annað byggt í kringum hlutfall rangra svarmöguleika sem hafa sést áður og í lokinn líkann sem er byggt á báðum breytunum. \textbf{Niðurstöður:} Frá meðaltals myndunum þá sást að það gæti verið hægt að skoða framfarir, en óvissa hvort framfarirnar sem sást voru aðallega áhrif utanbókarlærdómar. Þegar skoðað var líköninn, þá sást að fjöldi spurninga svarað fram að þessu var ennþá marktækt, með áhrifum utanbókarlærdóms innihaldinn í líkönunum, sem gæti verið að benda til þess að hægt sé að skoða þá framfarir í gegnum breytu tengt fjölda spurninga svarað.
+# Ágrip {-}
+\textbf{Inngangur:} Sumar spurningar í tutor-web eru búnar til þannig að kennarinn semur fyrst haus spurningar, næst eru tvö söfn búinn til, það fyrsta inniheldur rétt svör og sá næsti inniheldur röng svör. Svo eru spurningarnar búnar til með því að velja slembið rétt svar og slurk af röngum svörum (kannski með allt/ekkert ofangreint er rétt). Ef nemandi lærir ekki bara utanað, heldur er að auka skilning á verkefnið, þá ættu að sjást smátt og smátt framfarir í einkunn líka fyrir nýjar fullyrðingar. Svo markmið rannsóknarinnar er að sjá hvort hægt er að skoða framfarir nemenda, en ekki bara utanbókarlærdóm. \textbf{Aðferð:} Í þessari rannsókn var byrjað á því að setja upp myndir tengt meðaltali réttra svara eftir fjölda spurninga svaraðra, til að sjá hvort það sæist framfarir eftir því sem fleiri spurningum er svarað. Eftir það voru stillt upp þrjú Tvíkosta aðhvarfsgreininglíkön með slembiþætti til að skoða hvort marktækni fjölda spurninga svaraðra er enn sterk með áhrif utanbókarlærdóms í sama líkani. Það var gert með því að hafa eitt líkan byggt í kringum fjölda spurninga svarað, annað byggt í kringum hlutfall rangra svarmöguleika sem hafa sést áður og í lokinn líkan sem er byggt á báðum breytunum. \textbf{Niðurstöður:} Frá meðaltals myndunum þá sást að það gæti verið hægt að skoða framfarir, en óvissa hvort framfarirnar sem sást voru aðallega áhrif utanbókarlærdómar. Þegar skoðað var líköninn, þá sást að fjöldi spurninga svarað fram að þessu var ennþá marktækt, með áhrifum utanbókarlærdóms innihaldinn í líkönunum, sem gæti verið að benda til þess að hægt sé að skoða þá framfarir í gegnum breytu tengt fjölda spurninga svarað.
 \textbf{Umræða:} Það var set up bootstrap fyrir gögninn til að fá gott áhorf á AUC og staðlað Brier skorinu fyrir líkönin þrjú, þar sást ekki mikill munur milli líkananna. Það gæti verið að segja að  utanbókarlærdóms áhrif hlutfall rangra svara sem hafa sést áður er líkt styrkleikanum á að skoða fjölda spurninga svarað, sem sýnir stóru áhrif utanbókarlærdóms á líkur nemanda að svara næstu spurningu.
 
 \newpage
@@ -282,7 +282,8 @@ fullthing <- createUsable(hashAnswer)
 
 fullthing %>% kable(longtable = T, digits = 5, booktabs = T, 
                     caption = "Hlutföll flokkabreytanna", 
-                    linesep = '') %>%
+                    linesep = '',
+                    col.names = c("Fjöldi", "Hlutfall")) %>%
    kable_styling() %>%
   pack_rows("correct", 1, 2) %>%
   pack_rows("hsta", 3, 4) %>%
@@ -333,7 +334,8 @@ fullt100 <- createUsable(hashLim100)
 
 fullt100 %>% kable(longtable = T, digits = 5, booktabs = T, 
                    caption = "Hlutfall flokkabreytana fyrir fyrstu 100 svör", 
-                   linesep = '') %>%
+                   linesep = '',
+                   col.names = c("Fjöldi", "Hlutfall")) %>%
    kable_styling() %>%
   pack_rows("correct", 1, 2) %>%
   pack_rows("hsta", 3, 4) %>%
@@ -349,7 +351,8 @@ fullt50 <- createUsable(hashLim50)
 
 fullt50 %>% kable(longtable = T, digits = 5, booktabs = T, 
                   caption = "Hlutfall flokkabreytana fyrir fyrstu 50 svör", 
-                  linesep = '') %>%
+                  linesep = '',
+                  col.names = c("Fjöldi", "Hlutfall")) %>%
    kable_styling() %>%
   pack_rows("correct", 1, 2) %>%
   pack_rows("hsta", 3, 4) %>%
@@ -462,7 +465,9 @@ an13$term <- c("Fyrsta", "Annað")
 
 an13 %>% kable(digits = 4, booktab = T, 
                caption = "anova milli fyrsta og annað líkanið", 
-               linesep = '') %>%
+               linesep = '',
+               col.names = c("Líkan", "npar", "AIC", "BIC", "logLik", "deviance", 
+                             "statistic", "df", "p.value")) %>%
   kable_styling() %>%
   row_spec(row = 0, bold = T)
 
@@ -476,7 +481,9 @@ an37$term <- c("Annað", "Þriðja")
 
 an37 %>% kable(digits = 4, booktab = T, 
                caption = "anova milli annað og þriðja líkanið", 
-               linesep = '') %>%
+               linesep = '', 
+               col.names = c("Líkan", "npar", "AIC", "BIC", "logLik", "deviance", 
+                             "statistic", "df", "p.value")) %>%
   kable_styling() %>%
   row_spec(row = 0, bold = T)
 
@@ -525,11 +532,35 @@ fit7.opt.op <- fit7.cal[[1]]
 
 ```
 
+Tafla \@ref(tab:Anova) er anova töflur af gerð III fyrir líköninn þrjú og það lítur út fyrir að allar breyturnar eru marktækar, hvort nemandinn hafi séð rétta svarið áður eða ekki sýnist svo vera sterkasta breytann í hvert skipti. Svo sýnist það vera að þegar sett er saman *fsfat* og *hluta2* í sama líkan, þá fellur styrkleikinn þeirra ágætlega mikið. (EKKI ALVEG VISS HVAÐ ÞAÐ ÞÝÐIR ENN)
+```{r Anova, echo=F}
+T1 <- Anova(fit1, type = 3) %>% broom::tidy() %>% mutate(model = 1)
+
+T2 <- Anova(fit3, type = 3) %>% broom::tidy() %>% mutate(model = 2)
+
+T3 <- Anova(fit7, type = 3) %>% broom::tidy() %>% mutate(model = 3)
+
+aTable <- rbind(T1, T2, T3) %>%
+  dplyr::select(5, everything())
+
+aTable %>% kable(booktabs = T, 'latex',
+        caption = 'Anova af gerð III fyrir líköninn þrjú',
+        linesep = '',
+        col.names = c('líkan', 'Breyta', 'Lýsitala', 'df', '$p$'),
+        escape = F,
+        align = rep('c', 5)) %>%
+  kable_styling(full_width = F, latex_options = 'hold_position') %>%
+  row_spec(row = 0, bold = T) %>%
+  collapse_rows(1)
+
+
+```
+
 Fyrir matsgæði líkans var ákveðið að skoða AUC og staðlað Brier, þar sem AUC segir til um hve vel líkanið segir til að rétt svar er rétt á móti röngu svari, á meðan staðlað Brier er stiki sem segir til styrkleika spáinar, það var svo notað bootstrap með 2500 ítrunum til að skoða viðkvæmi líkananna við gagnavali og leiðrétta gildin fyrir bjartsýni. 
 
-Tafla \@ref(tab:optimism-table-2) sýnir hér frammistöðu líkannana þriggja eftir AUC og staðlað Brier skorinu, eftir að leiðrétta fyrir bjartsýni með 2500 bootstrap ítranir. Það sést hér að munurinn á milli líkannana er ekki það mikill, þar sem stærsti munurinn er hjá fyrsta \@ref(eq:mod1) og þriðja líkaninu \@ref(eq:mod3) og það er ekki meira en `r round(fit7.opt.cor$AUC - fit1.opt.cor$AUC, digits = 4)` hjá AUC og `r round(fit7.opt.cor$stBrier - fit1.opt.cor$stBrier, digits = 4)` hjá staðlað Brier skorinu. Þá lítur út fyrir að það er ekki mikill munur þar með tilliti til AUC og staðlað Brier. Til að bæta þá inniheldur tafla \@ref(tab:optimism-table) bjartsýni líkananna þriggja, þar sést að bjartsýnin er rosalega líkt hjá þeim öllum þremur. 
+Tafla \@ref(tab:optimism-table-2) sýnir hér frammistöðu líkanana þriggja eftir AUC og staðlað Brier skorinu, eftir að leiðrétta fyrir bjartsýni með 2500 bootstrap ítranir. Það sést hér að munurinn á milli líkanana er ekki það mikill, þar sem stærsti munurinn er hjá fyrsta \@ref(eq:mod1) og þriðja líkaninu \@ref(eq:mod3) og það er ekki meira en `r round(fit7.opt.cor$AUC - fit1.opt.cor$AUC, digits = 4)` hjá AUC og `r round(fit7.opt.cor$stBrier - fit1.opt.cor$stBrier, digits = 4)` hjá staðlað Brier skorinu. Þá lítur út fyrir að það er ekki mikill munur þar með tilliti til AUC og staðlað Brier. Til að bæta þá inniheldur tafla \@ref(tab:optimism-table) bjartsýni líkananna þriggja, þar sést að bjartsýnin er rosalega líkt hjá þeim öllum þremur. 
 
-Á mynd \@ref(fig:optimismpicture) sést svo hvernig AUC og staðlað Brier skorið dreifðist fyrir hverja ítrun. Þar sést að hvert líkann er aðeins hærra en það fyrra og að fyrir AUC þá er dreifingin á þjálfunar gildunum miklu meiri en hjá prufunar gildunum, en það er svo öfugt fyrir staðlað Brier, því þar er dreifingin hjá þjálfunar meiri en hjá prufunar gildunum.
+Á mynd \@ref(fig:optimismpicture) sést svo hvernig AUC og staðlað Brier skorið dreifðist fyrir hverja ítrun. Þar sést að hvert líkan er aðeins hærra en það fyrra og að fyrir AUC þá er dreifingin á þjálfunar gildunum miklu meiri en hjá prufunar gildunum, en það er svo öfugt fyrir staðlað Brier, því þar er dreifingin hjá þjálfunar meiri en hjá prufunar gildunum.
 
 ```{r optimism-table-2, echo = FALSE}
 rbind('1' = fit1.opt.cor, '3' = fit3.opt.cor, '7' = fit7.opt.cor) %>% dplyr::select(-c(brier)) %>% 
@@ -556,7 +587,7 @@ rbind('1' = fit1.opt.op, '3' = fit3.opt.op, '7' = fit7.opt.op) %>% dplyr::select
 
 
 
-```{r optimismpicture, echo=FALSE, fig.align='center', fig.cap="Dreifing AUC og staðlað Brier fyrir hvert líkann, hjá þjálfunar og prufunar bootstrap gildunum", fig.pos='H', out.width='100%'}
+```{r optimismpicture, echo=FALSE, fig.align='center', fig.cap="Dreifing AUC og staðlað Brier fyrir hvert líkan, hjá þjálfunar og prufunar bootstrap gildunum", fig.pos='H', out.width='100%'}
 include_graphics('Img/optimism.png')
 ```
 
@@ -565,32 +596,6 @@ Mynd \@ref(fig:Calibration-histogram) inniheldur kvörðunar graf og stuðlarit 
 ```{r Calibration-histogram, echo=F, fig.align='center', fig.cap="Að ofan er Kvörðunar graf og að neðan er stuðlarit yfir fjölda gagnanna fyrir spáður útkomurnar. Fyrir öll líkönin þrjú", fig.pos='H', out.width='100%'}
 include_graphics('Img/histogramCalibration.png')
 ```
-
-
-Tafla \@ref(tab:Anova) er anova töflur af gerð III fyrir líköninn þrjú og það lítur út fyrir að allar breyturnar eru marktækar, hvort nemandinn hafi séð rétta svarið áður eða ekki sýnist svo vera sterkasta breytann í hvert skipti. Svo sýnist það vera að þegar sett er saman *fsfat* og *hluta2* í sama líkann, þá fellur styrkleikinn þeirra ágætlega mikið. (EKKI ALVEG VISS HVAÐ ÞAÐ ÞÝÐIR ENN)
-```{r Anova, echo=F}
-T1 <- Anova(fit1, type = 3) %>% broom::tidy() %>% mutate(model = 1)
-
-T2 <- Anova(fit3, type = 3) %>% broom::tidy() %>% mutate(model = 2)
-
-T3 <- Anova(fit7, type = 3) %>% broom::tidy() %>% mutate(model = 3)
-
-aTable <- rbind(T1, T2, T3) %>%
-  dplyr::select(5, everything())
-
-aTable %>% kable(booktabs = T, 'latex',
-        caption = 'Anova af gerð III fyrir líköninn þrjú',
-        linesep = '',
-        col.names = c('Líkann', 'Breyta', 'Lýsitala', 'df', '$p$'),
-        escape = F,
-        align = rep('c', 5)) %>%
-  kable_styling(full_width = F, latex_options = 'hold_position') %>%
-  row_spec(row = 0, bold = T) %>%
-  collapse_rows(1)
-
-
-```
-
 
 
 # Umræða
@@ -613,14 +618,15 @@ Að lokum var sett saman þriðja líkanið \@ref(eq:mod3), í líkaninu er bæ�
 Hvað þýðir þetta? Frá þessu sjáum við að fjöldi spurninga fram að þessu er ennþá marktækt, þótt það sé bætt við utanbókaráhrifum hjá því hvort rétti svarmöguleikinn hafi sést áður og hlutfall rangra svarmöguleika sem hafa sést áður, þar bendir til þess að hægt sé að mæla áhrif nemenda. Þar sem stikinn fyrir fsfat er séð sem framfarir. 
 
 ## Smá loka niðurstöður og horfur
-Svo frá líkönunum er hægt að finna rök fyrir bæði að nógu sterkt er að skoða bara hlutfall rangra svarmöguleika sem hafa sést áður og að skoða fjölda spurninga svarað miðað við að AUC og staðlað Brier skorið er mjög líkt milli líkannana þriggja, þetta gæti verið að benda til rosalegu sterku áhrif utanbókarlærdóms til að sjá hvernig svarað er næst. 
+Svo frá líkönunum er hægt að finna rök fyrir bæði að nógu sterkt er að skoða bara hlutfall rangra svarmöguleika sem hafa sést áður og að skoða fjölda spurninga svarað miðað við að AUC og staðlað Brier skorið er mjög líkt milli líkanana þriggja, þetta gæti verið að benda til rosalegu sterku áhrif utanbókarlærdóms til að sjá hvernig svarað er næst. 
 
 Á sömu mótum þá er fyrsta \@ref(eq:mod1) og þriðja \@ref(eq:mod3) líkönin líka í sama styrkleika miðað við AUC og staðlað Brier skorið, semsagt hægt er að fá stika fyrir fjölda spurninga fram að þessu. Sem leyfir því að mæla framfarir nemenda frá spurningu til spurninga, að sjá hverjar framfarirnar eru þegar nemandinn byrjaði til þann punkts þar sem nemandinn kláraði.
 
-Spurning kemur samt að því hvernig hægt væri að skoða framfarir hvers nemenda fyrir sig, hugmynd að því væri að bæta við fjöldi spurninga fram að þessu sem slembiþátt í líkaninu, semsagt hafa (1 + fsfat | studentId) í líkaninu í staðinn fyrir (1 | studentId). Þá myndi fást framfarir hvers nemanda, ef þetta er rétt hugsun. Vandinn við svona líkann er að það tekur miklu lengur að keyra miðað við upprunalega líkanið.
+Spurning kemur samt að því hvernig hægt væri að skoða framfarir hvers nemenda fyrir sig, hugmynd að því væri að bæta við fjöldi spurninga fram að þessu sem slembiþátt í líkaninu, semsagt hafa (1 + fsfat | studentId) í líkaninu í staðinn fyrir (1 | studentId). Þá myndi fást framfarir hvers nemanda, ef þetta er rétt hugsun. Vandinn við svona líkan er að það tekur miklu lengur að keyra miðað við upprunalega líkanið.
 
 Annað væri að skoða meiri sambærilegar spurningar, með því að hafa fjölda spurninga fram að þessu vera telja eftir spurningahaus, frekar enn að skoða innan við fyrirlesturs.
 
+\newpage
 
 # Appendix I {-}
 
